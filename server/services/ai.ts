@@ -1,12 +1,12 @@
 import OpenAI from "openai";
-import { domains } from "@shared/schema";
+import { ncaEccDomains } from "@shared/schema";
 
 // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-export async function generateSecurityPolicy(domain: string): Promise<string> {
+export async function generateSecurityPolicy(domain: string, subdomain?: string): Promise<string> {
   const prompt = `
-Generate a comprehensive cybersecurity policy for the "${domain}" domain following NCA ECC (National Cybersecurity Authority Essential Cybersecurity Controls) framework requirements.
+Generate a comprehensive cybersecurity policy for the "${domain}" domain${subdomain ? ` and "${subdomain}" subdomain` : ''} following NCA ECC (National Cybersecurity Authority Essential Cybersecurity Controls) framework requirements.
 
 The policy should include:
 1. Purpose and scope
@@ -14,6 +14,13 @@ The policy should include:
 3. Implementation guidelines
 4. Compliance monitoring procedures
 5. Roles and responsibilities
+6. Risk assessment methodology
+7. Implementation roadmap with:
+   - Immediate actions (0-3 months)
+   - Short-term goals (3-6 months)
+   - Long-term objectives (6-12 months)
+8. Success metrics and KPIs
+9. Review and update procedures
 
 Format the response as a well-structured policy document. Focus on practical, actionable items that align with NCA ECC requirements.
 
@@ -26,7 +33,7 @@ Response should be detailed but concise, avoiding unnecessary technical jargon w
       messages: [
         {
           role: "system",
-          content: "You are an expert cybersecurity policy generator specializing in NCA ECC compliance. Generate clear, actionable policies that align with regulatory requirements."
+          content: "You are an expert cybersecurity policy generator specializing in NCA ECC compliance. Generate clear, actionable policies that align with regulatory requirements and provide practical implementation steps."
         },
         {
           role: "user",

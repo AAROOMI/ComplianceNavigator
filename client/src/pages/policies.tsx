@@ -4,10 +4,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { FileText, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { domains } from "@shared/schema";
+import { ncaEccDomains } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import type { Policy } from "@shared/schema";
 
 export default function Policies() {
   const [generating, setGenerating] = useState(false);
@@ -17,7 +18,7 @@ export default function Policies() {
   // Mock user ID for demonstration - replace with actual user ID from auth
   const userId = 1;
 
-  const { data: policies = [] } = useQuery({
+  const { data: policies = [] } = useQuery<Policy[]>({
     queryKey: [`/api/policies/${userId}`],
   });
 
@@ -68,7 +69,7 @@ export default function Policies() {
               <p className="text-sm text-muted-foreground">No policies generated yet.</p>
             ) : (
               <div className="space-y-4">
-                {policies.map((policy: any) => (
+                {policies.map((policy) => (
                   <div key={policy.id} className="p-4 border rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
                       <FileText className="w-4 h-4 text-primary" />
@@ -88,7 +89,7 @@ export default function Policies() {
 
       {/* Policy Generation Cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {domains.map((domain) => (
+        {ncaEccDomains.map((domain) => (
           <Card key={domain}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">

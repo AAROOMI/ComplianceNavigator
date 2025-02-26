@@ -6,59 +6,66 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { domains } from "@shared/schema";
+import { ncaEccDomains, ncaEccStructure } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 
 // Enhanced questions with risk weights and domain categorization
 const questions = [
   {
-    id: "ac1",
-    domain: "Access Control",
-    text: "Do you have a formal access control policy with role-based permissions?",
+    id: "g1",
+    domain: "Governance",
+    text: "Do you have a documented cybersecurity strategy aligned with business objectives?",
     weight: 3,
     impact: "High",
   },
   {
-    id: "ac2",
-    domain: "Access Control",
+    id: "g2",
+    domain: "Governance",
+    text: "Is there a formal risk assessment methodology in place?",
+    weight: 3,
+    impact: "High",
+  },
+  {
+    id: "cd1",
+    domain: "Cybersecurity Defence",
     text: "Is multi-factor authentication implemented for privileged accounts?",
     weight: 3,
     impact: "High",
   },
   {
-    id: "dp1",
-    domain: "Data Protection",
-    text: "Is sensitive data encrypted at rest using industry-standard algorithms?",
+    id: "cd2",
+    domain: "Cybersecurity Defence",
+    text: "Are encryption standards defined and implemented?",
     weight: 3,
     impact: "High",
   },
   {
-    id: "dp2",
-    domain: "Data Protection",
-    text: "Are regular data backup and recovery tests performed?",
-    weight: 2,
-    impact: "Medium",
-  },
-  {
-    id: "ns1",
-    domain: "Network Security",
-    text: "Is network traffic monitored and logged continuously?",
+    id: "cr1",
+    domain: "Cybersecurity Resilience",
+    text: "Is there a tested business continuity plan?",
     weight: 3,
     impact: "High",
   },
   {
-    id: "ir1",
-    domain: "Incident Response",
-    text: "Do you have a documented incident response plan?",
+    id: "cr2",
+    domain: "Cybersecurity Resilience",
+    text: "Do you have an incident response plan?",
     weight: 2,
     impact: "Medium",
   },
   {
-    id: "bc1",
-    domain: "Business Continuity",
-    text: "Is there a tested business continuity plan in place?",
-    weight: 2,
-    impact: "Medium",
+    id: "cc1",
+    domain: "Third Party Cloud Computing Cybersecurity",
+    text: "Are cloud service providers assessed for security compliance?",
+    weight: 3,
+    impact: "High",
+  },
+  {
+    id: "ics1",
+    domain: "Industrial Control System (ICS)",
+    text: "Is there network segmentation between IT and OT networks?",
+    weight: 3,
+    impact: "High",
   }
 ];
 
@@ -132,7 +139,7 @@ export default function QuestionForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {domains.map(domain => (
+        {ncaEccDomains.map(domain => (
           <Card key={domain} className="mb-6">
             <CardContent className="pt-6">
               <h3 className="text-lg font-semibold mb-4">{domain}</h3>

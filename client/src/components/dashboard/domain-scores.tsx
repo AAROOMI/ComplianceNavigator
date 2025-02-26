@@ -8,7 +8,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { domains } from "@shared/schema";
+import { ncaEccDomains } from "@shared/schema";
 
 ChartJS.register(
   CategoryScale,
@@ -36,11 +36,11 @@ const options = {
 };
 
 export default function DomainScores() {
-  // Mock scores
+  // Mock scores for each NCA ECC domain
   const scores = [80, 65, 70, 85, 60];
 
   const data = {
-    labels: domains,
+    labels: Array.from(ncaEccDomains),
     datasets: [
       {
         data: scores,

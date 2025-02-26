@@ -29,7 +29,7 @@ export async function registerRoutes(app: Express) {
 
       // Generate AI policy content if not provided
       if (!policy.content) {
-        policy.content = await generateSecurityPolicy(policy.domain);
+        policy.content = await generateSecurityPolicy(policy.domain, policy.subdomain);
       }
 
       const created = await storage.createPolicy(policy);

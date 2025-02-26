@@ -6,6 +6,7 @@ import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/dashboard";
 import Assessment from "@/pages/assessment";
 import Policies from "@/pages/policies";
+import NcaEcc from "@/pages/nca-ecc";
 import Landing from "@/pages/landing";
 import Sidebar from "@/components/layout/sidebar";
 
@@ -34,6 +35,14 @@ function Router() {
           <Sidebar />
           <main className="flex-1 p-8 overflow-auto">
             <Policies />
+          </main>
+        </div>
+      </Route>
+      <Route path="/nca-ecc">
+        <div className="flex h-screen bg-background">
+          <Sidebar />
+          <main className="flex-1 p-8 overflow-auto">
+            <NcaEcc />
           </main>
         </div>
       </Route>
