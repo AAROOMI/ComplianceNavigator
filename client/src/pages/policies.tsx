@@ -24,11 +24,10 @@ export default function Policies() {
   async function generatePolicy(domain: string) {
     setGenerating(true);
     try {
-      // Create real policy with API
+      // Create real policy with AI integration
       const policy = {
         userId,
         domain,
-        content: `This is a generated policy for ${domain.toLowerCase()}. It includes guidelines and procedures for maintaining compliance with NCA ECC framework requirements.`,
         generatedAt: new Date().toISOString(),
       };
 
@@ -39,7 +38,7 @@ export default function Policies() {
 
       toast({
         title: "Policy Generated",
-        description: `New ${domain} policy has been created.`,
+        description: `New ${domain} policy has been created using AI.`,
       });
     } catch (error) {
       toast({
@@ -75,7 +74,7 @@ export default function Policies() {
                       <FileText className="w-4 h-4 text-primary" />
                       <h3 className="font-medium">{policy.domain}</h3>
                     </div>
-                    <p className="text-sm text-muted-foreground">{policy.content}</p>
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">{policy.content}</p>
                     <p className="text-xs text-muted-foreground mt-2">
                       Generated on: {new Date(policy.generatedAt).toLocaleDateString()}
                     </p>
@@ -100,7 +99,7 @@ export default function Policies() {
             <CardContent>
               <ScrollArea className="h-[100px] mb-4">
                 <p className="text-sm text-muted-foreground">
-                  Generate a customized {domain.toLowerCase()} policy aligned with NCA ECC requirements and your organization's needs.
+                  Generate an AI-powered {domain.toLowerCase()} policy aligned with NCA ECC requirements and your organization's needs.
                 </p>
               </ScrollArea>
               <Separator className="my-4" />
