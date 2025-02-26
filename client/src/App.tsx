@@ -6,21 +6,39 @@ import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/dashboard";
 import Assessment from "@/pages/assessment";
 import Policies from "@/pages/policies";
+import Landing from "@/pages/landing";
 import Sidebar from "@/components/layout/sidebar";
 
 function Router() {
   return (
-    <div className="flex h-screen bg-background">
-      <Sidebar />
-      <main className="flex-1 p-8 overflow-auto">
-        <Switch>
-          <Route path="/" component={Dashboard} />
-          <Route path="/assessment" component={Assessment} />
-          <Route path="/policies" component={Policies} />
-          <Route component={NotFound} />
-        </Switch>
-      </main>
-    </div>
+    <Switch>
+      <Route path="/" component={Landing} />
+      <Route path="/dashboard">
+        <div className="flex h-screen bg-background">
+          <Sidebar />
+          <main className="flex-1 p-8 overflow-auto">
+            <Dashboard />
+          </main>
+        </div>
+      </Route>
+      <Route path="/assessment">
+        <div className="flex h-screen bg-background">
+          <Sidebar />
+          <main className="flex-1 p-8 overflow-auto">
+            <Assessment />
+          </main>
+        </div>
+      </Route>
+      <Route path="/policies">
+        <div className="flex h-screen bg-background">
+          <Sidebar />
+          <main className="flex-1 p-8 overflow-auto">
+            <Policies />
+          </main>
+        </div>
+      </Route>
+      <Route component={NotFound} />
+    </Switch>
   );
 }
 
