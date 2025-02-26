@@ -8,7 +8,7 @@ export default function Landing() {
       <div 
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: 'url("/Metawork backgroundapp.png")',
+          backgroundImage: 'url("/metaworks-bg.png")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
