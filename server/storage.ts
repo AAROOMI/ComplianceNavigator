@@ -1,4 +1,6 @@
 import { users, assessments, policies, type User, type InsertUser, type Assessment, type InsertAssessment, type Policy, type InsertPolicy } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -10,61 +12,39 @@ export interface IStorage {
   createPolicy(policy: InsertPolicy): Promise<Policy>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private assessments: Map<number, Assessment>;
-  private policies: Map<number, Policy>;
-  private currentId: number;
-
-  constructor() {
-    this.users = new Map();
-    this.assessments = new Map();
-    this.policies = new Map();
-    this.currentId = 1;
-  }
-
+export class DatabaseStorage implements IStorage {
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const [user] = await db.insert(users).values(insertUser).returning();
     return user;
   }
 
   async getAssessments(userId: number): Promise<Assessment[]> {
-    return Array.from(this.assessments.values()).filter(
-      (assessment) => assessment.userId === userId,
-    );
+    return db.select().from(assessments).where(eq(assessments.userId, userId));
   }
 
   async createAssessment(insertAssessment: InsertAssessment): Promise<Assessment> {
-    const id = this.currentId++;
-    const assessment: Assessment = { ...insertAssessment, id };
-    this.assessments.set(id, assessment);
+    const [assessment] = await db.insert(assessments).values(insertAssessment).returning();
     return assessment;
   }
 
   async getPolicies(userId: number): Promise<Policy[]> {
-    return Array.from(this.policies.values()).filter(
-      (policy) => policy.userId === userId,
-    );
+    return db.select().from(policies).where(eq(policies.userId, userId));
   }
 
   async createPolicy(insertPolicy: InsertPolicy): Promise<Policy> {
-    const id = this.currentId++;
-    const policy: Policy = { ...insertPolicy, id };
-    this.policies.set(id, policy);
+    const [policy] = await db.insert(policies).values(insertPolicy).returning();
     return policy;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

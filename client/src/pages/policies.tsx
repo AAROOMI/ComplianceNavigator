@@ -6,11 +6,13 @@ import { FileText, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { domains } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function Policies() {
   const [generating, setGenerating] = useState(false);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   // Mock user ID for demonstration - replace with actual user ID from auth
   const userId = 1;
@@ -21,14 +23,33 @@ export default function Policies() {
 
   async function generatePolicy(domain: string) {
     setGenerating(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setGenerating(false);
+    try {
+      // Create real policy with API
+      const policy = {
+        userId,
+        domain,
+        content: `This is a generated policy for ${domain.toLowerCase()}. It includes guidelines and procedures for maintaining compliance with NCA ECC framework requirements.`,
+        generatedAt: new Date().toISOString(),
+      };
 
-    toast({
-      title: "Policy Generated",
-      description: `New ${domain} policy has been created.`,
-    });
+      await apiRequest('POST', '/api/policies', policy);
+
+      // Invalidate policies cache to refresh the list
+      await queryClient.invalidateQueries({ queryKey: [`/api/policies/${userId}`] });
+
+      toast({
+        title: "Policy Generated",
+        description: `New ${domain} policy has been created.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to generate policy. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setGenerating(false);
+    }
   }
 
   return (
@@ -48,7 +69,7 @@ export default function Policies() {
               <p className="text-sm text-muted-foreground">No policies generated yet.</p>
             ) : (
               <div className="space-y-4">
-                {policies.map((policy) => (
+                {policies.map((policy: any) => (
                   <div key={policy.id} className="p-4 border rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
                       <FileText className="w-4 h-4 text-primary" />
