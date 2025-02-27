@@ -28,29 +28,16 @@ export function Sidebar({ className, children, ...props }: SidebarProps) {
   const { isOpen } = useSidebar();
 
   return (
-    <aside
+    <div
       className={cn(
-        "h-screen w-64 bg-background border-r transition-all duration-300 ease-in-out",
-        isOpen ? "translate-x-0" : "-translate-x-full"
+        "fixed inset-y-0 left-0 z-30 flex w-64 flex-col border-r bg-background transition-transform duration-300 ease-in-out",
+        isOpen ? "translate-x-0" : "-translate-x-full",
+        className
       )}
+      {...props}
     >
-      <div className="p-4">
-        <h2 className="text-xl font-bold mb-4">Navigation</h2>
-        <nav>
-          <ul className="space-y-2">
-            <li>
-              <a href="/" className="block p-2 hover:bg-muted rounded-md">Home</a>
-            </li>
-            <li>
-              <a href="/dashboard" className="block p-2 hover:bg-muted rounded-md">Dashboard</a>
-            </li>
-            <li>
-              <a href="/settings" className="block p-2 hover:bg-muted rounded-md">Settings</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </aside>
+      {children}
+    </div>
   );
 }
 
