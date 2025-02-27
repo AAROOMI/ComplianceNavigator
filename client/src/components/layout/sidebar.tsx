@@ -13,6 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenu
 } from '@/components/ui/sidebar';
+import { useSidebar } from '@/components/ui/sidebar-context';
 import { ShieldCheck, FileText, ClipboardCheck, Bot, LayoutDashboard } from 'lucide-react';
 
 export default function Sidebar() {
