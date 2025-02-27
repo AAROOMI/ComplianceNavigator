@@ -1,8 +1,9 @@
 
-import { Router, Route, Switch } from "wouter";
+import { Router, Switch, Route } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "./lib/queryClient";
-import { SidebarProvider } from "./components/ui/sidebar-context";
+import { Toaster } from "@/components/ui/toaster";
+import { queryClient } from "@/lib/queryClient";
+import { SidebarProvider } from "@/components/ui/sidebar-context";
 
 function App() {
   return (
@@ -12,11 +13,21 @@ function App() {
           <div className="flex h-screen">
             <Switch>
               <Route path="/">
-                <div>Home Page</div>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold mb-4">Welcome to the Application</h1>
+                  <p>Your application is now running successfully on port 3000.</p>
+                </div>
+              </Route>
+              <Route>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold mb-4">404 - Page Not Found</h1>
+                  <p>The page you are looking for does not exist.</p>
+                </div>
               </Route>
             </Switch>
           </div>
         </Router>
+        <Toaster />
       </SidebarProvider>
     </QueryClientProvider>
   );
