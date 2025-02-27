@@ -2,7 +2,7 @@ import { Express } from "express";
 import { createServer } from "http";
 import { storage } from "./storage";
 import { insertAssessmentSchema, insertPolicySchema } from "@shared/schema";
-import { generateSecurityPolicy, generateComplianceResponse } from "./services/ai";
+import { generateSecurityPolicy } from "./services/ai";
 
 export async function registerRoutes(app: Express) {
   app.get("/api/assessments/:userId", async (req, res) => {
@@ -48,27 +48,6 @@ export async function registerRoutes(app: Express) {
     } catch (error) {
       console.error("Error creating policy:", error);
       res.status(500).json({ message: "Failed to create policy" });
-    }
-  });
-
-  // AI Assistant API endpoint
-  app.post("/api/assistant/chat", async (req, res) => {
-    try {
-      const { message } = req.body;
-      if (!message) {
-        return res.status(400).json({ message: "Message is required" });
-      }
-
-      // Generate response using AI
-      const response = await generateComplianceResponse(message);
-      
-      res.json({ 
-        message: response,
-        timestamp: new Date().toISOString()
-      });
-    } catch (error) {
-      console.error("Error in AI assistant:", error);
-      res.status(500).json({ message: "Failed to process your request" });
     }
   });
 
