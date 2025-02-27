@@ -24,15 +24,21 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
 }
 
-export function Sidebar({ className, children, ...props }: SidebarProps) {
+export function Sidebar({
+  className,
+  children,
+  ...props
+}: SidebarProps) {
   const { isOpen } = useSidebar();
 
   return (
     <aside
       className={cn(
-        "h-screen w-64 bg-background border-r transition-all duration-300 ease-in-out",
-        isOpen ? "translate-x-0" : "-translate-x-full"
+        "fixed inset-y-0 left-0 z-30 flex w-64 flex-col border-r bg-background transition-transform duration-300 ease-in-out",
+        isOpen ? "translate-x-0" : "-translate-x-full",
+        className
       )}
+      {...props}
     >
       <div className="p-4">
         <h2 className="text-xl font-bold mb-4">Navigation</h2>
@@ -50,6 +56,7 @@ export function Sidebar({ className, children, ...props }: SidebarProps) {
           </ul>
         </nav>
       </div>
+      {children}
     </aside>
   );
 }
@@ -65,10 +72,7 @@ export function SidebarHeader({
 }: SidebarHeaderProps) {
   return (
     <div
-      className={cn(
-        "flex h-14 items-center border-b px-4 py-2 lg:h-[60px]",
-        className
-      )}
+      className={cn("p-4 border-b", className)}
       {...props}
     >
       {children}
