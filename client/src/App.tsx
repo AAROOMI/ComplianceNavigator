@@ -1,27 +1,24 @@
-import { Switch, Route } from "wouter";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { SidebarProvider } from "@/components/ui/sidebar-context";
-import { queryClient } from "@/lib/queryClient";
-import Router from "./router"; // Corrected import path
-import NotFound from "@/pages/not-found";
-import Dashboard from "@/pages/dashboard";
-import Assessment from "@/pages/assessment";
-import Policies from "@/pages/policies";
-import NcaEcc from "@/pages/nca-ecc";
-import Assistant from "@/pages/assistant";
-import Landing from "@/pages/landing";
-import Sidebar from "@/components/layout/sidebar";
 
+import { Router, Route, Switch } from "wouter";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./lib/queryClient";
+import { SidebarProvider } from "./components/ui/sidebar-context";
 
 function App() {
   return (
-    <SidebarProvider>
-      <QueryClientProvider client={queryClient}>
-        <Router />
-        <Toaster />
-      </QueryClientProvider>
-    </SidebarProvider>
+    <QueryClientProvider client={queryClient}>
+      <SidebarProvider>
+        <Router>
+          <div className="flex h-screen">
+            <Switch>
+              <Route path="/">
+                <div>Home Page</div>
+              </Route>
+            </Switch>
+          </div>
+        </Router>
+      </SidebarProvider>
+    </QueryClientProvider>
   );
 }
 
