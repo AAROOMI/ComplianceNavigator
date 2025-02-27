@@ -47,7 +47,7 @@ export default function VirtualAssistant() {
     }
   };
 
-  const handleUserMessage = (content: string) => {
+  const handleUserMessage = async (content: string) => {
     // Add user message
     setMessages(prev => [...prev, { role: "user", content }]);
     setInput("");
@@ -55,28 +55,38 @@ export default function VirtualAssistant() {
     // Show "thinking" expression
     setAvatarMood("thinking");
     
-    // Simulate AI response after a short delay
-    setTimeout(() => {
-      let response: string;
+    try {
+      // Call the AI Assistant API
+      const response = await fetch('/api/assistant/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: content }),
+      });
       
-      // Basic pattern matching for compliance-related questions
-      if (content.toLowerCase().includes("nca ecc")) {
-        response = "The NCA ECC (Essential Cybersecurity Controls) framework includes 5 domains: Governance, Cybersecurity Defence, Cybersecurity Resilience, Third Party Cloud Computing, and Industrial Control Systems. Each domain has specific controls that organizations must implement to achieve compliance.";
-      } else if (content.toLowerCase().includes("policy")) {
-        response = "I can help generate security policies aligned with compliance requirements. You can use our Policy Generator tool to create customized policies for specific domains.";
-      } else if (content.toLowerCase().includes("compliance")) {
-        response = "To improve your compliance posture, we should start with an assessment of your current security controls. Would you like me to guide you through our assessment process?";
-      } else {
-        response = "I'm your cybersecurity compliance assistant. I can help with understanding compliance requirements, generating policies, and guiding you through assessments. What specific area would you like assistance with?";
+      if (!response.ok) {
+        throw new Error('Failed to get AI response');
       }
       
+      const data = await response.json();
+      const aiResponse = data.message;
+      
       // Add AI response
-      setMessages(prev => [...prev, { role: "assistant", content: response }]);
+      setMessages(prev => [...prev, { role: "assistant", content: aiResponse }]);
       
       // Show "happy" expression briefly after responding
       setAvatarMood("happy");
       setTimeout(() => setAvatarMood("neutral"), 2000);
-    }, 1500);
+    } catch (error) {
+      console.error("Error getting AI response:", error);
+      // Add fallback response
+      setMessages(prev => [...prev, { 
+        role: "assistant", 
+        content: "I'm having trouble connecting to my knowledge base. Please try again later." 
+      }]);
+      setAvatarMood("neutral");
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
