@@ -17,6 +17,195 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
+import React from 'react';
+import { cn } from '@/lib/utils';
+import { useSidebar } from './sidebar-context';
+
+export const Sidebar = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
+  const { isOpen } = useSidebar();
+
+  return (
+    <div
+      className={cn(
+        "h-screen flex-col border-r bg-background",
+        isOpen ? "w-64" : "w-16",
+        "transition-all duration-300 ease-in-out",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const SidebarHeader = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
+  return (
+    <div
+      className={cn("p-4 border-b", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const SidebarContent = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
+  return (
+    <div
+      className={cn("flex-1 overflow-auto", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const SidebarFooter = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
+  return (
+    <div
+      className={cn("p-4 border-t", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const SidebarGroup = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
+  return (
+    <div
+      className={cn("py-2", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const SidebarGroupLabel = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
+  return (
+    <div
+      className={cn("px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const SidebarGroupContent = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
+  return (
+    <div
+      className={cn("space-y-1", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const SidebarMenu = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLUListElement>) => {
+  return (
+    <ul
+      className={cn("space-y-1 px-2", className)}
+      {...props}
+    >
+      {children}
+    </ul>
+  );
+};
+
+export const SidebarMenuItem = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLLIElement>) => {
+  return (
+    <li
+      className={cn(className)}
+      {...props}
+    >
+      {children}
+    </li>
+  );
+};
+
+export const SidebarMenuButton = ({
+  className,
+  children,
+  active = false,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & { active?: boolean }) => {
+  return (
+    <button
+      className={cn(
+        "w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors",
+        active && "bg-muted",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
+
+export const SidebarMenuSub = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLUListElement>) => {
+  return (
+    <ul
+      className={cn("pl-6 space-y-1 mt-1", className)}
+      {...props}
+    >
+      {children}
+    </ul>
+  );
+};
+
+export const SidebarMenuSkeleton = () => {
+  return (
+    <div className="px-3 py-2">
+      <div className="h-4 w-[80%] bg-muted rounded animate-pulse"></div>
+    </div>
+  );
+};
+
 const SIDEBAR_COOKIE_NAME = "sidebar:state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = "16rem"
@@ -155,134 +344,6 @@ const SidebarProvider = React.forwardRef<
 )
 SidebarProvider.displayName = "SidebarProvider"
 
-const Sidebar = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<"div"> & {
-    side?: "left" | "right"
-    variant?: "sidebar" | "floating" | "inset"
-    collapsible?: "offcanvas" | "icon" | "none"
-  }
->(
-  (
-    {
-      side = "left",
-      variant = "sidebar",
-      collapsible = "offcanvas",
-      className,
-      children,
-      ...props
-    },
-    ref
-  ) => {
-    const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
-
-    if (collapsible === "none") {
-      return (
-        <div
-          className={cn(
-            "flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground",
-            className
-          )}
-          ref={ref}
-          {...props}
-        >
-          {children}
-        </div>
-      )
-    }
-
-    if (isMobile) {
-      return (
-        <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
-          <SheetContent
-            data-sidebar="sidebar"
-            data-mobile="true"
-            className="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
-            style={
-              {
-                "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
-              } as React.CSSProperties
-            }
-            side={side}
-          >
-            <div className="flex h-full w-full flex-col">{children}</div>
-          </SheetContent>
-        </Sheet>
-      )
-    }
-
-    return (
-      <div
-        ref={ref}
-        className="group peer hidden md:block"
-        data-state={state}
-        data-collapsible={state === "collapsed" ? collapsible : ""}
-        data-variant={variant}
-        data-side={side}
-      >
-        {/* This is what handles the sidebar gap on desktop */}
-        <div
-          className={cn(
-            "duration-200 relative h-svh w-[--sidebar-width] bg-transparent transition-[width] ease-linear",
-            "group-data-[collapsible=offcanvas]:w-0",
-            "group-data-[side=right]:rotate-180",
-            variant === "floating" || variant === "inset"
-              ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4))]"
-              : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]"
-          )}
-        />
-        <div
-          className={cn(
-            "duration-200 fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex",
-            side === "left"
-              ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
-              : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
-            // Adjust the padding for floating and inset variants.
-            variant === "floating" || variant === "inset"
-              ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]"
-              : "group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r group-data-[side=right]:border-l",
-            className
-          )}
-          {...props}
-        >
-          <div
-            data-sidebar="sidebar"
-            className="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
-          >
-            {children}
-          </div>
-        </div>
-      </div>
-    )
-  }
-)
-Sidebar.displayName = "Sidebar"
-
-const SidebarTrigger = React.forwardRef<
-  React.ElementRef<typeof Button>,
-  React.ComponentProps<typeof Button>
->(({ className, onClick, ...props }, ref) => {
-  const { toggleSidebar } = useSidebar()
-
-  return (
-    <Button
-      ref={ref}
-      data-sidebar="trigger"
-      variant="ghost"
-      size="icon"
-      className={cn("h-7 w-7", className)}
-      onClick={(event) => {
-        onClick?.(event)
-        toggleSidebar()
-      }}
-      {...props}
-    >
-      <PanelLeft />
-      <span className="sr-only">Toggle Sidebar</span>
-    </Button>
-  )
-})
-SidebarTrigger.displayName = "SidebarTrigger"
 
 const SidebarRail = React.forwardRef<
   HTMLButtonElement,

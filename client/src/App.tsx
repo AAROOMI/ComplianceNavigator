@@ -10,6 +10,7 @@ import NcaEcc from "@/pages/nca-ecc";
 import Assistant from "@/pages/assistant";
 import Landing from "@/pages/landing";
 import Sidebar from "@/components/layout/sidebar";
+import { SidebarProvider } from "./components/ui/sidebar-context"; // Added import
 
 function Router() {
   return (
@@ -62,10 +63,12 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router />
-      <Toaster />
-    </QueryClientProvider>
+    <SidebarProvider> {/* Added SidebarProvider */}
+      <QueryClientProvider client={queryClient}>
+        <Router />
+        <Toaster />
+      </QueryClientProvider>
+    </SidebarProvider> {/* Added closing tag */}
   );
 }
 
