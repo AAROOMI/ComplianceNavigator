@@ -32,6 +32,20 @@ export class DatabaseStorage implements IStorage {
     return db.select().from(assessments).where(eq(assessments.userId, userId));
   }
 
+  async createAssessment(assessment: InsertAssessment): Promise<Assessment> {
+    const [created] = await db.insert(assessments).values(assessment).returning();
+    return created;
+  }
+
+  async getPolicies(userId: number): Promise<Policy[]> {
+    return db.select().from(policies).where(eq(policies.userId, userId));
+  }
+
+  async createPolicy(policy: InsertPolicy): Promise<Policy> {
+    const [created] = await db.insert(policies).values(policy).returning();
+    return created;
+  }
+
   async createAssessment(insertAssessment: InsertAssessment): Promise<Assessment> {
     const [assessment] = await db.insert(assessments).values(insertAssessment).returning();
     return assessment;

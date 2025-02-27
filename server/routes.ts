@@ -25,11 +25,22 @@ export async function registerRoutes(app: Express) {
 
   app.post("/api/policies", async (req, res) => {
     try {
-      const policy = insertPolicySchema.parse(req.body);
+      // First, ensure a default content if none provided
+      const policyData = {
+        ...req.body,
+        content: req.body.content || "Default policy content - will be replaced"
+      };
+      
+      const policy = insertPolicySchema.parse(policyData);
 
-      // Generate AI policy content if not provided
-      if (!policy.content) {
-        policy.content = await generateSecurityPolicy(policy.domain, policy.subdomain);
+      // Generate AI policy content if needed
+      if (policy.content === "Default policy content - will be replaced") {
+        try {
+          policy.content = await generateSecurityPolicy(policy.domain, policy.subdomain || "");
+        } catch (genError) {
+          console.error("Error generating policy:", genError);
+          policy.content = `Policy for ${policy.domain} - AI generation failed`;
+        }
       }
 
       const created = await storage.createPolicy(policy);
