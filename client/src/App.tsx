@@ -1,76 +1,64 @@
-
-import { Router, Switch, Route } from "wouter";
+import { Route, Switch } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { SidebarProvider } from "@/components/ui/sidebar-context";
 import { Toaster } from "@/components/ui/toaster";
 import { queryClient } from "@/lib/queryClient";
-import { SidebarProvider } from "@/components/ui/sidebar-context";
-import { Sidebar } from "@/components/ui/sidebar";
 
-function App() {
+// Import pages
+import Landing from "@/pages/landing";
+import Dashboard from "@/pages/dashboard";
+import Assessment from "@/pages/assessment";
+import Policies from "@/pages/policies";
+import NcaEcc from "@/pages/nca-ecc";
+import NotFound from "@/pages/not-found";
+import Sidebar from "@/components/layout/sidebar";
+
+export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SidebarProvider>
-        <Router>
-          <div className="flex h-screen">
-            <Sidebar />
-            <div className="flex-1">
-              <Switch>
-                <Route path="/">
-                  <div className="p-6">
-                    <h1 className="text-2xl font-bold mb-4">Welcome to the Application</h1>
-                    <p>Your application is now running successfully on port 3000.</p>
-                  </div>
-                </Route>
-                <Route>
-                  <div className="p-6">
-                    <h1 className="text-2xl font-bold mb-4">404 - Page Not Found</h1>
-                    <p>The page you are looking for does not exist.</p>
-                  </div>
-                </Route>
-              </Switch>
+        <Switch>
+          <Route path="/">
+            <Landing />
+          </Route>
+          <Route path="/dashboard">
+            <div className="flex h-screen bg-background">
+              <Sidebar />
+              <main className="flex-1 p-8 overflow-auto">
+                <Dashboard />
+              </main>
             </div>
-          </div>
-        </Router>
+          </Route>
+          <Route path="/assessment">
+            <div className="flex h-screen bg-background">
+              <Sidebar />
+              <main className="flex-1 p-8 overflow-auto">
+                <Assessment />
+              </main>
+            </div>
+          </Route>
+          <Route path="/policies">
+            <div className="flex h-screen bg-background">
+              <Sidebar />
+              <main className="flex-1 p-8 overflow-auto">
+                <Policies />
+              </main>
+            </div>
+          </Route>
+          <Route path="/nca-ecc">
+            <div className="flex h-screen bg-background">
+              <Sidebar />
+              <main className="flex-1 p-8 overflow-auto">
+                <NcaEcc />
+              </main>
+            </div>
+          </Route>
+          <Route>
+            <NotFound />
+          </Route>
+        </Switch>
         <Toaster />
       </SidebarProvider>
     </QueryClientProvider>
   );
 }
-
-export default App;
-import React from "react";
-import { Route, Switch } from "wouter";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SidebarProvider } from "./components/ui/sidebar-context";
-import { Toaster } from "./components/ui/toaster";
-import "./index.css";
-
-// Import your components here
-import Sidebar from "./components/ui/sidebar";
-// import other components as needed
-
-const queryClient = new QueryClient();
-
-function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <SidebarProvider>
-        <div className="flex h-screen">
-          <Switch>
-            <Route path="/">
-              <Sidebar />
-              {/* Your main content goes here */}
-              <div className="flex-1 p-4">
-                <h1 className="text-2xl font-bold">Welcome to your application</h1>
-              </div>
-            </Route>
-            {/* Add more routes as needed */}
-          </Switch>
-        </div>
-      </SidebarProvider>
-      <Toaster />
-    </QueryClientProvider>
-  );
-}
-
-export default App;

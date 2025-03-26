@@ -3,45 +3,13 @@ import React, { createContext, useContext, useState } from "react";
 interface SidebarContextType {
   isOpen: boolean;
   toggle: () => void;
-}
-
-const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
-
-export function useSidebar(): SidebarContextType {
-  const context = useContext(SidebarContext);
-  if (context === undefined) {
-    throw new Error("useSidebar must be used within a SidebarProvider");
-  }
-  return context;
-}
-
-export function SidebarProvider({ children }: React.PropsWithChildren<{}>) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggle = () => {
-    setIsOpen(!isOpen);
-  };
-
-  return (
-    <SidebarContext.Provider value={{ isOpen, toggle }}>
-      {children}
-    </SidebarContext.Provider>
-  );
-}
-import React, { createContext, useContext, useState } from "react";
-
-interface SidebarContextType {
-  isOpen: boolean;
-  toggle: () => void;
   close: () => void;
   open: () => void;
 }
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
-export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ 
-  children 
-}) => {
+export function SidebarProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => {
@@ -61,12 +29,12 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
       {children}
     </SidebarContext.Provider>
   );
-};
+}
 
-export const useSidebar = (): SidebarContextType => {
+export function useSidebar(): SidebarContextType {
   const context = useContext(SidebarContext);
   if (context === undefined) {
     throw new Error("useSidebar must be used within a SidebarProvider");
   }
   return context;
-};
+}
