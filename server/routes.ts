@@ -1,7 +1,7 @@
 import { Express } from "express";
 import { createServer } from "http";
 import { storage } from "./storage";
-import { insertAssessmentSchema, insertPolicySchema } from "@shared/schema";
+import { insertAssessmentSchema, insertPolicySchema, insertVulnerabilitySchema } from "@shared/schema";
 import { generateSecurityPolicy, generateComplianceResponse } from "./services/ai";
 
 export async function registerRoutes(app: Express) {
@@ -69,6 +69,48 @@ export async function registerRoutes(app: Express) {
     } catch (error) {
       console.error("Error in AI assistant:", error);
       res.status(500).json({ message: "Failed to process your request" });
+    }
+  });
+
+  // Vulnerability Assessment API endpoints
+  app.get("/api/vulnerabilities/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const assessmentId = req.query.assessmentId ? parseInt(req.query.assessmentId.toString()) : undefined;
+      const vulnerabilities = await storage.getVulnerabilities(userId, assessmentId);
+      res.json(vulnerabilities);
+    } catch (error) {
+      console.error("Error fetching vulnerabilities:", error);
+      res.status(500).json({ message: "Failed to fetch vulnerabilities" });
+    }
+  });
+
+  app.get("/api/vulnerabilities/:userId/domain/:domain", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const domain = req.params.domain;
+      const vulnerabilities = await storage.getVulnerabilityByDomain(userId, domain);
+      res.json(vulnerabilities);
+    } catch (error) {
+      console.error("Error fetching domain vulnerabilities:", error);
+      res.status(500).json({ message: "Failed to fetch domain vulnerabilities" });
+    }
+  });
+
+  app.post("/api/vulnerabilities", async (req, res) => {
+    try {
+      // Ensure created date is set
+      const vulnerabilityData = {
+        ...req.body,
+        createdAt: req.body.createdAt || new Date().toISOString()
+      };
+      
+      const vulnerability = insertVulnerabilitySchema.parse(vulnerabilityData);
+      const created = await storage.createVulnerability(vulnerability);
+      res.json(created);
+    } catch (error) {
+      console.error("Error creating vulnerability:", error);
+      res.status(500).json({ message: "Failed to create vulnerability" });
     }
   });
 

@@ -165,6 +165,22 @@ export const assessments = pgTable("assessments", {
   completedAt: text("completed_at").notNull(),
 });
 
+export const vulnerabilities = pgTable("vulnerabilities", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  assessmentId: integer("assessment_id").notNull(),
+  domain: text("domain").notNull(),
+  subdomain: text("subdomain").notNull(),
+  control: text("control").notNull(),
+  status: text("status").notNull(), // "compliant", "partially-compliant", "non-compliant"
+  impact: text("impact").notNull(), // "critical", "high", "medium", "low"
+  risk: text("risk").notNull(), // calculated risk value
+  description: text("description").notNull(),
+  remediation: text("remediation").notNull(),
+  timeline: text("timeline"), // remediation timeline
+  createdAt: text("created_at").notNull(),
+});
+
 export const policies = pgTable("policies", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").notNull(),
@@ -196,6 +212,21 @@ export const insertPolicySchema = createInsertSchema(policies).pick({
   generatedAt: true,
 });
 
+export const insertVulnerabilitySchema = createInsertSchema(vulnerabilities).pick({
+  userId: true,
+  assessmentId: true,
+  domain: true,
+  subdomain: true,
+  control: true,
+  status: true,
+  impact: true,
+  risk: true,
+  description: true,
+  remediation: true,
+  timeline: true,
+  createdAt: true,
+});
+
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 
@@ -204,3 +235,6 @@ export type InsertAssessment = z.infer<typeof insertAssessmentSchema>;
 
 export type Policy = typeof policies.$inferSelect;
 export type InsertPolicy = z.infer<typeof insertPolicySchema>;
+
+export type Vulnerability = typeof vulnerabilities.$inferSelect;
+export type InsertVulnerability = z.infer<typeof insertVulnerabilitySchema>;

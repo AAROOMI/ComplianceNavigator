@@ -1,6 +1,6 @@
-import { users, assessments, policies, type User, type InsertUser, type Assessment, type InsertAssessment, type Policy, type InsertPolicy } from "@shared/schema";
+import { users, assessments, policies, vulnerabilities, type User, type InsertUser, type Assessment, type InsertAssessment, type Policy, type InsertPolicy, type Vulnerability, type InsertVulnerability } from "@shared/schema";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -10,6 +10,9 @@ export interface IStorage {
   createAssessment(assessment: InsertAssessment): Promise<Assessment>;
   getPolicies(userId: number): Promise<Policy[]>;
   createPolicy(policy: InsertPolicy): Promise<Policy>;
+  getVulnerabilities(userId: number, assessmentId?: number): Promise<Vulnerability[]>;
+  getVulnerabilityByDomain(userId: number, domain: string): Promise<Vulnerability[]>;
+  createVulnerability(vulnerability: InsertVulnerability): Promise<Vulnerability>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -46,18 +49,36 @@ export class DatabaseStorage implements IStorage {
     return created;
   }
 
-  async createAssessment(insertAssessment: InsertAssessment): Promise<Assessment> {
-    const [assessment] = await db.insert(assessments).values(insertAssessment).returning();
-    return assessment;
+  async getVulnerabilities(userId: number, assessmentId?: number): Promise<Vulnerability[]> {
+    if (assessmentId) {
+      return db.select()
+        .from(vulnerabilities)
+        .where(
+          and(
+            eq(vulnerabilities.userId, userId),
+            eq(vulnerabilities.assessmentId, assessmentId)
+          )
+        );
+    }
+    return db.select()
+      .from(vulnerabilities)
+      .where(eq(vulnerabilities.userId, userId));
   }
 
-  async getPolicies(userId: number): Promise<Policy[]> {
-    return db.select().from(policies).where(eq(policies.userId, userId));
+  async getVulnerabilityByDomain(userId: number, domain: string): Promise<Vulnerability[]> {
+    return db.select()
+      .from(vulnerabilities)
+      .where(
+        and(
+          eq(vulnerabilities.userId, userId),
+          eq(vulnerabilities.domain, domain)
+        )
+      );
   }
 
-  async createPolicy(insertPolicy: InsertPolicy): Promise<Policy> {
-    const [policy] = await db.insert(policies).values(insertPolicy).returning();
-    return policy;
+  async createVulnerability(vulnerability: InsertVulnerability): Promise<Vulnerability> {
+    const [created] = await db.insert(vulnerabilities).values(vulnerability).returning();
+    return created;
   }
 }
 

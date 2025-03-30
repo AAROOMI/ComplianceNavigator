@@ -73,7 +73,11 @@ const formSchema = z.object({
   answers: z.record(z.enum(["yes", "partial", "no"])),
 });
 
-export default function QuestionForm() {
+interface QuestionFormProps {
+  onComplete?: (assessmentId: number) => void;
+}
+
+export default function QuestionForm({ onComplete }: QuestionFormProps) {
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -112,22 +116,32 @@ export default function QuestionForm() {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
       const results = await analyzeRisks(data.answers);
+      let lastAssessmentId: number = 0;
 
       // Save assessment results
       for (const result of results) {
-        await apiRequest('POST', '/api/assessments', {
+        const assessment = await apiRequest<{ id: number }>('POST', '/api/assessments', {
           userId: 1, // TODO: Replace with actual user ID
           domain: result.domain,
           score: result.score,
           completedAt: new Date().toISOString()
         });
+        if (assessment && 'id' in assessment) {
+          lastAssessmentId = assessment.id;
+        }
       }
 
       toast({
         title: "Assessment Complete",
         description: "Your risk assessment has been analyzed and saved.",
       });
+
+      // Call the onComplete callback if provided
+      if (onComplete && lastAssessmentId) {
+        onComplete(lastAssessmentId);
+      }
     } catch (error) {
+      console.error("Error saving assessment:", error);
       toast({
         title: "Error",
         description: "Failed to save assessment results.",
