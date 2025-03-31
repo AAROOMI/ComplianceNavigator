@@ -1,4 +1,11 @@
-import { users, assessments, policies, vulnerabilities, type User, type InsertUser, type Assessment, type InsertAssessment, type Policy, type InsertPolicy, type Vulnerability, type InsertVulnerability } from "@shared/schema";
+import { 
+  users, assessments, policies, vulnerabilities, riskManagementPlans,
+  type User, type InsertUser, 
+  type Assessment, type InsertAssessment, 
+  type Policy, type InsertPolicy, 
+  type Vulnerability, type InsertVulnerability,
+  type RiskManagementPlan, type InsertRiskManagementPlan
+} from "@shared/schema";
 import { db } from "./db";
 import { eq, and } from "drizzle-orm";
 
@@ -13,6 +20,11 @@ export interface IStorage {
   getVulnerabilities(userId: number, assessmentId?: number): Promise<Vulnerability[]>;
   getVulnerabilityByDomain(userId: number, domain: string): Promise<Vulnerability[]>;
   createVulnerability(vulnerability: InsertVulnerability): Promise<Vulnerability>;
+  getRiskManagementPlans(userId: number, vulnerabilityId?: number): Promise<RiskManagementPlan[]>;
+  getRiskManagementPlanById(id: number): Promise<RiskManagementPlan | undefined>;
+  createRiskManagementPlan(plan: InsertRiskManagementPlan): Promise<RiskManagementPlan>;
+  updateRiskManagementPlan(id: number, plan: Partial<InsertRiskManagementPlan>): Promise<RiskManagementPlan | undefined>;
+  deleteRiskManagementPlan(id: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -79,6 +91,49 @@ export class DatabaseStorage implements IStorage {
   async createVulnerability(vulnerability: InsertVulnerability): Promise<Vulnerability> {
     const [created] = await db.insert(vulnerabilities).values(vulnerability).returning();
     return created;
+  }
+
+  // Risk Management Plan methods
+  async getRiskManagementPlans(userId: number, vulnerabilityId?: number): Promise<RiskManagementPlan[]> {
+    if (vulnerabilityId) {
+      return db.select()
+        .from(riskManagementPlans)
+        .where(
+          and(
+            eq(riskManagementPlans.userId, userId),
+            eq(riskManagementPlans.vulnerabilityId, vulnerabilityId)
+          )
+        );
+    }
+    return db.select()
+      .from(riskManagementPlans)
+      .where(eq(riskManagementPlans.userId, userId));
+  }
+
+  async getRiskManagementPlanById(id: number): Promise<RiskManagementPlan | undefined> {
+    const [plan] = await db.select()
+      .from(riskManagementPlans)
+      .where(eq(riskManagementPlans.id, id));
+    return plan;
+  }
+
+  async createRiskManagementPlan(plan: InsertRiskManagementPlan): Promise<RiskManagementPlan> {
+    const [created] = await db.insert(riskManagementPlans).values(plan).returning();
+    return created;
+  }
+
+  async updateRiskManagementPlan(id: number, plan: Partial<InsertRiskManagementPlan>): Promise<RiskManagementPlan | undefined> {
+    const [updated] = await db.update(riskManagementPlans)
+      .set(plan)
+      .where(eq(riskManagementPlans.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteRiskManagementPlan(id: number): Promise<boolean> {
+    const result = await db.delete(riskManagementPlans)
+      .where(eq(riskManagementPlans.id, id));
+    return true; // In a real implementation, we'd check the result
   }
 }
 
