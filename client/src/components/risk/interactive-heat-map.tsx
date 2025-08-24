@@ -5,16 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Activity, Filter, RotateCcw, TrendingUp } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import type { RiskRegister } from "@shared/schema";
 
-interface RiskData {
-  id: number;
-  category: string;
-  title: string;
-  riskLevel: string;
-  impact: string;
-  likelihood: string;
-  description: string;
-}
+type RiskData = RiskRegister;
 
 interface HeatMapCell {
   impact: string;
@@ -58,7 +51,7 @@ export default function InteractiveRiskHeatMap() {
   const [animationEnabled, setAnimationEnabled] = useState(true);
   const [filterCategory, setFilterCategory] = useState<string>("all");
 
-  const { data: riskData = [], isLoading } = useQuery({
+  const { data: riskData = [], isLoading } = useQuery<RiskData[]>({
     queryKey: ['/api/risk-register'],
   });
 
@@ -81,12 +74,12 @@ export default function InteractiveRiskHeatMap() {
         const severity = calculateSeverity(impact, likelihood);
         
         // Filter risks by category if selected
-        let filteredRisks = riskData.filter((risk: RiskData) => 
+        let filteredRisks = riskData.filter((risk) => 
           risk.impact === impact && risk.likelihood === likelihood
         );
         
         if (filterCategory !== "all") {
-          filteredRisks = filteredRisks.filter((risk: RiskData) => 
+          filteredRisks = filteredRisks.filter((risk) => 
             risk.category === filterCategory
           );
         }
@@ -106,7 +99,7 @@ export default function InteractiveRiskHeatMap() {
   };
 
   const heatMapMatrix = createHeatMapMatrix();
-  const categories = Array.from(new Set(riskData.map((risk: RiskData) => risk.category)));
+  const categories = Array.from(new Set(riskData.map((risk) => risk.category)));
 
   // Animation effects
   useEffect(() => {

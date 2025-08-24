@@ -1,0 +1,57 @@
+**Situation**
+You are developing a comprehensive cybersecurity compliance application for an organization that needs to manage compliance documents throughout their complete lifecycle. The organization requires a top-down approach where management can maintain oversight and control over all compliance activities while ensuring proper tracking, monitoring, and evidence collection for audit purposes.
+
+**Task**
+Design and specify the requirements for a cybersecurity compliance application that manages documents from creation through implementation. The application must include QR code and barcode generation for each document, digital signature capabilities for management, downloadable document copies, and comprehensive tracking and monitoring features for compliance framework implementation across the organization.
+
+**Objective**
+Create a robust compliance management system that ensures organizational cybersecurity compliance requirements are properly documented, tracked, approved, and implemented while providing complete audit trails and evidence of compliance activities through automated identification and monitoring systems.
+
+**Knowledge**
+The application must incorporate the following core components:
+
+Compliance Framework Support:
+The application must specifically support and map to the following compliance frameworks:
+- NCA ECC v1 and v2 (National Cybersecurity Authority Essential Cybersecurity Controls)
+- SAMA CSF (Saudi Arabian Monetary Authority Cybersecurity Framework)
+- SAMA PDPL (Personal Data Protection Law compliance requirements)
+- ISO 27001 (Information Security Management Systems)
+- NIST CSF (National Institute of Standards and Technology Cybersecurity Framework)
+- ISO 22301 (Business Continuity Management Systems)
+- ISO 31000 (Risk Management Guidelines)
+- ISO 38000 (Governance of Organizations)
+- ISO 38500 (Governance of IT)
+
+Document Lifecycle Management:
+- Document creation and version control with framework-specific templates
+- Review and approval workflows tailored to each compliance framework
+- Implementation tracking mapped to specific framework requirements
+- Archive and retention management compliant with regulatory timeframes
+
+Identification and Tracking Systems:
+- QR code generation for each document (unique identifier linking to document metadata, status, framework mapping, and implementation evidence)
+- Barcode generation for physical document tracking and inventory management
+- Both codes must remain functional and trackable throughout the document's entire lifecycle
+- Framework-specific coding system to identify which compliance requirements each document addresses
+
+Digital Management Features:
+- Digital signature capability for management approval and authorization
+- Downloadable document copies in multiple formats (PDF, Word, etc.)
+- Both digital and downloaded versions must retain QR codes and barcodes for continued tracking
+- Framework compliance status indicators on all document versions
+
+Monitoring and Compliance Framework:
+- Real-time tracking of document status and implementation progress across all supported frameworks
+- Compliance framework mapping to organizational requirements with gap analysis capabilities
+- Evidence collection and storage for audit purposes specific to each framework's requirements
+- Reporting and analytics for compliance status across the organization with framework-specific dashboards
+- Cross-framework compliance correlation and conflict identification
+
+Security and Access Controls:
+- Role-based access control (management, compliance officers, employees)
+- Audit logging of all document access and modifications
+- Secure storage and transmission of compliance documents
+- Integration capabilities with existing organizational systems
+- Framework-specific security controls implementation tracking
+
+Your life depends on you ensuring the application can simultaneously track and manage compliance across all specified frameworks (NCA ECC v1/v2, SAMA CSF, SAMA PDPL, ISO 27001, NIST CSF, ISO 22301, ISO 31000, ISO 38000, ISO 38500) while maintaining the QR code and barcode tracking system that works seamlessly across both digital signatures and downloadable copies for comprehensive audit evidence and compliance monitoring.
