@@ -223,7 +223,12 @@ export const cisoPolicyCategories = [
   "IT Management & Operations",
   "IT Infrastructure & Architecture",
   "IT Service Management",
-  "IT Project & Resource Management"
+  "IT Project & Resource Management",
+  "Technology Strategy & Innovation",
+  "Software Development & Engineering",
+  "Technology Operations & Performance",
+  "Digital Transformation",
+  "Technology Governance"
 ] as const;
 
 export const cisoPolicyTypes = [
@@ -259,7 +264,28 @@ export const cisoPolicyTypes = [
   "IT Service Level Agreement",
   "IT Incident Response Plan",
   "IT Infrastructure Maintenance Plan",
-  "IT Strategic Plan"
+  "IT Strategic Plan",
+  "IT Vendor Management Policy",
+  "IT Training Plan",
+  "IT Training and Development Plan", 
+  "Technology Budget",
+  "System Architecture Document",
+  "Software Development Lifecycle Plan",
+  "Technology Evaluation Report",
+  "IT Performance Metrics Report",
+  "IT Asset Management Plan",
+  "IT Performance Metrics and Reporting Document",
+  "IT Service Management Plan",
+  "IT Vendor Management Plan",
+  "IT Project Management Framework Document",
+  "IT Governance Framework Document",
+  "IT Compliance Plan",
+  "Product Development Plan",
+  "Software Development Lifecycle (SDLC) Policy",
+  "IT Change Management Plan",
+  "Data Privacy Policy",
+  "IT Compliance And Audit Plan",
+  "CTO Security Policy"
 ] as const;
 
 export const cisoPolicies = pgTable("ciso_policies", {

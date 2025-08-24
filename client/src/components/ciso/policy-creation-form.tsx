@@ -633,6 +633,441 @@ This IT Service Level Agreement (SLA) defines the service commitments between [I
 - Force majeure events and external factors
 - User error or unauthorized modifications`,
     requiredFields: ["organization_name", "service_manager", "sla_period"]
+  },
+
+  "Technology Budget": {
+    description: "Strategic technology budget planning and resource allocation",
+    sections: ["Budget Overview", "Technology Investments", "Operational Costs", "ROI Analysis", "Strategic Initiatives"],
+    template: `# Technology Budget
+
+## 1. Executive Summary
+This Technology Budget outlines [Organization Name]'s strategic technology investments and operational requirements for [Budget Period].
+
+## 2. Budget Overview
+### 2.1 Total Technology Investment
+- Total technology budget: $[Amount]
+- Capital expenditures (CAPEX): [Amount]
+- Operational expenditures (OPEX): [Amount]
+- Strategic initiatives: [Amount]
+
+### 2.2 Budget Allocation
+- Infrastructure & Cloud Services: [Percentage]%
+- Software Development & Innovation: [Percentage]%
+- Security & Compliance: [Percentage]%
+- Data & Analytics: [Percentage]%
+- Digital Transformation: [Percentage]%
+
+## 3. Technology Infrastructure Investments
+### 3.1 Cloud Infrastructure
+- Cloud platform subscriptions and services
+- Data storage and compute resources
+- Content delivery networks and edge computing
+- Disaster recovery and backup solutions
+
+### 3.2 Development & Innovation
+- Development tools and platforms
+- Testing and quality assurance tools
+- DevOps and CI/CD pipeline infrastructure
+- Emerging technology research and prototyping
+
+## 4. Strategic Technology Initiatives
+### 4.1 Digital Transformation Projects
+- Customer experience enhancement platforms
+- Business process automation and optimization
+- Data analytics and artificial intelligence
+- Internet of Things (IoT) and edge computing
+
+### 4.2 Innovation Investments
+- Research and development projects
+- Proof of concept and pilot programs
+- Technology partnership and collaboration
+- Intellectual property and patent development
+
+## 5. Operational Technology Expenses
+### 5.1 Software Licensing and Subscriptions
+- Enterprise software license renewals
+- Development and productivity tools
+- Security and monitoring software
+- Third-party API and service subscriptions
+
+### 5.2 Technology Operations
+- IT support and maintenance contracts
+- Technology staff training and certification
+- Vendor management and consulting services
+- Technology governance and compliance
+
+## 6. Return on Investment Analysis
+### 6.1 Expected Benefits
+- Revenue growth through technology enablement
+- Cost reduction through automation and efficiency
+- Risk mitigation through security investments
+- Competitive advantage through innovation
+
+### 6.2 Performance Metrics
+- Technology ROI measurement and tracking
+- Innovation pipeline and time-to-market metrics
+- Customer satisfaction and digital experience scores
+- Operational efficiency and cost optimization`,
+    requiredFields: ["organization_name", "cto_name", "budget_period"]
+  },
+
+  "Software Development Lifecycle Plan": {
+    description: "Comprehensive SDLC methodology and process framework",
+    sections: ["SDLC Overview", "Development Phases", "Quality Assurance", "DevOps Integration", "Governance"],
+    template: `# Software Development Lifecycle Plan
+
+## 1. SDLC Framework Overview
+This Software Development Lifecycle Plan establishes the methodology and processes for [Organization Name]'s software development initiatives.
+
+## 2. Development Methodology
+### 2.1 Agile Development Framework
+- Scrum methodology with 2-week sprints
+- Cross-functional development teams
+- Continuous integration and deployment
+- Regular stakeholder feedback and iteration
+
+### 2.2 Development Phases
+1. **Requirements Analysis**
+   - Stakeholder requirement gathering
+   - User story development and prioritization
+   - Technical feasibility assessment
+   - Risk analysis and mitigation planning
+
+2. **Design and Architecture**
+   - System architecture design
+   - Database design and modeling
+   - User interface and experience design
+   - API design and documentation
+
+3. **Implementation and Development**
+   - Code development following best practices
+   - Code review and peer programming
+   - Unit testing and test-driven development
+   - Version control and branch management
+
+4. **Testing and Quality Assurance**
+   - Automated testing framework implementation
+   - Integration and system testing
+   - Performance and security testing
+   - User acceptance testing coordination
+
+5. **Deployment and Release**
+   - Continuous integration/continuous deployment (CI/CD)
+   - Environment management and configuration
+   - Release planning and rollback procedures
+   - Production monitoring and alerting
+
+## 3. Quality Assurance Framework
+### 3.1 Code Quality Standards
+- Coding standards and style guides
+- Code review processes and criteria
+- Static code analysis and security scanning
+- Documentation requirements and maintenance
+
+### 3.2 Testing Strategy
+- Test automation and coverage requirements
+- Performance testing and optimization
+- Security testing and vulnerability assessment
+- Accessibility and usability testing
+
+## 4. DevOps and Automation
+### 4.1 CI/CD Pipeline
+- Automated build and deployment processes
+- Environment provisioning and management
+- Configuration management and infrastructure as code
+- Monitoring and logging implementation
+
+### 4.2 Development Tools and Platforms
+- Version control systems and branching strategies
+- Development environment standardization
+- Project management and collaboration tools
+- Performance monitoring and analytics
+
+## 5. Governance and Compliance
+### 5.1 Project Governance
+- Project approval and prioritization processes
+- Resource allocation and team management
+- Progress tracking and reporting
+- Risk management and issue escalation
+
+### 5.2 Compliance and Security
+- Security development lifecycle integration
+- Data privacy and protection requirements
+- Regulatory compliance considerations
+- Audit trail and documentation standards`,
+    requiredFields: ["organization_name", "development_manager", "methodology"]
+  },
+
+  "Product Development Plan": {
+    description: "Strategic product development roadmap and execution plan",
+    sections: ["Product Strategy", "Development Roadmap", "Resource Planning", "Go-to-Market", "Success Metrics"],
+    template: `# Product Development Plan
+
+## 1. Product Vision and Strategy
+This Product Development Plan outlines the strategy and execution plan for [Product Name] at [Organization Name].
+
+## 2. Product Overview
+### 2.1 Product Vision
+[Product vision statement and long-term objectives]
+
+### 2.2 Target Market and Customer Segments
+- Primary target audience and user personas
+- Market size and opportunity analysis
+- Competitive landscape and positioning
+- Customer needs and pain point analysis
+
+## 3. Development Roadmap
+### 3.1 Phase 1: Foundation (Months 1-3)
+- Core platform development and architecture
+- Basic feature implementation and testing
+- User interface design and prototyping
+- Technical infrastructure setup
+
+### 3.2 Phase 2: Enhancement (Months 4-6)
+- Advanced feature development and integration
+- User experience optimization and refinement
+- Performance optimization and scalability
+- Security implementation and testing
+
+### 3.3 Phase 3: Launch (Months 7-9)
+- Beta testing and user feedback incorporation
+- Production environment deployment
+- Go-to-market strategy execution
+- Customer onboarding and support processes
+
+## 4. Technical Architecture
+### 4.1 Technology Stack
+- Frontend technologies and frameworks
+- Backend systems and database architecture
+- Cloud infrastructure and deployment strategy
+- Third-party integrations and APIs
+
+### 4.2 Development Approach
+- Agile development methodology
+- Cross-functional team collaboration
+- Continuous integration and deployment
+- Quality assurance and testing protocols
+
+## 5. Resource Requirements
+### 5.1 Development Team Structure
+- Product management and strategy roles
+- Software engineering and development resources
+- User experience and design professionals
+- Quality assurance and testing specialists
+
+### 5.2 Budget and Timeline
+- Development cost estimates and allocation
+- Infrastructure and operational expenses
+- Marketing and go-to-market investment
+- Timeline milestones and deliverables
+
+## 6. Go-to-Market Strategy
+### 6.1 Launch Strategy
+- Product positioning and messaging
+- Marketing channels and campaigns
+- Sales strategy and channel partnerships
+- Customer acquisition and retention plans
+
+### 6.2 Success Metrics and KPIs
+- User adoption and engagement metrics
+- Revenue and business impact measurements
+- Customer satisfaction and feedback tracking
+- Technical performance and reliability metrics`,
+    requiredFields: ["organization_name", "product_manager", "launch_date"]
+  },
+
+  "System Architecture Document": {
+    description: "Comprehensive system architecture design and documentation",
+    sections: ["Architecture Overview", "System Components", "Integration Design", "Security Architecture", "Scalability"],
+    template: `# System Architecture Document
+
+## 1. Architecture Overview
+This System Architecture Document provides a comprehensive design for [System Name] at [Organization Name].
+
+## 2. System Requirements
+### 2.1 Functional Requirements
+- Core business functionality and capabilities
+- User interface and experience requirements
+- Integration and interoperability needs
+- Performance and scalability expectations
+
+### 2.2 Non-Functional Requirements
+- Availability and reliability targets (99.9% uptime)
+- Performance requirements (response time < 2 seconds)
+- Scalability requirements (support 10,000+ concurrent users)
+- Security and compliance standards
+
+## 3. High-Level Architecture
+### 3.1 System Components
+- Presentation layer (web and mobile interfaces)
+- Business logic layer (application services)
+- Data access layer (database and storage)
+- Integration layer (APIs and messaging)
+
+### 3.2 Technology Stack
+- **Frontend**: React.js, TypeScript, Material-UI
+- **Backend**: Node.js, Express.js, GraphQL
+- **Database**: PostgreSQL, Redis for caching
+- **Cloud Platform**: AWS with multi-region deployment
+- **Monitoring**: Prometheus, Grafana, ELK stack
+
+## 4. Detailed Component Design
+### 4.1 User Interface Layer
+- Responsive web application design
+- Mobile-first approach with Progressive Web App (PWA)
+- Component-based architecture with reusable UI libraries
+- Accessibility compliance (WCAG 2.1 AA)
+
+### 4.2 Application Services Layer
+- Microservices architecture with domain-driven design
+- RESTful APIs and GraphQL for data access
+- Event-driven architecture with message queues
+- Business logic encapsulation and separation of concerns
+
+### 4.3 Data Layer
+- Relational database design with normalized schema
+- Data caching strategy for performance optimization
+- Data backup and disaster recovery procedures
+- Data privacy and protection implementation
+
+## 5. Integration Architecture
+### 5.1 Internal Integrations
+- Service-to-service communication patterns
+- API gateway for routing and security
+- Event sourcing and CQRS implementation
+- Database synchronization and consistency
+
+### 5.2 External Integrations
+- Third-party API integration and management
+- Data import/export mechanisms
+- Real-time data synchronization
+- Legacy system integration approaches
+
+## 6. Security Architecture
+### 6.1 Authentication and Authorization
+- Multi-factor authentication implementation
+- Role-based access control (RBAC)
+- JWT token-based session management
+- Single sign-on (SSO) integration
+
+### 6.2 Data Security
+- Encryption at rest and in transit
+- Secure API design and implementation
+- Input validation and sanitization
+- Security monitoring and threat detection
+
+## 7. Scalability and Performance
+### 7.1 Horizontal Scaling Strategy
+- Load balancing and auto-scaling configuration
+- Database sharding and replication
+- Content delivery network (CDN) implementation
+- Caching strategies at multiple layers
+
+### 7.2 Performance Optimization
+- Code optimization and best practices
+- Database query optimization
+- Network latency reduction techniques
+- Resource utilization monitoring and tuning`,
+    requiredFields: ["organization_name", "system_architect", "technology_stack"]
+  },
+
+  "Technology Evaluation Report": {
+    description: "Comprehensive technology assessment and recommendation report",
+    sections: ["Evaluation Criteria", "Technology Assessment", "Cost Analysis", "Risk Assessment", "Recommendations"],
+    template: `# Technology Evaluation Report
+
+## 1. Executive Summary
+This Technology Evaluation Report assesses [Technology Name/Solution] for potential adoption at [Organization Name].
+
+## 2. Evaluation Scope and Objectives
+### 2.1 Evaluation Purpose
+- Strategic technology alignment assessment
+- Technical capability and performance evaluation
+- Cost-benefit analysis and ROI calculation
+- Risk assessment and mitigation strategies
+
+### 2.2 Evaluation Criteria
+- **Technical Requirements**: Functionality, performance, scalability
+- **Business Alignment**: Strategic fit, competitive advantage
+- **Financial Impact**: Total cost of ownership, ROI
+- **Risk Factors**: Implementation complexity, vendor stability
+
+## 3. Technology Overview
+### 3.1 Solution Description
+[Detailed description of the technology solution being evaluated]
+
+### 3.2 Key Features and Capabilities
+- Core functionality and feature set
+- Integration capabilities and APIs
+- Scalability and performance characteristics
+- Security and compliance features
+
+## 4. Technical Assessment
+### 4.1 Functionality Evaluation
+- Feature completeness against requirements
+- User interface and experience assessment
+- Integration capabilities and compatibility
+- Customization and configuration options
+
+### 4.2 Performance Analysis
+- Performance benchmarking results
+- Scalability testing and load handling
+- Reliability and availability metrics
+- Security assessment and vulnerability testing
+
+## 5. Cost-Benefit Analysis
+### 5.1 Total Cost of Ownership
+- **Initial Investment**: Licensing, hardware, implementation
+- **Ongoing Costs**: Maintenance, support, training
+- **Hidden Costs**: Integration, customization, migration
+- **5-Year TCO**: $[Amount] over evaluation period
+
+### 5.2 Expected Benefits
+- **Quantifiable Benefits**: Cost savings, efficiency gains
+- **Strategic Benefits**: Competitive advantage, innovation enablement
+- **Risk Mitigation**: Security improvements, compliance adherence
+- **ROI Calculation**: [Percentage]% return over [Time Period]
+
+## 6. Risk Assessment
+### 6.1 Implementation Risks
+- Technical complexity and integration challenges
+- Timeline and resource requirements
+- Change management and user adoption
+- Data migration and system compatibility
+
+### 6.2 Vendor and Technology Risks
+- Vendor financial stability and market position
+- Technology roadmap and future development
+- Support quality and service levels
+- Exit strategy and data portability
+
+## 7. Comparison Analysis
+### 7.1 Alternative Solutions
+[Comparison with other evaluated technologies/vendors]
+
+### 7.2 Pros and Cons Summary
+**Advantages:**
+- [List key advantages and strengths]
+
+**Disadvantages:**
+- [List limitations and concerns]
+
+## 8. Recommendations
+### 8.1 Final Recommendation
+[Clear recommendation: Proceed, Proceed with conditions, or Do not proceed]
+
+### 8.2 Implementation Considerations
+- Recommended implementation approach
+- Critical success factors and requirements
+- Timeline and resource recommendations
+- Risk mitigation strategies
+
+### 8.3 Next Steps
+- Pilot program or proof of concept
+- Vendor negotiations and contracting
+- Implementation planning and resource allocation
+- Success metrics and evaluation criteria`,
+    requiredFields: ["organization_name", "evaluator", "technology_name"]
   }
 };
 
@@ -709,7 +1144,28 @@ export default function PolicyCreationForm({
         "IT Service Level Agreement": "IT Service Management",
         "IT Incident Response Plan": "Incident & Crisis Management",
         "IT Infrastructure Maintenance Plan": "IT Infrastructure & Architecture",
-        "IT Strategic Plan": "Strategic Planning"
+        "IT Strategic Plan": "Strategic Planning",
+        "IT Vendor Management Policy": "Third-Party Management",
+        "IT Training Plan": "Training & Awareness",
+        "IT Training and Development Plan": "Training & Awareness",
+        "Technology Budget": "Technology Strategy & Innovation",
+        "System Architecture Document": "Technology Strategy & Innovation",
+        "Software Development Lifecycle Plan": "Software Development & Engineering",
+        "Technology Evaluation Report": "Technology Operations & Performance",
+        "IT Performance Metrics Report": "Technology Operations & Performance",
+        "IT Asset Management Plan": "IT Management & Operations",
+        "IT Performance Metrics and Reporting Document": "Technology Operations & Performance",
+        "IT Service Management Plan": "IT Service Management",
+        "IT Vendor Management Plan": "Third-Party Management",
+        "IT Project Management Framework Document": "IT Project & Resource Management",
+        "IT Governance Framework Document": "Technology Governance",
+        "IT Compliance Plan": "Governance & Compliance",
+        "Product Development Plan": "Software Development & Engineering",
+        "Software Development Lifecycle (SDLC) Policy": "Software Development & Engineering",
+        "IT Change Management Plan": "IT Management & Operations",
+        "Data Privacy Policy": "Data Protection",
+        "IT Compliance And Audit Plan": "Governance & Compliance",
+        "CTO Security Policy": "Security Operations"
       };
       
       const category = categoryMapping[policyType] || "Governance & Compliance";

@@ -126,6 +126,70 @@ const mockPolicies = [
     aiGenerated: false,
     createdAt: "2024-05-20T11:20:00Z",
     updatedAt: "2024-08-23T08:30:00Z"
+  },
+  {
+    id: 7,
+    policyType: "Technology Budget",
+    category: "Technology Strategy & Innovation",
+    title: "Technology Investment and Budget Plan 2024",
+    description: "Strategic technology budget allocation and investment planning for digital transformation initiatives",
+    status: "active",
+    priority: "critical",
+    owner: "CTO Office",
+    version: "4.0",
+    reviewDate: "2024-12-31",
+    expiryDate: "2025-12-31",
+    aiGenerated: false,
+    createdAt: "2024-01-01T08:00:00Z",
+    updatedAt: "2024-08-24T12:00:00Z"
+  },
+  {
+    id: 8,
+    policyType: "Software Development Lifecycle Plan",
+    category: "Software Development & Engineering",
+    title: "Enterprise SDLC Framework and Best Practices",
+    description: "Comprehensive software development lifecycle methodology for enterprise application development",
+    status: "approved",
+    priority: "high",
+    owner: "Engineering Manager",
+    version: "2.5",
+    reviewDate: "2024-10-15",
+    expiryDate: "2025-10-15",
+    aiGenerated: true,
+    createdAt: "2024-04-10T13:30:00Z",
+    updatedAt: "2024-08-23T15:45:00Z"
+  },
+  {
+    id: 9,
+    policyType: "Product Development Plan",
+    category: "Software Development & Engineering",
+    title: "Next-Generation Product Development Roadmap",
+    description: "Strategic product development plan for innovative technology solutions and market expansion",
+    status: "draft",
+    priority: "high",
+    owner: "Product Manager",
+    version: "1.0",
+    reviewDate: "2024-09-01",
+    expiryDate: "2025-09-01",
+    aiGenerated: true,
+    createdAt: "2024-08-15T10:00:00Z",
+    updatedAt: "2024-08-24T16:20:00Z"
+  },
+  {
+    id: 10,
+    policyType: "Technology Evaluation Report",
+    category: "Technology Operations & Performance",
+    title: "Cloud Platform Migration Evaluation",
+    description: "Comprehensive evaluation of cloud platforms for enterprise migration and modernization strategy",
+    status: "review",
+    priority: "medium",
+    owner: "Solutions Architect",
+    version: "1.2",
+    reviewDate: "2024-09-20",
+    expiryDate: "2025-09-20",
+    aiGenerated: false,
+    createdAt: "2024-07-01T14:15:00Z",
+    updatedAt: "2024-08-24T09:30:00Z"
   }
 ];
 
@@ -270,8 +334,8 @@ export default function CisoPolicies() {
         <div className="flex items-center gap-3">
           <Shield className="w-8 h-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold">CISO & IT Manager Policies</h1>
-            <p className="text-muted-foreground">Comprehensive cybersecurity and IT policy management system</p>
+            <h1 className="text-3xl font-bold">CISO, IT Manager & CTO Policies</h1>
+            <p className="text-muted-foreground">Comprehensive cybersecurity, IT operations, and technology strategy policy management</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
