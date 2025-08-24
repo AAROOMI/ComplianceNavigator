@@ -84,11 +84,9 @@ export default function SarahAIConsultant({ className }: SarahAIConsultantProps)
           }`}
           onClick={startConversation}
         >
-          <img 
-            src="/attached_assets/ceo-removebg-preview_1756022760331.png" 
-            alt="Sarah Johnson - AI Compliance Consultant"
-            className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-lg transition-transform duration-200 group-hover:scale-105"
-          />
+          <div className="w-12 h-12 rounded-full bg-muted border-2 border-white shadow-lg transition-transform duration-200 group-hover:scale-105 flex items-center justify-center">
+            <MessageCircle className="w-6 h-6 text-muted-foreground" />
+          </div>
           
           {/* Status Indicator */}
           <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white transition-all duration-300 ${
