@@ -1,11 +1,17 @@
 import { 
   users, assessments, policies, vulnerabilities, riskManagementPlans, riskRegister,
+  usersManagement, achievementBadges, userAchievements, policyFeedback, policyCollaboration,
   type User, type InsertUser, 
   type Assessment, type InsertAssessment, 
   type Policy, type InsertPolicy, 
   type Vulnerability, type InsertVulnerability,
   type RiskManagementPlan, type InsertRiskManagementPlan,
-  type RiskRegister, type InsertRiskRegister
+  type RiskRegister, type InsertRiskRegister,
+  type UsersManagement, type InsertUsersManagement,
+  type AchievementBadge, type InsertAchievementBadge,
+  type UserAchievement, type InsertUserAchievement,
+  type PolicyFeedback, type InsertPolicyFeedback,
+  type PolicyCollaboration, type InsertPolicyCollaboration
 } from "@shared/schema";
 import { eq, and } from "drizzle-orm";
 
@@ -31,6 +37,25 @@ export interface IStorage {
   createRiskRegisterEntry(entry: InsertRiskRegister): Promise<RiskRegister>;
   updateRiskRegisterEntry(id: number, entry: Partial<InsertRiskRegister>): Promise<RiskRegister | undefined>;
   deleteRiskRegisterEntry(id: number): Promise<boolean>;
+  
+  // User Management
+  getUsersManagement(): Promise<UsersManagement[]>;
+  getUserManagement(id: number): Promise<UsersManagement | undefined>;
+  createUserManagement(insertUser: InsertUsersManagement): Promise<UsersManagement>;
+  updateUserManagement(id: number, updateData: Partial<InsertUsersManagement>): Promise<UsersManagement>;
+  deleteUserManagement(id: number): Promise<void>;
+  
+  // Achievement Badges
+  getAchievementBadges(): Promise<AchievementBadge[]>;
+  createAchievementBadge(badge: InsertAchievementBadge): Promise<AchievementBadge>;
+  getUserAchievements(userId: number): Promise<UserAchievement[]>;
+  awardBadge(userId: number, badgeId: number): Promise<UserAchievement>;
+  
+  // Policy Feedback & Collaboration
+  getPolicyFeedback(policyId: number): Promise<PolicyFeedback[]>;
+  createPolicyFeedback(feedback: InsertPolicyFeedback): Promise<PolicyFeedback>;
+  getPolicyCollaboration(policyId: number): Promise<PolicyCollaboration[]>;
+  createPolicyCollaboration(collaboration: InsertPolicyCollaboration): Promise<PolicyCollaboration>;
 }
 
 class DatabaseStorage implements IStorage {
@@ -214,6 +239,86 @@ class DatabaseStorage implements IStorage {
       .where(eq(riskRegister.id, id));
     return true;
   }
+
+  // User Management - Database implementation
+  async getUsersManagement(): Promise<UsersManagement[]> {
+    const db = await this.getDb();
+    return await db.select().from(usersManagement);
+  }
+
+  async getUserManagement(id: number): Promise<UsersManagement | undefined> {
+    const db = await this.getDb();
+    const [user] = await db.select().from(usersManagement).where(eq(usersManagement.id, id));
+    return user;
+  }
+
+  async createUserManagement(insertUser: InsertUsersManagement): Promise<UsersManagement> {
+    const db = await this.getDb();
+    const [user] = await db.insert(usersManagement).values(insertUser).returning();
+    return user;
+  }
+
+  async updateUserManagement(id: number, updateData: Partial<InsertUsersManagement>): Promise<UsersManagement> {
+    const db = await this.getDb();
+    const [user] = await db.update(usersManagement)
+      .set({ ...updateData, updatedAt: new Date() })
+      .where(eq(usersManagement.id, id))
+      .returning();
+    return user;
+  }
+
+  async deleteUserManagement(id: number): Promise<void> {
+    const db = await this.getDb();
+    await db.delete(usersManagement).where(eq(usersManagement.id, id));
+  }
+
+  // Achievement Badges - Database implementation
+  async getAchievementBadges(): Promise<AchievementBadge[]> {
+    const db = await this.getDb();
+    return await db.select().from(achievementBadges).where(eq(achievementBadges.isActive, true));
+  }
+
+  async createAchievementBadge(badge: InsertAchievementBadge): Promise<AchievementBadge> {
+    const db = await this.getDb();
+    const [created] = await db.insert(achievementBadges).values(badge).returning();
+    return created;
+  }
+
+  async getUserAchievements(userId: number): Promise<UserAchievement[]> {
+    const db = await this.getDb();
+    return await db.select().from(userAchievements).where(eq(userAchievements.userId, userId));
+  }
+
+  async awardBadge(userId: number, badgeId: number): Promise<UserAchievement> {
+    const db = await this.getDb();
+    const [achievement] = await db.insert(userAchievements)
+      .values({ userId, badgeId, progress: 100 })
+      .returning();
+    return achievement;
+  }
+
+  // Policy Feedback & Collaboration - Database implementation
+  async getPolicyFeedback(policyId: number): Promise<PolicyFeedback[]> {
+    const db = await this.getDb();
+    return await db.select().from(policyFeedback).where(eq(policyFeedback.policyId, policyId));
+  }
+
+  async createPolicyFeedback(feedback: InsertPolicyFeedback): Promise<PolicyFeedback> {
+    const db = await this.getDb();
+    const [created] = await db.insert(policyFeedback).values(feedback).returning();
+    return created;
+  }
+
+  async getPolicyCollaboration(policyId: number): Promise<PolicyCollaboration[]> {
+    const db = await this.getDb();
+    return await db.select().from(policyCollaboration).where(eq(policyCollaboration.policyId, policyId));
+  }
+
+  async createPolicyCollaboration(collaboration: InsertPolicyCollaboration): Promise<PolicyCollaboration> {
+    const db = await this.getDb();
+    const [created] = await db.insert(policyCollaboration).values(collaboration).returning();
+    return created;
+  }
 }
 
 class InMemoryStorage implements IStorage {
@@ -353,6 +458,193 @@ class InMemoryStorage implements IStorage {
     const before = this.riskRegisterEntries.length;
     this.riskRegisterEntries = this.riskRegisterEntries.filter(r => r.id !== id);
     return this.riskRegisterEntries.length < before;
+  }
+
+  // User Management - InMemory implementation with sample data
+  private usersManagementList: UsersManagement[] = [
+    {
+      id: 1,
+      username: "sarah.chen",
+      email: "sarah.chen@metaworks.com",
+      firstName: "Sarah",
+      lastName: "Chen",
+      role: "ciso",
+      department: "Security",
+      isActive: true,
+      phoneNumber: "+1-555-0123",
+      preferences: { theme: "dark", notifications: true },
+      createdAt: new Date('2024-01-15'),
+      updatedAt: new Date('2024-01-15'),
+      lastLogin: new Date('2025-01-24T10:30:00')
+    },
+    {
+      id: 2,
+      username: "mike.thompson",
+      email: "mike.thompson@metaworks.com",
+      firstName: "Mike",
+      lastName: "Thompson",
+      role: "it_manager",
+      department: "IT Operations",
+      isActive: true,
+      phoneNumber: "+1-555-0124",
+      preferences: { theme: "light", notifications: false },
+      createdAt: new Date('2024-02-01'),
+      updatedAt: new Date('2024-02-01'),
+      lastLogin: new Date('2025-01-24T09:15:00')
+    },
+    {
+      id: 3,
+      username: "alexandra.rodriguez",
+      email: "alexandra.rodriguez@metaworks.com",
+      firstName: "Alexandra",
+      lastName: "Rodriguez",
+      role: "cto",
+      department: "Engineering",
+      isActive: true,
+      phoneNumber: "+1-555-0125",
+      preferences: { theme: "dark", notifications: true },
+      createdAt: new Date('2023-11-10'),
+      updatedAt: new Date('2023-11-10'),
+      lastLogin: new Date('2025-01-24T11:45:00')
+    },
+    {
+      id: 4,
+      username: "david.kim",
+      email: "david.kim@metaworks.com",
+      firstName: "David",
+      lastName: "Kim",
+      role: "system_admin",
+      department: "Infrastructure",
+      isActive: true,
+      phoneNumber: "+1-555-0126",
+      preferences: { theme: "light", notifications: true },
+      createdAt: new Date('2024-03-05'),
+      updatedAt: new Date('2024-03-05'),
+      lastLogin: new Date('2025-01-24T08:20:00')
+    },
+    {
+      id: 5,
+      username: "emma.watson",
+      email: "emma.watson@metaworks.com",
+      firstName: "Emma",
+      lastName: "Watson",
+      role: "user",
+      department: "Compliance",
+      isActive: false,
+      phoneNumber: "+1-555-0127",
+      preferences: { theme: "dark", notifications: false },
+      createdAt: new Date('2024-04-12'),
+      updatedAt: new Date('2024-04-12'),
+      lastLogin: new Date('2025-01-20T16:30:00')
+    }
+  ];
+  private userMgmtIdSeq = 6;
+
+  async getUsersManagement(): Promise<UsersManagement[]> {
+    return this.usersManagementList;
+  }
+
+  async getUserManagement(id: number): Promise<UsersManagement | undefined> {
+    return this.usersManagementList.find(u => u.id === id);
+  }
+
+  async createUserManagement(insertUser: InsertUsersManagement): Promise<UsersManagement> {
+    const created: UsersManagement = {
+      id: this.userMgmtIdSeq++,
+      ...insertUser,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      lastLogin: null
+    } as UsersManagement;
+    this.usersManagementList.push(created);
+    return created;
+  }
+
+  async updateUserManagement(id: number, updateData: Partial<InsertUsersManagement>): Promise<UsersManagement> {
+    const index = this.usersManagementList.findIndex(u => u.id === id);
+    if (index === -1) throw new Error("User not found");
+    
+    const updated = {
+      ...this.usersManagementList[index],
+      ...updateData,
+      updatedAt: new Date()
+    };
+    this.usersManagementList[index] = updated;
+    return updated;
+  }
+
+  async deleteUserManagement(id: number): Promise<void> {
+    this.usersManagementList = this.usersManagementList.filter(u => u.id !== id);
+  }
+
+  // Achievement Badges - InMemory implementation
+  private achievementBadgesList: AchievementBadge[] = [];
+  private userAchievementsList: UserAchievement[] = [];
+  private badgeIdSeq = 1;
+  private userAchievementIdSeq = 1;
+
+  async getAchievementBadges(): Promise<AchievementBadge[]> {
+    return this.achievementBadgesList.filter(b => b.isActive);
+  }
+
+  async createAchievementBadge(badge: InsertAchievementBadge): Promise<AchievementBadge> {
+    const created: AchievementBadge = {
+      id: this.badgeIdSeq++,
+      ...badge,
+      createdAt: new Date()
+    } as AchievementBadge;
+    this.achievementBadgesList.push(created);
+    return created;
+  }
+
+  async getUserAchievements(userId: number): Promise<UserAchievement[]> {
+    return this.userAchievementsList.filter(ua => ua.userId === userId);
+  }
+
+  async awardBadge(userId: number, badgeId: number): Promise<UserAchievement> {
+    const created: UserAchievement = {
+      id: this.userAchievementIdSeq++,
+      userId,
+      badgeId,
+      progress: 100,
+      earnedAt: new Date()
+    } as UserAchievement;
+    this.userAchievementsList.push(created);
+    return created;
+  }
+
+  // Policy Feedback & Collaboration - InMemory implementation  
+  private policyFeedbackList: PolicyFeedback[] = [];
+  private policyCollaborationList: PolicyCollaboration[] = [];
+  private feedbackIdSeq = 1;
+  private collaborationIdSeq = 1;
+
+  async getPolicyFeedback(policyId: number): Promise<PolicyFeedback[]> {
+    return this.policyFeedbackList.filter(f => f.policyId === policyId);
+  }
+
+  async createPolicyFeedback(feedback: InsertPolicyFeedback): Promise<PolicyFeedback> {
+    const created: PolicyFeedback = {
+      id: this.feedbackIdSeq++,
+      ...feedback,
+      createdAt: new Date()
+    } as PolicyFeedback;
+    this.policyFeedbackList.push(created);
+    return created;
+  }
+
+  async getPolicyCollaboration(policyId: number): Promise<PolicyCollaboration[]> {
+    return this.policyCollaborationList.filter(c => c.policyId === policyId);
+  }
+
+  async createPolicyCollaboration(collaboration: InsertPolicyCollaboration): Promise<PolicyCollaboration> {
+    const created: PolicyCollaboration = {
+      id: this.collaborationIdSeq++,
+      ...collaboration,
+      timestamp: new Date()
+    } as PolicyCollaboration;
+    this.policyCollaborationList.push(created);
+    return created;
   }
 }
 

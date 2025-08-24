@@ -6,7 +6,11 @@ import {
   insertPolicySchema, 
   insertVulnerabilitySchema, 
   insertRiskManagementPlanSchema,
-  insertRiskRegisterSchema
+  insertRiskRegisterSchema,
+  insertUsersManagementSchema,
+  insertAchievementBadgeSchema,
+  insertPolicyFeedbackSchema,
+  insertPolicyCollaborationSchema
 } from "@shared/schema";
 import { generateSecurityPolicy, generateComplianceResponse } from "./services/ai";
 import { seedRiskRegister } from "./risk-register-seed";
@@ -290,6 +294,111 @@ export async function registerRoutes(app: Express) {
     } catch (error) {
       console.error("Error deleting risk register entry:", error);
       res.status(500).json({ message: "Failed to delete risk register entry" });
+    }
+  });
+
+  // User Management API endpoints
+  app.get("/api/users-management", async (req, res) => {
+    try {
+      const users = await storage.getUsersManagement();
+      res.json(users);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      res.status(500).json({ message: "Failed to fetch users" });
+    }
+  });
+
+  app.get("/api/users-management/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const user = await storage.getUserManagement(id);
+      
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  app.post("/api/users-management", async (req, res) => {
+    try {
+      const userData = insertUsersManagementSchema.parse(req.body);
+      const created = await storage.createUserManagement(userData);
+      res.json(created);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      res.status(500).json({ message: "Failed to create user" });
+    }
+  });
+
+  app.put("/api/users-management/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updateData = req.body;
+      const updated = await storage.updateUserManagement(id, updateData);
+      res.json(updated);
+    } catch (error) {
+      console.error("Error updating user:", error);
+      res.status(500).json({ message: "Failed to update user" });
+    }
+  });
+
+  app.delete("/api/users-management/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteUserManagement(id);
+      res.json({ message: "User deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      res.status(500).json({ message: "Failed to delete user" });
+    }
+  });
+
+  // Achievement Badges API endpoints
+  app.get("/api/achievement-badges", async (req, res) => {
+    try {
+      const badges = await storage.getAchievementBadges();
+      res.json(badges);
+    } catch (error) {
+      console.error("Error fetching badges:", error);
+      res.status(500).json({ message: "Failed to fetch badges" });
+    }
+  });
+
+  app.post("/api/achievement-badges", async (req, res) => {
+    try {
+      const badgeData = insertAchievementBadgeSchema.parse(req.body);
+      const created = await storage.createAchievementBadge(badgeData);
+      res.json(created);
+    } catch (error) {
+      console.error("Error creating badge:", error);
+      res.status(500).json({ message: "Failed to create badge" });
+    }
+  });
+
+  app.get("/api/user-achievements/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const achievements = await storage.getUserAchievements(userId);
+      res.json(achievements);
+    } catch (error) {
+      console.error("Error fetching user achievements:", error);
+      res.status(500).json({ message: "Failed to fetch achievements" });
+    }
+  });
+
+  app.post("/api/award-badge", async (req, res) => {
+    try {
+      const { userId, badgeId } = req.body;
+      const achievement = await storage.awardBadge(userId, badgeId);
+      res.json(achievement);
+    } catch (error) {
+      console.error("Error awarding badge:", error);
+      res.status(500).json({ message: "Failed to award badge" });
     }
   });
 

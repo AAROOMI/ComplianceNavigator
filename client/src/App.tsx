@@ -16,6 +16,7 @@ import MetaworksCompliance from "@/pages/metaworks-compliance";
 import NFRMRiskManagement from "@/pages/nfrm-risk-management";
 import CisoPolicies from "@/pages/ciso-policies";
 import RiskRegisterPage from "@/pages/risk-register";
+import UserManagement from "@/pages/user-management";
 import NotFound from "@/pages/not-found";
 
 export default function App() {
@@ -67,6 +68,11 @@ export default function App() {
           <Route path="/risk-register">
             <Layout>
               <RiskRegisterPage />
+            </Layout>
+          </Route>
+          <Route path="/user-management">
+            <Layout>
+              <UserManagement />
             </Layout>
           </Route>
           <Route>

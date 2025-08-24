@@ -1,13 +1,13 @@
 import React from 'react';
 import { useLocation } from 'wouter';
 import { useSidebar } from '@/components/ui/sidebar-context';
-import { ShieldCheck, FileText, ClipboardCheck, Bot, LayoutDashboard, AlertTriangle, Shield, Database } from 'lucide-react';
+import { ShieldCheck, FileText, ClipboardCheck, Bot, LayoutDashboard, AlertTriangle, Shield, Database, Settings, Rocket, Monitor, Users } from 'lucide-react';
 
 export default function Sidebar() {
   const [location] = useLocation();
   const { isOpen } = useSidebar();
 
-  const links = [
+  const mainLinks = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/assessment", label: "Assessment", icon: ClipboardCheck },
     { href: "/policies", label: "Policies", icon: FileText },
@@ -17,6 +17,16 @@ export default function Sidebar() {
     { href: "/risk-register", label: "Risk Register", icon: Database },
     { href: "/ciso-policies", label: "CISO Policies", icon: Shield },
     { href: "/assistant", label: "Assistant", icon: Bot },
+  ];
+
+  const roleLinks = [
+    { href: "/it-manager", label: "IT Manager Portal", icon: Settings },
+    { href: "/cto-dashboard", label: "CTO Dashboard", icon: Rocket },
+    { href: "/sysadmin-tools", label: "System Admin Tools", icon: Monitor },
+  ];
+
+  const managementLinks = [
+    { href: "/user-management", label: "User Management", icon: Users },
   ];
 
   return (
@@ -34,28 +44,92 @@ export default function Sidebar() {
         </div>
 
         <nav className="flex-1 p-4 overflow-y-auto">
-          <ul className="space-y-2">
-            {links.map((link) => {
-              const Icon = link.icon;
-              const isActive = location === link.href;
+          {/* Main Navigation */}
+          <div className="mb-6">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+              Main Navigation
+            </h3>
+            <ul className="space-y-1">
+              {mainLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = location === link.href;
 
-              return (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
-                      isActive
-                        ? "bg-primary text-primary-foreground"
-                        : "hover:bg-muted"
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                    <span>{link.label}</span>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+                return (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                        isActive
+                          ? "bg-primary text-primary-foreground"
+                          : "hover:bg-muted"
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      <span>{link.label}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {/* Role-Based Portals */}
+          <div className="mb-6">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+              Role-Based Portals
+            </h3>
+            <ul className="space-y-1">
+              {roleLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = location === link.href;
+
+                return (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                        isActive
+                          ? "bg-primary text-primary-foreground"
+                          : "hover:bg-muted"
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      <span className="text-sm">{link.label}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {/* Management */}
+          <div className="mb-4">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+              Management
+            </h3>
+            <ul className="space-y-1">
+              {managementLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = location === link.href;
+
+                return (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                        isActive
+                          ? "bg-primary text-primary-foreground"
+                          : "hover:bg-muted"
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      <span className="text-sm">{link.label}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </nav>
 
         <div className="p-4 border-t">

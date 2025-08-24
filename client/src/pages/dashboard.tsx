@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import ComplianceRiskOverview from "@/components/dashboard/compliance-risk-overview";
 import NCADomainMatrix from "@/components/dashboard/nca-domain-matrix";
 import ApplicationMetrics from "@/components/dashboard/application-metrics";
+import PolicyHealthMonitor from "@/components/dashboard/policy-health-monitor";
 import VulnerabilitySummary from "@/components/dashboard/vulnerability-summary";
 import OnboardingExperience from "@/components/ciso/onboarding-experience";
 import ITManagerOnboarding from "@/components/ciso/it-manager-onboarding";
 import CTOOnboarding from "@/components/ciso/cto-onboarding";
 import SysAdminOnboarding from "@/components/ciso/sysadmin-onboarding";
-import { Shield, Bot, FileBarChart, Settings, Rocket, Monitor, Users, Database, TrendingUp } from "lucide-react";
+import { Shield, Bot, FileBarChart, Settings, Rocket, Monitor, Users, Database, TrendingUp, FileText } from "lucide-react";
 import { Link } from "wouter";
 
 export default function Dashboard() {
@@ -120,7 +121,21 @@ export default function Dashboard() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-4">
+        {/* Policy Health Monitor */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="w-5 h-5" />
+              Policy Health Monitor
+            </CardTitle>
+            <CardDescription>Real-time policy health scoring and monitoring</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <PolicyHealthMonitor userId={userId} />
+          </CardContent>
+        </Card>
+
         {/* Compliance Risk Overview */}
         <Card>
           <CardHeader>
