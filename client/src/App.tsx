@@ -25,6 +25,9 @@ import UserAwareness from "@/pages/user-awareness";
 import SecurityQuizzes from "@/pages/security-quizzes";
 import TrainingMaterials from "@/pages/training-materials";
 import CompetencyBadges from "@/pages/competency-badges";
+import ITManagerPortal from "@/pages/it-manager";
+import CTODashboard from "@/pages/cto-dashboard";
+import SysAdminTools from "@/pages/sysadmin-tools";
 import NotFound from "@/pages/not-found";
 
 export default function App() {
@@ -108,6 +111,21 @@ export default function App() {
           <Route path="/competency-badges">
             <Layout>
               <CompetencyBadges />
+            </Layout>
+          </Route>
+          <Route path="/it-manager">
+            <Layout>
+              <ITManagerPortal />
+            </Layout>
+          </Route>
+          <Route path="/cto-dashboard">
+            <Layout>
+              <CTODashboard />
+            </Layout>
+          </Route>
+          <Route path="/sysadmin-tools">
+            <Layout>
+              <SysAdminTools />
             </Layout>
           </Route>
           <Route>
