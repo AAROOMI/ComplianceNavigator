@@ -22,12 +22,17 @@ import {
   Eye,
   Edit,
   Calendar,
-  Star
+  Star,
+  Monitor,
+  Rocket
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cisoPolicyTypes, cisoPolicyCategories } from "@shared/schema";
 import PolicyCreationForm from "@/components/ciso/policy-creation-form";
 import OnboardingExperience from "@/components/ciso/onboarding-experience";
+import ITManagerOnboarding from "@/components/ciso/it-manager-onboarding";
+import CTOOnboarding from "@/components/ciso/cto-onboarding";
+import SysAdminOnboarding from "@/components/ciso/sysadmin-onboarding";
 
 // Mock data for initial display - in real app this would come from API
 const mockPolicies = [
@@ -282,6 +287,9 @@ export default function CisoPolicies() {
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [activeTab, setActiveTab] = useState("overview");
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showITManagerOnboarding, setShowITManagerOnboarding] = useState(false);
+  const [showCTOOnboarding, setShowCTOOnboarding] = useState(false);
+  const [showSysAdminOnboarding, setShowSysAdminOnboarding] = useState(false);
   const { toast } = useToast();
 
   // Check if user has seen onboarding before (in real app, this would be from user preferences/localStorage)
@@ -379,6 +387,18 @@ export default function CisoPolicies() {
     setShowOnboarding(true);
   };
 
+  const startITManagerTour = () => {
+    setShowITManagerOnboarding(true);
+  };
+
+  const startCTOTour = () => {
+    setShowCTOOnboarding(true);
+  };
+
+  const startSysAdminTour = () => {
+    setShowSysAdminOnboarding(true);
+  };
+
   const getPolicyStats = () => {
     const total = policies.length;
     const active = policies.filter(p => p.status === "active").length;
@@ -403,14 +423,48 @@ export default function CisoPolicies() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            onClick={startOnboardingTour}
-            className="flex items-center gap-2"
-          >
-            <Star className="w-4 h-4" />
-            Take Tour
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={startOnboardingTour}
+              className="flex items-center gap-1 text-xs"
+              data-testid="button-ciso-tour"
+            >
+              <Shield className="w-3 h-3" />
+              CISO
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={startITManagerTour}
+              className="flex items-center gap-1 text-xs"
+              data-testid="button-it-manager-tour"
+            >
+              <Settings className="w-3 h-3" />
+              IT Manager
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={startCTOTour}
+              className="flex items-center gap-1 text-xs"
+              data-testid="button-cto-tour"
+            >
+              <Rocket className="w-3 h-3" />
+              CTO
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={startSysAdminTour}
+              className="flex items-center gap-1 text-xs"
+              data-testid="button-sysadmin-tour"
+            >
+              <Monitor className="w-3 h-3" />
+              SysAdmin
+            </Button>
+          </div>
           <Button 
             onClick={() => handleCreatePolicy()} 
             className="flex items-center gap-2"
@@ -857,11 +911,47 @@ export default function CisoPolicies() {
         onPolicyCreated={handlePolicyCreated}
       />
 
-      {/* Onboarding Experience */}
+      {/* Onboarding Experiences */}
       <OnboardingExperience
         isVisible={showOnboarding}
         onComplete={handleOnboardingComplete}
         onSkip={handleOnboardingSkip}
+      />
+
+      <ITManagerOnboarding
+        isVisible={showITManagerOnboarding}
+        onComplete={() => {
+          setShowITManagerOnboarding(false);
+          localStorage.setItem('it-manager-policies-onboarding-completed', 'true');
+        }}
+        onSkip={() => {
+          setShowITManagerOnboarding(false);
+          localStorage.setItem('it-manager-policies-onboarding-completed', 'true');
+        }}
+      />
+
+      <CTOOnboarding
+        isVisible={showCTOOnboarding}
+        onComplete={() => {
+          setShowCTOOnboarding(false);
+          localStorage.setItem('cto-policies-onboarding-completed', 'true');
+        }}
+        onSkip={() => {
+          setShowCTOOnboarding(false);
+          localStorage.setItem('cto-policies-onboarding-completed', 'true');
+        }}
+      />
+
+      <SysAdminOnboarding
+        isVisible={showSysAdminOnboarding}
+        onComplete={() => {
+          setShowSysAdminOnboarding(false);
+          localStorage.setItem('sysadmin-policies-onboarding-completed', 'true');
+        }}
+        onSkip={() => {
+          setShowSysAdminOnboarding(false);
+          localStorage.setItem('sysadmin-policies-onboarding-completed', 'true');
+        }}
       />
     </div>
   );
