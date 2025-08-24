@@ -6,9 +6,11 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Download, Search, Trash2, Edit, FileText, Database, FileSpreadsheet, RotateCcw } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Shield, Download, Search, Trash2, Edit, FileText, Database, FileSpreadsheet, RotateCcw, Wand2, Target } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import InteractiveRiskMeters from "@/components/dashboard/interactive-risk-meters";
+import RiskTreatmentGenerator from "@/components/risk/risk-treatment-generator";
 
 interface Risk {
   id: string;
@@ -32,6 +34,8 @@ export default function NFRMRiskManagement() {
   const [risks, setRisks] = useState<Risk[]>([]);
   const [searchFilter, setSearchFilter] = useState("");
   const [editingRisk, setEditingRisk] = useState<Risk | null>(null);
+  const [showTreatmentGenerator, setShowTreatmentGenerator] = useState(false);
+  const [selectedRiskForTreatment, setSelectedRiskForTreatment] = useState<Risk | null>(null);
   const { toast } = useToast();
 
   // Form state
@@ -170,6 +174,34 @@ export default function NFRMRiskManagement() {
       title: "Risk Deleted",
       description: "Risk has been removed from the register.",
     });
+  };
+
+  const handleGenerateTreatment = (risk: Risk) => {
+    setSelectedRiskForTreatment(risk);
+    setShowTreatmentGenerator(true);
+  };
+
+  const handleTreatmentRecommendationGenerated = (recommendations: any[]) => {
+    if (recommendations.length > 0 && selectedRiskForTreatment) {
+      // Auto-populate the treatment field with the primary recommendation
+      const primaryRecommendation = recommendations[0];
+      const updatedRisks = risks.map(risk => 
+        risk.id === selectedRiskForTreatment.id 
+          ? { ...risk, treatment: `${primaryRecommendation.strategy.toUpperCase()}: ${primaryRecommendation.title}` }
+          : risk
+      );
+      setRisks(updatedRisks);
+      
+      toast({
+        title: "Treatment Recommendation Applied",
+        description: `Primary recommendation has been applied to ${selectedRiskForTreatment.asset}.`,
+      });
+    }
+  };
+
+  const handleCloseTreatmentGenerator = () => {
+    setShowTreatmentGenerator(false);
+    setSelectedRiskForTreatment(null);
   };
 
   const handleResetAll = () => {
@@ -517,6 +549,15 @@ export default function NFRMRiskManagement() {
                           <Button
                             size="sm"
                             variant="ghost"
+                            onClick={() => handleGenerateTreatment(risk)}
+                            title="Generate AI Treatment Recommendations"
+                            data-testid={`button-generate-treatment-${risk.id}`}
+                          >
+                            <Wand2 className="w-3 h-3" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
                             onClick={() => handleEdit(risk)}
                             data-testid={`button-edit-risk-${risk.id}`}
                           >
@@ -541,6 +582,25 @@ export default function NFRMRiskManagement() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Risk Treatment Generator Dialog */}
+      <Dialog open={showTreatmentGenerator} onOpenChange={setShowTreatmentGenerator}>
+        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Wand2 className="w-5 h-5 text-primary" />
+              AI Risk Treatment Recommendations
+            </DialogTitle>
+          </DialogHeader>
+          {selectedRiskForTreatment && (
+            <RiskTreatmentGenerator
+              risk={selectedRiskForTreatment}
+              onRecommendationGenerated={handleTreatmentRecommendationGenerated}
+              onClose={handleCloseTreatmentGenerator}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Footer */}
       <div className="text-xs text-muted-foreground">
