@@ -24,7 +24,9 @@ import {
   Target,
   Zap,
   Archive,
-  Package
+  Package,
+  Activity,
+  AlertTriangle
 } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import CryptoJS from "crypto-js";
