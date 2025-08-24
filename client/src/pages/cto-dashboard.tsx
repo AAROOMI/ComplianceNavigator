@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Rocket, 
   TrendingUp, 
@@ -12,12 +13,20 @@ import {
   BarChart,
   Lightbulb,
   Clock,
-  CheckCircle
+  CheckCircle,
+  FileText,
+  Wand2,
+  MessageSquare,
+  Archive
 } from "lucide-react";
 import CTOOnboarding from "@/components/ciso/cto-onboarding";
+import CTODocumentGenerator from "@/components/cto/policy-generator";
+import CTOExpertConsultant from "@/components/cto/expert-consultant";
+import CTODocumentLibrary from "@/components/cto/document-library";
 
 export default function CTODashboard() {
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview");
 
   const metrics = {
     activeProjects: 8,
@@ -80,19 +89,28 @@ export default function CTODashboard() {
           </p>
         </div>
         
-        <Button
-          onClick={() => setShowOnboarding(true)}
-          variant="outline"
-          className="flex items-center gap-2"
-          data-testid="button-start-onboarding"
-        >
-          <Lightbulb className="h-4 w-4" />
-          Strategic Tour
-        </Button>
+        <div className="flex gap-3">
+          <Button
+            onClick={() => setShowOnboarding(true)}
+            variant="outline"
+            className="flex items-center gap-2"
+            data-testid="button-start-onboarding"
+          >
+            <Lightbulb className="h-4 w-4" />
+            Strategic Tour
+          </Button>
+          <Button 
+            className="flex items-center gap-2"
+            onClick={() => setActiveTab("generator")}
+          >
+            <Wand2 className="w-4 h-4" />
+            Generate Strategy Document
+          </Button>
+        </div>
       </div>
 
-      {/* Key Metrics */}
-      <div className="grid md:grid-cols-4 gap-4">
+      {/* Overview Statistics */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -142,7 +160,18 @@ export default function CTODashboard() {
         </Card>
       </div>
 
-      {/* Strategic Initiatives */}
+      {/* Main Content Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="overview">Strategic Overview</TabsTrigger>
+          <TabsTrigger value="generator">Document Generator</TabsTrigger>
+          <TabsTrigger value="consultant">Expert Consultant</TabsTrigger>
+          <TabsTrigger value="library">Document Library</TabsTrigger>
+        </TabsList>
+
+        {/* Strategic Overview Tab */}
+        <TabsContent value="overview" className="space-y-6">
+          {/* Strategic Initiatives */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -280,6 +309,24 @@ export default function CTODashboard() {
           </CardContent>
         </Card>
       </div>
+
+        </TabsContent>
+
+        {/* Document Generator Tab */}
+        <TabsContent value="generator">
+          <CTODocumentGenerator />
+        </TabsContent>
+
+        {/* Expert Consultant Tab */}
+        <TabsContent value="consultant">
+          <CTOExpertConsultant />
+        </TabsContent>
+
+        {/* Document Library Tab */}
+        <TabsContent value="library">
+          <CTODocumentLibrary />
+        </TabsContent>
+      </Tabs>
 
       {/* CTO Onboarding */}
       <CTOOnboarding

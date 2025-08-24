@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Monitor, 
   Server, 
@@ -16,12 +17,20 @@ import {
   Activity,
   AlertTriangle,
   CheckCircle,
-  Clock
+  Clock,
+  FileText,
+  Wand2,
+  MessageSquare,
+  Archive
 } from "lucide-react";
 import SysAdminOnboarding from "@/components/ciso/sysadmin-onboarding";
+import SysAdminDocumentGenerator from "@/components/sysadmin/policy-generator";
+import SysAdminExpertConsultant from "@/components/sysadmin/expert-consultant";
+import SysAdminDocumentLibrary from "@/components/sysadmin/document-library";
 
 export default function SysAdminTools() {
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview");
 
   const systemHealth = {
     cpu: { usage: 45, status: "Normal" },
@@ -96,26 +105,35 @@ export default function SysAdminTools() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
             <Monitor className="h-8 w-8 text-primary" />
-            System Admin Tools
+            System Administrator Portal
           </h1>
           <p className="text-muted-foreground mt-2">
-            Monitor, manage, and maintain system infrastructure and services
+            AI-Powered System Administration, Documentation & Expert Support
           </p>
         </div>
         
-        <Button
-          onClick={() => setShowOnboarding(true)}
-          variant="outline"
-          className="flex items-center gap-2"
-          data-testid="button-start-onboarding"
-        >
-          <Terminal className="h-4 w-4" />
-          Admin Tour
-        </Button>
+        <div className="flex gap-3">
+          <Button
+            onClick={() => setShowOnboarding(true)}
+            variant="outline"
+            className="flex items-center gap-2"
+            data-testid="button-start-onboarding"
+          >
+            <Terminal className="h-4 w-4" />
+            Admin Tour
+          </Button>
+          <Button 
+            className="flex items-center gap-2"
+            onClick={() => setActiveTab("generator")}
+          >
+            <Wand2 className="w-4 h-4" />
+            Generate Admin Document
+          </Button>
+        </div>
       </div>
 
-      {/* System Health Overview */}
-      <div className="grid md:grid-cols-4 gap-4">
+      {/* Overview Statistics */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-2">
@@ -181,7 +199,18 @@ export default function SysAdminTools() {
         </Card>
       </div>
 
-      {/* Quick Actions */}
+      {/* Main Content Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="overview">System Overview</TabsTrigger>
+          <TabsTrigger value="generator">Document Generator</TabsTrigger>
+          <TabsTrigger value="consultant">Expert Consultant</TabsTrigger>
+          <TabsTrigger value="library">Document Library</TabsTrigger>
+        </TabsList>
+
+        {/* System Overview Tab */}
+        <TabsContent value="overview" className="space-y-6">
+          {/* Quick Actions */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -274,6 +303,24 @@ export default function SysAdminTools() {
           </div>
         </CardContent>
       </Card>
+
+        </TabsContent>
+
+        {/* Document Generator Tab */}
+        <TabsContent value="generator">
+          <SysAdminDocumentGenerator />
+        </TabsContent>
+
+        {/* Expert Consultant Tab */}
+        <TabsContent value="consultant">
+          <SysAdminExpertConsultant />
+        </TabsContent>
+
+        {/* Document Library Tab */}
+        <TabsContent value="library">
+          <SysAdminDocumentLibrary />
+        </TabsContent>
+      </Tabs>
 
       {/* System Admin Onboarding */}
       <SysAdminOnboarding
