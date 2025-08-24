@@ -14,12 +14,8 @@ import {
 } from "@shared/schema";
 import { generateSecurityPolicy, generateComplianceResponse } from "./services/ai";
 import { seedRiskRegister } from "./risk-register-seed";
-import authRoutes, { requireAuth, requirePermission } from "./auth-routes";
 
 export async function registerRoutes(app: Express) {
-  // Authentication routes
-  app.use('/api/auth', authRoutes);
-
   app.get("/api/assessments/:userId", async (req, res) => {
     const userId = parseInt(req.params.userId);
     const assessments = await storage.getAssessments(userId);

@@ -3,8 +3,7 @@ import { sql } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-// Legacy NCA ECC domains (kept for compatibility)
-export const legacyNcaEccDomains = [
+export const ncaEccDomains = [
   "Governance",
   "Cybersecurity Defence",
   "Cybersecurity Resilience",
@@ -12,216 +11,141 @@ export const legacyNcaEccDomains = [
   "Industrial Control System (ICS)"
 ] as const;
 
-// NCA ECC Deployment Strategy - 11 Domain Structure
-export const ncaEccDomains = [
-  "Cybersecurity Governance & Strategy",
-  "Risk Management", 
-  "Human Resource Security",
-  "Asset Management",
-  "Access Control",
-  "Cybersecurity Operations",
-  "Business Continuity & Disaster Recovery",
-  "Compliance & Audit",
-  "Penetration Testing",
-  "Secure Systems Development",
-  "Physical Security"
-] as const;
-
-export const deploymentPhases = [
-  "Assessment Phase",
-  "Planning Phase", 
-  "Implementation Phase",
-  "Validation Phase",
-  "Continuous Improvement Phase"
-] as const;
-
+// NCA ECC detailed structure with controls
 export const ncaEccStructure = {
-  "Cybersecurity Governance & Strategy": {
-    requirements: [
-      "Establish a cybersecurity governance structure",
-      "Develop cybersecurity policies", 
-      "Assign roles and responsibilities"
+  "Governance": {
+    "Cybersecurity Strategy": [
+      "ECC-1-1-1: Establish cybersecurity strategy",
+      "ECC-1-1-2: Align with business objectives",
+      "ECC-1-1-3: Regular strategy review"
     ],
-    workflow: [
-      "Identify governance roles",
-      "Define cybersecurity strategy",
-      "Approve and enforce policies"
+    "Cybersecurity Policy": [
+      "ECC-1-2-1: Document security policies",
+      "ECC-1-2-2: Policy review and updates",
+      "ECC-1-2-3: Policy communication"
     ],
-    policies: [
-      "Cybersecurity Governance Policy",
-      "Cybersecurity Roles & Responsibilities Policy",
-      "Cybersecurity Strategy Document"
+    "Cybersecurity Roles and Responsibilities": [
+      "ECC-1-3-1: Define security roles",
+      "ECC-1-3-2: Assign responsibilities",
+      "ECC-1-3-3: Document RACI matrix"
+    ],
+    "Asset Management": [
+      "ECC-1-4-1: Asset inventory",
+      "ECC-1-4-2: Asset classification",
+      "ECC-1-4-3: Asset handling procedures"
+    ],
+    "Risk Management": [
+      "ECC-1-5-1: Risk assessment methodology",
+      "ECC-1-5-2: Regular risk assessments",
+      "ECC-1-5-3: Risk treatment plans"
     ]
   },
-  "Risk Management": {
-    requirements: [
-      "Conduct periodic risk assessments",
-      "Implement risk treatment plans",
-      "Ensure business continuity planning"
+  "Cybersecurity Defence": {
+    "Access Control": [
+      "ECC-2-1-1: Access control policy",
+      "ECC-2-1-2: User access management",
+      "ECC-2-1-3: Privileged access management"
     ],
-    workflow: [
-      "Identify assets and threats",
-      "Assess risks",
-      "Implement mitigation controls",
-      "Monitor and update risks"
+    "Cryptography": [
+      "ECC-2-2-1: Encryption standards",
+      "ECC-2-2-2: Key management",
+      "ECC-2-2-3: Cryptographic controls"
     ],
-    policies: [
-      "Risk Management Policy",
-      "Business Continuity & Disaster Recovery Plan", 
-      "Incident Response Plan"
+    "Email Security": [
+      "ECC-2-3-1: Email protection measures",
+      "ECC-2-3-2: Spam filtering",
+      "ECC-2-3-3: Email encryption"
+    ],
+    "Network Security": [
+      "ECC-2-4-1: Network segmentation",
+      "ECC-2-4-2: Firewall management",
+      "ECC-2-4-3: Network monitoring"
+    ],
+    "System Security": [
+      "ECC-2-5-1: System hardening",
+      "ECC-2-5-2: Patch management",
+      "ECC-2-5-3: Endpoint protection"
     ]
   },
-  "Human Resource Security": {
-    requirements: [
-      "Conduct background checks for employees",
-      "Provide cybersecurity awareness training",
-      "Define access control policies"
+  "Cybersecurity Resilience": {
+    "Business Continuity": [
+      "ECC-3-1-1: BC planning",
+      "ECC-3-1-2: BC testing",
+      "ECC-3-1-3: Recovery procedures"
     ],
-    workflow: [
-      "Screen new hires",
-      "Assign cybersecurity roles and training",
-      "Enforce access controls"
+    "Disaster Recovery": [
+      "ECC-3-2-1: DR strategy",
+      "ECC-3-2-2: DR testing",
+      "ECC-3-2-3: Backup procedures"
     ],
-    policies: [
-      "Employee Background Verification Policy",
-      "Cybersecurity Training & Awareness Policy",
-      "User Access Management Policy"
+    "Incident Management": [
+      "ECC-3-3-1: Incident response plan",
+      "ECC-3-3-2: Incident detection",
+      "ECC-3-3-3: Incident reporting"
+    ],
+    "Vulnerability Management": [
+      "ECC-3-4-1: Vulnerability assessment",
+      "ECC-3-4-2: Vulnerability remediation",
+      "ECC-3-4-3: Security testing"
+    ],
+    "Threat Intelligence": [
+      "ECC-3-5-1: Threat monitoring",
+      "ECC-3-5-2: Threat analysis",
+      "ECC-3-5-3: Intelligence sharing"
     ]
   },
-  "Asset Management": {
-    requirements: [
-      "Maintain an inventory of assets",
-      "Classify and protect critical assets", 
-      "Define data retention policies"
+  "Third Party Cloud Computing Cybersecurity": {
+    "Cloud Service Provider Selection": [
+      "ECC-4-1-1: Provider assessment",
+      "ECC-4-1-2: Security requirements",
+      "ECC-4-1-3: Compliance verification"
     ],
-    workflow: [
-      "Identify and classify assets",
-      "Implement access controls",
-      "Conduct periodic reviews"
+    "Data Protection in Cloud": [
+      "ECC-4-2-1: Data classification",
+      "ECC-4-2-2: Data encryption",
+      "ECC-4-2-3: Data backup"
     ],
-    policies: [
-      "Asset Management Policy",
-      "Data Classification Policy",
-      "Data Retention & Disposal Policy"
+    "Cloud Security Configuration": [
+      "ECC-4-3-1: Security settings",
+      "ECC-4-3-2: Configuration management",
+      "ECC-4-3-3: Change control"
+    ],
+    "Cloud Access Management": [
+      "ECC-4-4-1: Identity management",
+      "ECC-4-4-2: Access control",
+      "ECC-4-4-3: Privilege management"
+    ],
+    "Cloud Monitoring": [
+      "ECC-4-5-1: Performance monitoring",
+      "ECC-4-5-2: Security monitoring",
+      "ECC-4-5-3: Incident detection"
     ]
   },
-  "Access Control": {
-    requirements: [
-      "Implement role-based access controls",
-      "Enforce multi-factor authentication (MFA)",
-      "Monitor and review access logs"
+  "Industrial Control System (ICS)": {
+    "ICS Security Policy": [
+      "ECC-5-1-1: ICS-specific policies",
+      "ECC-5-1-2: Security procedures",
+      "ECC-5-1-3: Policy compliance"
     ],
-    workflow: [
-      "Define user roles",
-      "Assign access based on roles", 
-      "Review and update access rights"
+    "ICS Network Segmentation": [
+      "ECC-5-2-1: Network zones",
+      "ECC-5-2-2: Traffic control",
+      "ECC-5-2-3: Remote access"
     ],
-    policies: [
-      "Access Control Policy",
-      "Multi-Factor Authentication Policy",
-      "Privilege Management Policy"
-    ]
-  },
-  "Cybersecurity Operations": {
-    requirements: [
-      "Establish Security Operations Center (SOC)",
-      "Implement security monitoring solutions",
-      "Define incident response procedures"
+    "ICS Access Control": [
+      "ECC-5-3-1: Access management",
+      "ECC-5-3-2: Authentication",
+      "ECC-5-3-3: Authorization"
     ],
-    workflow: [
-      "Set up SOC",
-      "Deploy monitoring tools",
-      "Define incident handling process"
+    "ICS Incident Response": [
+      "ECC-5-4-1: Response planning",
+      "ECC-5-4-2: Incident handling",
+      "ECC-5-4-3: Recovery procedures"
     ],
-    policies: [
-      "Security Operations Policy",
-      "Incident Detection & Response Plan",
-      "Threat Intelligence Policy"
-    ]
-  },
-  "Business Continuity & Disaster Recovery": {
-    requirements: [
-      "Develop and test DR plans",
-      "Implement backup solutions",
-      "Conduct continuity drills"
-    ],
-    workflow: [
-      "Identify critical business processes",
-      "Develop DR strategies",
-      "Test and update plans"
-    ],
-    policies: [
-      "Business Continuity Policy",
-      "Disaster Recovery Plan",
-      "Backup & Restoration Policy"
-    ]
-  },
-  "Compliance & Audit": {
-    requirements: [
-      "Conduct periodic security audits",
-      "Maintain compliance with NCA ECC",
-      "Document cybersecurity incidents"
-    ],
-    workflow: [
-      "Schedule audits",
-      "Identify non-compliance issues",
-      "Implement corrective actions"
-    ],
-    policies: [
-      "Audit & Compliance Policy",
-      "Regulatory Compliance Tracking Policy",
-      "Cybersecurity Incident Documentation Procedure"
-    ]
-  },
-  "Penetration Testing": {
-    requirements: [
-      "Conduct penetration testing regularly",
-      "Include all technology components in the testing scope",
-      "Ensure minimal disruption to production systems"
-    ],
-    workflow: [
-      "Develop a rules of engagement document",
-      "Conduct penetration testing on critical systems",
-      "Document vulnerabilities and remediation plans"
-    ],
-    policies: [
-      "Penetration Testing Policy",
-      "Third-party Cybersecurity Testing Policy", 
-      "Penetration Testing Data Protection Guidelines"
-    ]
-  },
-  "Secure Systems Development": {
-    requirements: [
-      "Implement secure software development lifecycle (SDLC)",
-      "Conduct threat modeling and risk assessments",
-      "Perform vulnerability testing"
-    ],
-    workflow: [
-      "Integrate security into the development process",
-      "Conduct code reviews and security testing", 
-      "Deploy applications securely"
-    ],
-    policies: [
-      "Secure Software Development Policy",
-      "Source Code Security Standards",
-      "Software Composition Analysis Guidelines"
-    ]
-  },
-  "Physical Security": {
-    requirements: [
-      "Implement access control measures",
-      "Monitor physical security through surveillance",
-      "Restrict third-party access"
-    ],
-    workflow: [
-      "Develop a physical security plan",
-      "Implement controlled access measures",
-      "Conduct security assessments"
-    ],
-    policies: [
-      "Physical Security Policy",
-      "Data Center Access Control Policy",
-      "Emergency Response Procedures"
+    "ICS Business Continuity": [
+      "ECC-5-5-1: Continuity planning",
+      "ECC-5-5-2: Backup systems",
+      "ECC-5-5-3: Recovery testing"
     ]
   }
 } as const;
@@ -667,13 +591,10 @@ export const usersManagement = pgTable("users_management", {
   id: serial("id").primaryKey(),
   username: varchar("username", { length: 50 }).notNull().unique(),
   email: varchar("email", { length: 100 }).notNull().unique(),
-  passwordHash: varchar("password_hash", { length: 255 }).notNull(),
   firstName: varchar("first_name", { length: 50 }),
   lastName: varchar("last_name", { length: 50 }),
-  role: varchar("role", { length: 50 }).notNull().default("Employee"), // Super Admin, CISO, IT Manager, Security Analyst, Auditor, Employee
-  department: varchar("department", { length: 100 }),
-  status: varchar("status", { length: 20 }).notNull().default("Active"),
-  permissions: text("permissions").array(),
+  role: varchar("role", { length: 20 }).notNull().default("user"), // admin, ciso, it-manager, cto, sysadmin, user
+  department: varchar("department", { length: 50 }),
   isActive: boolean("is_active").notNull().default(true),
   lastLogin: timestamp("last_login"),
   createdAt: timestamp("created_at").defaultNow(),
@@ -681,15 +602,6 @@ export const usersManagement = pgTable("users_management", {
   profileImageUrl: varchar("profile_image_url", { length: 255 }),
   phoneNumber: varchar("phone_number", { length: 20 }),
   preferences: jsonb("preferences").default({}),
-});
-
-// Authentication Sessions
-export const userSessions = pgTable("user_sessions", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => usersManagement.id).notNull(),
-  token: varchar("token", { length: 255 }).notNull().unique(),
-  expiresAt: timestamp("expires_at").notNull(),
-  createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Achievement Badges System
@@ -738,22 +650,13 @@ export const policyCollaboration = pgTable("policy_collaboration", {
 export const insertUsersManagementSchema = createInsertSchema(usersManagement).pick({
   username: true,
   email: true,
-  passwordHash: true,
   firstName: true,
   lastName: true,
   role: true,
   department: true,
-  status: true,
-  permissions: true,
   isActive: true,
   phoneNumber: true,
   preferences: true
-});
-
-export const insertUserSessionSchema = createInsertSchema(userSessions).pick({
-  userId: true,
-  token: true,
-  expiresAt: true
 });
 
 export const insertAchievementBadgeSchema = createInsertSchema(achievementBadges).pick({
@@ -787,8 +690,6 @@ export const insertPolicyCollaborationSchema = createInsertSchema(policyCollabor
 
 export type UsersManagement = typeof usersManagement.$inferSelect;
 export type InsertUsersManagement = z.infer<typeof insertUsersManagementSchema>;
-export type UserSession = typeof userSessions.$inferSelect;
-export type InsertUserSession = z.infer<typeof insertUserSessionSchema>;
 export type AchievementBadge = typeof achievementBadges.$inferSelect;
 export type InsertAchievementBadge = z.infer<typeof insertAchievementBadgeSchema>;
 export type UserAchievement = typeof userAchievements.$inferSelect;

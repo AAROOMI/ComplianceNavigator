@@ -1,14 +1,31 @@
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import DocumentCRUDManager from "@/components/document/document-crud-manager";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Shield, Archive, FileText } from "lucide-react";
+import { 
+  Search, 
+  Download, 
+  Upload,
+  FileText, 
+  Trash2, 
+  Edit,
+  Eye,
+  Star,
+  Calendar,
+  User,
+  Tag,
+  Filter,
+  Archive,
+  Share2
+} from "lucide-react";
 
 interface PolicyDocument {
   id: string;
   title: string;
-  content: string;
   category: string;
   status: 'draft' | 'review' | 'approved' | 'archived';
   version: string;
@@ -24,41 +41,6 @@ const MOCK_POLICIES: PolicyDocument[] = [
   {
     id: '1',
     title: 'Information Security Policy',
-    content: `# Information Security Policy
-
-## 1. Purpose
-This Information Security Policy establishes the framework for protecting organizational information assets and ensuring compliance with regulatory requirements.
-
-## 2. Scope
-This policy applies to all employees, contractors, and third parties with access to organizational systems and data.
-
-## 3. Information Classification
-- **Public**: Information intended for public disclosure
-- **Internal**: Information for internal use only
-- **Confidential**: Sensitive information requiring protection
-- **Restricted**: Highly sensitive information with limited access
-
-## 4. Access Control
-- All access to information systems must be authorized
-- User accounts must be regularly reviewed and updated
-- Multi-factor authentication required for sensitive systems
-
-## 5. Data Protection
-- Personal data must be handled in accordance with GDPR/CCPA
-- Data retention policies must be followed
-- Regular backups and secure disposal procedures required
-
-## 6. Incident Response
-- All security incidents must be reported immediately
-- Incident response team activation procedures
-- Post-incident review and documentation requirements
-
-## 7. Compliance
-This policy ensures compliance with:
-- ISO 27001:2013
-- NIST Cybersecurity Framework
-- SOX requirements
-- Industry-specific regulations`,
     category: 'Governance',
     status: 'approved',
     version: '2.1',
@@ -72,42 +54,6 @@ This policy ensures compliance with:
   {
     id: '2',
     title: 'Incident Response Plan',
-    content: `# Incident Response Plan
-
-## 1. Overview
-This document outlines the procedures for responding to cybersecurity incidents.
-
-## 2. Incident Response Team
-- **Incident Commander**: CISO or designee
-- **Technical Lead**: IT Security Manager
-- **Communications Lead**: Public Relations Manager
-- **Legal Counsel**: Chief Legal Officer
-
-## 3. Incident Classification
-### Severity Levels:
-- **Critical**: Complete system compromise, data breach
-- **High**: Significant system impact, potential data exposure
-- **Medium**: Limited system impact, no data exposure
-- **Low**: Minor security events, no immediate impact
-
-## 4. Response Procedures
-### Detection and Analysis
-1. Monitor security alerts and notifications
-2. Analyze potential security incidents
-3. Determine incident severity and classification
-4. Document initial findings
-
-### Containment, Eradication, and Recovery
-1. Implement immediate containment measures
-2. Identify and eliminate root cause
-3. Restore systems to normal operations
-4. Monitor for recurring issues
-
-### Post-Incident Activities
-1. Conduct post-incident review
-2. Document lessons learned
-3. Update procedures and controls
-4. Provide training on new procedures`,
     category: 'Incident Response',
     status: 'approved',
     version: '1.8',
@@ -121,57 +67,6 @@ This document outlines the procedures for responding to cybersecurity incidents.
   {
     id: '3',
     title: 'Data Classification Policy',
-    content: `# Data Classification Policy
-
-## 1. Purpose
-Establish consistent data classification standards to ensure appropriate protection measures.
-
-## 2. Data Categories
-
-### Public Data
-- Marketing materials
-- Published financial reports
-- Public website content
-- Press releases
-
-### Internal Data
-- Internal communications
-- Non-sensitive business documents
-- General policy documents
-- Training materials
-
-### Confidential Data
-- Customer information
-- Financial records
-- Business strategies
-- Employee records
-
-### Restricted Data
-- Personal identifiable information (PII)
-- Payment card information
-- Intellectual property
-- Legal documents
-
-## 3. Handling Requirements
-
-### Confidential Data Requirements:
-- Encryption in transit and at rest
-- Access logging and monitoring
-- Regular access reviews
-- Secure disposal procedures
-
-### Restricted Data Requirements:
-- Enhanced encryption standards
-- Multi-factor authentication
-- Data loss prevention controls
-- Legal hold procedures
-
-## 4. Compliance
-This policy ensures compliance with:
-- GDPR Article 32 (Security of processing)
-- PCI DSS Requirements
-- HIPAA Security Rule
-- SOX Section 404`,
     category: 'Data Protection',
     status: 'review',
     version: '1.2',
@@ -185,55 +80,6 @@ This policy ensures compliance with:
   {
     id: '4',
     title: 'Access Control Policy',
-    content: `# Access Control Policy
-
-## 1. Purpose
-Define access control requirements to protect organizational resources and information.
-
-## 2. Access Control Principles
-- **Principle of Least Privilege**: Users granted minimum access required
-- **Separation of Duties**: Critical functions divided among multiple users
-- **Need-to-Know**: Access limited to necessary information only
-- **Defense in Depth**: Multiple layers of access controls
-
-## 3. User Account Management
-
-### Account Provisioning
-1. Formal access request and approval process
-2. Manager authorization required
-3. HR verification of employment status
-4. Role-based access assignment
-
-### Account Maintenance
-- Regular access reviews (quarterly)
-- Immediate access updates for role changes
-- Automated monitoring of inactive accounts
-- Password policy enforcement
-
-### Account Termination
-- Immediate access revocation upon termination
-- Asset recovery procedures
-- Exit interview completion
-- Final access audit
-
-## 4. Authentication Requirements
-
-### Standard Users
-- Strong password policy (12+ characters)
-- Account lockout after failed attempts
-- Regular password changes
-
-### Privileged Users
-- Multi-factor authentication mandatory
-- Enhanced password requirements
-- Privileged access workstations
-- Session monitoring and recording
-
-## 5. Authorization Controls
-- Role-based access control (RBAC)
-- Attribute-based access control (ABAC)
-- Regular entitlement reviews
-- Segregation of duties enforcement`,
     category: 'Access Management',
     status: 'draft',
     version: '0.9',
@@ -247,60 +93,6 @@ Define access control requirements to protect organizational resources and infor
   {
     id: '5',
     title: 'Business Continuity Plan',
-    content: `# Business Continuity Plan
-
-## 1. Purpose
-Ensure business operations continue during and after disruptive events.
-
-## 2. Business Impact Analysis
-
-### Critical Business Functions
-- Customer service operations
-- Financial transaction processing
-- Manufacturing processes
-- IT infrastructure services
-
-### Recovery Time Objectives (RTO)
-- Tier 1 Systems: 4 hours
-- Tier 2 Systems: 24 hours
-- Tier 3 Systems: 72 hours
-
-### Recovery Point Objectives (RPO)
-- Critical Data: 15 minutes
-- Important Data: 4 hours
-- Standard Data: 24 hours
-
-## 3. Risk Assessment
-- Natural disasters (flood, earthquake, fire)
-- Technology failures (hardware, software, network)
-- Human factors (key personnel loss, cyber attacks)
-- Supply chain disruptions
-
-## 4. Continuity Strategies
-
-### Preventive Measures
-- Redundant systems and infrastructure
-- Regular data backups
-- Environmental controls
-- Security monitoring
-
-### Response Procedures
-1. Incident detection and assessment
-2. Emergency response team activation
-3. Employee safety procedures
-4. Communication protocols
-
-### Recovery Operations
-- Alternative site activation
-- System restoration procedures
-- Data recovery processes
-- Vendor coordination
-
-## 5. Testing and Maintenance
-- Annual full-scale exercises
-- Quarterly tabletop exercises
-- Regular plan updates
-- Training programs for key personnel`,
     category: 'Business Continuity',
     status: 'approved',
     version: '3.0',
@@ -315,64 +107,329 @@ Ensure business operations continue during and after disruptive events.
 
 export default function PolicyLibrary() {
   const { toast } = useToast();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedStatus, setSelectedStatus] = useState("All");
   const [policies, setPolicies] = useState<PolicyDocument[]>(MOCK_POLICIES);
+  const [showStarredOnly, setShowStarredOnly] = useState(false);
 
-  const handlePolicyUpdate = (updatedPolicy: PolicyDocument) => {
+  const categories = ["All", ...Array.from(new Set(policies.map(p => p.category)))];
+  const statuses = ["All", "draft", "review", "approved", "archived"];
+
+  const filteredPolicies = policies.filter(policy => {
+    const matchesSearch = policy.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         policy.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         policy.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesCategory = selectedCategory === "All" || policy.category === selectedCategory;
+    const matchesStatus = selectedStatus === "All" || policy.status === selectedStatus;
+    const matchesStarred = !showStarredOnly || policy.starred;
+    
+    return matchesSearch && matchesCategory && matchesStatus && matchesStarred;
+  });
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'approved': return 'bg-green-500';
+      case 'review': return 'bg-yellow-500';
+      case 'draft': return 'bg-blue-500';
+      case 'archived': return 'bg-gray-500';
+      default: return 'bg-gray-500';
+    }
+  };
+
+  const toggleStar = (policyId: string) => {
     setPolicies(prev => prev.map(policy => 
-      policy.id === updatedPolicy.id ? updatedPolicy : policy
+      policy.id === policyId 
+        ? { ...policy, starred: !policy.starred }
+        : policy
     ));
   };
 
-  const handlePolicyDelete = (policyId: string) => {
-    setPolicies(prev => prev.filter(policy => policy.id !== policyId));
+  const handleDownload = (policy: PolicyDocument) => {
+    toast({
+      title: "Download Started",
+      description: `Downloading ${policy.title} v${policy.version}`,
+    });
   };
 
-  const handlePolicyCreate = (newPolicy: Partial<PolicyDocument>) => {
-    const policy: PolicyDocument = {
-      id: Date.now().toString(),
-      title: newPolicy.title || 'New Policy',
-      content: newPolicy.content || '# New Policy\n\nPolicy content...',
-      category: newPolicy.category || 'General',
-      status: 'draft',
-      version: '1.0',
-      lastModified: new Date(),
-      author: 'Current User',
-      size: '12 KB',
-      tags: newPolicy.tags || ['new'],
-      starred: false,
-      description: newPolicy.description || 'New policy document'
-    };
-    setPolicies(prev => [...prev, policy]);
+  const handleDelete = (policyId: string) => {
+    setPolicies(prev => prev.filter(policy => policy.id !== policyId));
+    toast({
+      title: "Policy Deleted",
+      description: "The policy has been removed from the library.",
+    });
   };
+
+  const uploadPolicy = () => {
+    toast({
+      title: "Upload Policy",
+      description: "Policy upload functionality coming soon.",
+    });
+  };
+
+  const getStatsData = () => {
+    const total = policies.length;
+    const approved = policies.filter(p => p.status === 'approved').length;
+    const inReview = policies.filter(p => p.status === 'review').length;
+    const draft = policies.filter(p => p.status === 'draft').length;
+    const starred = policies.filter(p => p.starred).length;
+    
+    return { total, approved, inReview, draft, starred };
+  };
+
+  const stats = getStatsData();
 
   return (
     <div className="space-y-6">
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Total Policies</p>
+                <p className="text-2xl font-bold">{stats.total}</p>
+              </div>
+              <FileText className="w-8 h-8 text-primary" />
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Approved</p>
+                <p className="text-2xl font-bold text-green-500">{stats.approved}</p>
+              </div>
+              <Badge className="bg-green-500 text-white">✓</Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">In Review</p>
+                <p className="text-2xl font-bold text-yellow-500">{stats.inReview}</p>
+              </div>
+              <Badge className="bg-yellow-500 text-white">⏳</Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Drafts</p>
+                <p className="text-2xl font-bold text-blue-500">{stats.draft}</p>
+              </div>
+              <Badge className="bg-blue-500 text-white">📝</Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Starred</p>
+                <p className="text-2xl font-bold text-yellow-400">{stats.starred}</p>
+              </div>
+              <Star className="w-8 h-8 text-yellow-400 fill-current" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Main Content */}
       <Tabs defaultValue="library" className="space-y-6">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="library">
-            <Shield className="w-4 h-4 mr-2" />
-            Policy Library
-          </TabsTrigger>
-          <TabsTrigger value="templates">
-            <FileText className="w-4 h-4 mr-2" />
-            Templates
-          </TabsTrigger>
-          <TabsTrigger value="analytics">
-            <Archive className="w-4 h-4 mr-2" />
-            Analytics
-          </TabsTrigger>
+          <TabsTrigger value="library">Policy Library</TabsTrigger>
+          <TabsTrigger value="templates">Templates</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
 
         {/* Policy Library Tab */}
-        <TabsContent value="library">
-          <DocumentCRUDManager
-            documents={policies}
-            onDocumentUpdate={handlePolicyUpdate}
-            onDocumentDelete={handlePolicyDelete}
-            onDocumentCreate={handlePolicyCreate}
-            title="CISO Policy Library"
-            description="Manage, organize, and track your cybersecurity policies with QR codes and barcodes"
-          />
+        <TabsContent value="library" className="space-y-6">
+          {/* Search and Filters */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Policy Library Management</CardTitle>
+                  <CardDescription>Manage, organize, and track your security policies</CardDescription>
+                </div>
+                <Button onClick={uploadPolicy} data-testid="button-upload-policy">
+                  <Upload className="w-4 h-4 mr-2" />
+                  Upload Policy
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col lg:flex-row gap-4">
+                <div className="flex-1">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search policies, descriptions, or tags..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                      data-testid="input-policy-search"
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  <Button
+                    variant={showStarredOnly ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setShowStarredOnly(!showStarredOnly)}
+                    data-testid="button-filter-starred"
+                  >
+                    <Star className="w-4 h-4 mr-1" />
+                    Starred
+                  </Button>
+                  {categories.map((category) => (
+                    <Button
+                      key={category}
+                      variant={selectedCategory === category ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedCategory(category)}
+                      data-testid={`button-category-${category.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      {category}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              <div className="flex gap-2 mt-4">
+                <Label className="text-sm font-medium">Status:</Label>
+                {statuses.map((status) => (
+                  <Button
+                    key={status}
+                    variant={selectedStatus === status ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedStatus(status)}
+                    data-testid={`button-status-${status}`}
+                  >
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Policies List */}
+          <div className="space-y-4">
+            {filteredPolicies.length === 0 ? (
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-center py-12 text-muted-foreground">
+                    <FileText className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                    <p>No policies found</p>
+                    <p className="text-sm">Try adjusting your search criteria or filters</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              filteredPolicies.map((policy) => (
+                <Card key={policy.id} className="hover:shadow-md transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-lg font-semibold">{policy.title}</h3>
+                          <Badge className={`${getStatusColor(policy.status)} text-white`}>
+                            {policy.status}
+                          </Badge>
+                          <Badge variant="outline">v{policy.version}</Badge>
+                          {policy.starred && (
+                            <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                          )}
+                        </div>
+                        <p className="text-muted-foreground mb-3">{policy.description}</p>
+                        
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                          <div className="flex items-center gap-1">
+                            <User className="w-4 h-4" />
+                            {policy.author}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-4 h-4" />
+                            {policy.lastModified.toLocaleDateString()}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <FileText className="w-4 h-4" />
+                            {policy.size}
+                          </div>
+                        </div>
+
+                        <div className="flex gap-1 flex-wrap">
+                          {policy.tags.map((tag) => (
+                            <Badge key={tag} variant="secondary" className="text-xs">
+                              <Tag className="w-3 h-3 mr-1" />
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 ml-4">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => toggleStar(policy.id)}
+                          data-testid={`button-star-${policy.id}`}
+                        >
+                          <Star className={`w-4 h-4 ${policy.starred ? 'text-yellow-400 fill-current' : ''}`} />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          data-testid={`button-view-${policy.id}`}
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          data-testid={`button-edit-${policy.id}`}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleDownload(policy)}
+                          data-testid={`button-download-${policy.id}`}
+                        >
+                          <Download className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          data-testid={`button-share-${policy.id}`}
+                        >
+                          <Share2 className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleDelete(policy.id)}
+                          data-testid={`button-delete-${policy.id}`}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
+          </div>
         </TabsContent>
 
         {/* Templates Tab */}
