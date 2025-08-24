@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'wouter';
 import { useSidebar } from '@/components/ui/sidebar-context';
-import { ShieldCheck, FileText, ClipboardCheck, Bot, LayoutDashboard } from 'lucide-react';
+import { ShieldCheck, FileText, ClipboardCheck, Bot, LayoutDashboard, AlertTriangle } from 'lucide-react';
 
 export default function Sidebar() {
   const [location] = useLocation();
@@ -13,6 +13,7 @@ export default function Sidebar() {
     { href: "/policies", label: "Policies", icon: FileText },
     { href: "/nca-ecc", label: "NCA ECC", icon: ShieldCheck },
     { href: "/metaworks", label: "Metaworks V1&V2", icon: ShieldCheck },
+    { href: "/nfrm", label: "NFRM Risk Management", icon: AlertTriangle },
     { href: "/assistant", label: "Assistant", icon: Bot },
   ];
 

@@ -13,6 +13,7 @@ import Policies from "@/pages/policies";
 import NcaEcc from "@/pages/nca-ecc";
 import Assistant from "@/pages/assistant";
 import MetaworksCompliance from "@/pages/metaworks-compliance";
+import NFRMRiskManagement from "@/pages/nfrm-risk-management";
 import NotFound from "@/pages/not-found";
 
 export default function App() {
@@ -50,6 +51,11 @@ export default function App() {
           </Route>
           <Route path="/metaworks">
             <MetaworksCompliance />
+          </Route>
+          <Route path="/nfrm">
+            <Layout>
+              <NFRMRiskManagement />
+            </Layout>
           </Route>
           <Route>
             <NotFound />

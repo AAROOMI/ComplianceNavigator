@@ -1,0 +1,401 @@
+# Create a simple, ready-to-run Risk Assessment web app (single-file) and zip it for download.
+import zipfile, os, textwrap, json, base64, io, datetime
+
+index_html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NFCRM Risk Assessment – Simple App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' rx='24' fill='%230ea5e9'/%3E%3Cpath d='M92 36 64 92 36 36h14l14 28 14-28h14z' fill='white'/%3E%3C/svg%3E">
+  <style>
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+    ::-webkit-scrollbar-track { background: #f8fafc; }
+    /* Heat map cells */
+    .cell { transition: transform .1s ease; }
+    .cell:hover { transform: scale(1.04); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <div class="max-w-6xl mx-auto p-4 md:p-8">
+    <header class="mb-6">
+      <h1 class="text-2xl md:text-3xl font-bold">Cybersecurity Risk Assessment (NFCRM – 1:2024)</h1>
+      <p class="text-sm md:text-base text-slate-600 mt-1">Simple, client-side tool to capture risks, score them on a 5×5 matrix, and export results.</p>
+      <div class="mt-3 text-xs text-slate-500">
+        <span class="inline-flex items-center gap-2 bg-white border border-slate-200 rounded-full px-3 py-1 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>TLP: White • Public
+        </span>
+      </div>
+    </header>
+
+    <!-- Controls -->
+    <section class="grid md:grid-cols-3 gap-4 mb-6">
+      <div class="bg-white rounded-2xl shadow p-4 border border-slate-200">
+        <h2 class="font-semibold mb-2">New Risk</h2>
+        <form id="riskForm" class="space-y-3">
+          <div>
+            <label class="text-sm font-medium">Asset / Process</label>
+            <input id="asset" class="w-full mt-1 rounded-xl border-slate-300 focus:ring-0 focus:border-sky-500" placeholder="e.g., Payroll System"/>
+          </div>
+          <div>
+            <label class="text-sm font-medium">Threat</label>
+            <input id="threat" class="w-full mt-1 rounded-xl border-slate-300 focus:ring-0 focus:border-sky-500" placeholder="e.g., Ransomware"/>
+          </div>
+          <div>
+            <label class="text-sm font-medium">Vulnerability</label>
+            <input id="vuln" class="w-full mt-1 rounded-xl border-slate-300 focus:ring-0 focus:border-sky-500" placeholder="e.g., Unpatched server"/>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="text-xs font-medium">Confidentiality (1–5)</label>
+              <input id="impC" type="number" min="1" max="5" value="3" class="w-full mt-1 rounded-xl border-slate-300 focus:ring-0 focus:border-sky-500"/>
+            </div>
+            <div>
+              <label class="text-xs font-medium">Integrity (1–5)</label>
+              <input id="impI" type="number" min="1" max="5" value="3" class="w-full mt-1 rounded-xl border-slate-300 focus:ring-0 focus:border-sky-500"/>
+            </div>
+            <div>
+              <label class="text-xs font-medium">Availability (1–5)</label>
+              <input id="impA" type="number" min="1" max="5" value="3" class="w-full mt-1 rounded-xl border-slate-300 focus:ring-0 focus:border-sky-500"/>
+            </div>
+          </div>
+          <div>
+            <label class="text-sm font-medium">Likelihood (1–5)</label>
+            <select id="likelihood" class="w-full mt-1 rounded-xl border-slate-300 focus:ring-0 focus:border-sky-500">
+              <option value="1">1 – Very Rare</option>
+              <option value="2">2 – Rare</option>
+              <option value="3" selected>3 – Improbable</option>
+              <option value="4">4 – Probable</option>
+              <option value="5">5 – Almost Certain</option>
+            </select>
+            <p class="text-xs text-slate-500 mt-1">Time period + exploitability combined.</p>
+          </div>
+          <div>
+            <label class="text-sm font-medium">Existing Controls (optional)</label>
+            <textarea id="controls" rows="2" class="w-full mt-1 rounded-xl border-slate-300 focus:ring-0 focus:border-sky-500" placeholder="e.g., EDR, daily backups, MFA"></textarea>
+          </div>
+          <div>
+            <label class="text-sm font-medium">Proposed Treatment (optional)</label>
+            <textarea id="treatment" rows="2" class="w-full mt-1 rounded-xl border-slate-300 focus:ring-0 focus:border-sky-500" placeholder="e.g., Patch SLA, network segmentation"></textarea>
+          </div>
+          <button class="w-full bg-sky-600 hover:bg-sky-700 text-white rounded-xl py-2 mt-2">Add Risk</button>
+        </form>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow p-4 border border-slate-200">
+        <h2 class="font-semibold mb-2">5×5 Risk Matrix</h2>
+        <div id="matrix" class="grid grid-cols-5 gap-1 text-xs">
+          <!-- Cells generated by JS -->
+        </div>
+        <div class="mt-3 text-xs text-slate-500">
+          <p>Scoring: Impact (max of C/I/A, 1–5) × Likelihood (1–5) ⇒ 1–25.</p>
+          <p class="mt-1">Bands: 1–3 Very Low, 4–8 Low, 9–14 Medium, 15–19 High, 20–25 Severe.</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow p-4 border border-slate-200">
+        <h2 class="font-semibold mb-2">Export & Settings</h2>
+        <div class="space-y-2">
+          <button id="exportCSV" class="w-full bg-white border border-slate-300 hover:bg-slate-50 rounded-xl py-2">Export CSV</button>
+          <button id="exportJSON" class="w-full bg-white border border-slate-300 hover:bg-slate-50 rounded-xl py-2">Export JSON</button>
+          <button id="exportPDF" class="w-full bg-white border border-slate-300 hover:bg-slate-50 rounded-xl py-2">Export PDF Report</button>
+          <button id="resetAll" class="w-full bg-rose-600 hover:bg-rose-700 text-white rounded-xl py-2">Reset All</button>
+        </div>
+        <p class="text-xs text-slate-500 mt-3">All data is stored locally in your browser (localStorage).</p>
+      </div>
+    </section>
+
+    <!-- Table -->
+    <section class="bg-white rounded-2xl shadow p-4 border border-slate-200">
+      <div class="flex items-center justify-between gap-2 mb-3">
+        <h2 class="font-semibold">Risk Register</h2>
+        <input id="search" placeholder="Search…" class="rounded-xl border-slate-300 focus:ring-0 focus:border-sky-500"/>
+      </div>
+      <div class="overflow-auto">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-50">
+            <tr>
+              <th class="text-left p-2">#</th>
+              <th class="text-left p-2">Asset</th>
+              <th class="text-left p-2">Threat</th>
+              <th class="text-left p-2">Vulnerability</th>
+              <th class="text-left p-2">C/I/A</th>
+              <th class="text-left p-2">Likelihood</th>
+              <th class="text-left p-2">Score</th>
+              <th class="text-left p-2">Level</th>
+              <th class="text-left p-2">Controls</th>
+              <th class="text-left p-2">Treatment</th>
+              <th class="text-left p-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="riskRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="text-xs text-slate-500 mt-6">
+      <p>Aligned with the National Framework for Cybersecurity Risk Management (NFCRM – 1:2024) draft (KSA). Bands and likelihood labels follow the 5×5 matrix and probability descriptions. This tool is provided as-is.</p>
+    </footer>
+  </div>
+
+<script>
+  const storageKey = "nfcrm_risks_v1";
+  let risks = JSON.parse(localStorage.getItem(storageKey) || "[]");
+  let filter = "";
+
+  const el = id => document.getElementById(id);
+
+  function impactBand(score) {
+    if (score >= 20) return {label:"Severe", cls:"bg-rose-600 text-white"};
+    if (score >= 15) return {label:"High", cls:"bg-orange-500 text-white"};
+    if (score >= 9)  return {label:"Medium", cls:"bg-amber-400 text-slate-900"};
+    if (score >= 4)  return {label:"Low", cls:"bg-emerald-300 text-slate-900"};
+    return {label:"Very Low", cls:"bg-emerald-200 text-slate-900"};
+  }
+
+  function cellColor(score) {
+    if (score >= 20) return "bg-rose-200";
+    if (score >= 15) return "bg-orange-200";
+    if (score >= 9)  return "bg-amber-200";
+    if (score >= 4)  return "bg-emerald-200";
+    return "bg-emerald-100";
+  }
+
+  function renderMatrix() {
+    const grid = el("matrix");
+    grid.innerHTML = "";
+    for (let i = 5; i >= 1; i--) {            // Likelihood rows (5 to 1)
+      for (let j = 1; j <= 5; j++) {          // Impact columns (1 to 5)
+        const score = i * j;
+        const div = document.createElement("div");
+        div.className = "cell rounded-lg p-2 text-center " + cellColor(score);
+        div.innerHTML = `<div class="font-semibold">${score}</div><div class="text-[10px]">${i}×${j}</div>`;
+        grid.appendChild(div);
+      }
+    }
+  }
+
+  function save() {
+    localStorage.setItem(storageKey, JSON.stringify(risks));
+  }
+
+  function renderTable() {
+    const tbody = el("riskRows");
+    tbody.innerHTML = "";
+    const filtered = risks.filter(r => {
+      const q = filter.toLowerCase();
+      return Object.values(r).join(" ").toLowerCase().includes(q);
+    });
+    filtered.forEach((r, idx) => {
+      const tr = document.createElement("tr");
+      tr.className = idx % 2 ? "bg-white" : "bg-slate-50";
+      const tag = impactBand(r.score);
+      tr.innerHTML = `
+        <td class="p-2 align-top">${idx+1}</td>
+        <td class="p-2 align-top">${r.asset}</td>
+        <td class="p-2 align-top">${r.threat}</td>
+        <td class="p-2 align-top">${r.vuln}</td>
+        <td class="p-2 align-top">${r.impC}/${r.impI}/${r.impA}</td>
+        <td class="p-2 align-top">${r.likelihood}</td>
+        <td class="p-2 align-top font-semibold">${r.score}</td>
+        <td class="p-2 align-top"><span class="px-2 py-1 rounded-full text-xs ${tag.cls}">${tag.label}</span></td>
+        <td class="p-2 align-top whitespace-pre-wrap">${r.controls || ""}</td>
+        <td class="p-2 align-top whitespace-pre-wrap">${r.treatment || ""}</td>
+        <td class="p-2 align-top">
+          <div class="flex gap-2">
+            <button class="text-sky-700 underline" data-action="edit" data-id="${r.id}">Edit</button>
+            <button class="text-rose-700 underline" data-action="del" data-id="${r.id}">Delete</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function toCSV(items) {
+    const cols = ["asset","threat","vuln","impC","impI","impA","likelihood","score","level","controls","treatment","createdAt"];
+    const header = cols.join(",");
+    const lines = items.map(r => [
+      r.asset, r.threat, r.vuln, r.impC, r.impI, r.impA, r.likelihood, r.score, r.level, (r.controls||"").replaceAll("\\n"," "), (r.treatment||"").replaceAll("\\n"," "), r.createdAt
+    ].map(v => `"${String(v).replaceAll('"','""')}"`).join(","));
+    return [header, ...lines].join("\\n");
+  }
+
+  function exportCSV() {
+    const blob = new Blob([toCSV(risks)], {type: "text/csv;charset=utf-8;"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "nfcrm_risk_register.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportJSON() {
+    const blob = new Blob([JSON.stringify(risks, null, 2)], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "nfcrm_risks.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function exportPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({unit:"pt", format:"a4"});
+    const pageW = doc.internal.pageSize.getWidth();
+    let y = 48;
+
+    doc.setFontSize(16);
+    doc.text("Cybersecurity Risk Assessment Report", 48, y); y += 20;
+    doc.setFontSize(10);
+    doc.text("Aligned with NFCRM – 1:2024 (Draft). Generated: " + new Date().toLocaleString(), 48, y); y += 18;
+
+    const bands = [
+      {name:"Severe", range:"20–25"},
+      {name:"High", range:"15–19"},
+      {name:"Medium", range:"9–14"},
+      {name:"Low", range:"4–8"},
+      {name:"Very Low", range:"1–3"}
+    ];
+    doc.text("Risk Bands (matrix 5×5): " + bands.map(b=>`${b.name} ${b.range}`).join("  •  "), 48, y); y += 22;
+
+    // Table header
+    const cols = ["#", "Asset", "Threat", "Vuln", "C/I/A", "L", "Score", "Level"];
+    let x = 48;
+    doc.setFontSize(9);
+    cols.forEach((c,i) => {
+      doc.text(c, x, y);
+      x += [18, 110, 110, 90, 60, 18, 36, 44][i];
+    });
+    y += 12;
+    doc.setLineWidth(0.5);
+    doc.line(48, y, pageW-48, y); y += 10;
+
+    risks.forEach((r, i) => {
+      x = 48;
+      const row = [
+        String(i+1),
+        r.asset,
+        r.threat,
+        r.vuln,
+        `${r.impC}/${r.impI}/${r.impA}`,
+        String(r.likelihood),
+        String(r.score),
+        r.level
+      ];
+      row.forEach((val, idx) => {
+        const maxW = [18,110,110,90,60,18,36,44][idx];
+        const lines = doc.splitTextToSize(val, maxW);
+        doc.text(lines, x, y);
+        x += maxW;
+      });
+      y += 14;
+      if (y > 760) { doc.addPage(); y = 48; }
+    });
+
+    doc.save("nfcrm_risk_report.pdf");
+  }
+
+  function addRisk(e) {
+    e.preventDefault();
+    const asset = el("asset").value.trim();
+    const threat = el("threat").value.trim();
+    const vuln = el("vuln").value.trim();
+    const impC = clamp(parseInt(el("impC").value||"0"),1,5);
+    const impI = clamp(parseInt(el("impI").value||"0"),1,5);
+    const impA = clamp(parseInt(el("impA").value||"0"),1,5);
+    const likelihood = clamp(parseInt(el("likelihood").value||"0"),1,5);
+    const controls = el("controls").value;
+    const treatment = el("treatment").value;
+
+    if (!asset || !threat || !vuln) {
+      alert("Please fill Asset, Threat, and Vulnerability.");
+      return;
+    }
+
+    const impact = Math.max(impC, impI, impA); // per NFCRM matrix approach 1–5
+    const score = impact * likelihood;
+    const band = impactBand(score);
+
+    const r = {
+      id: crypto.randomUUID(),
+      asset, threat, vuln,
+      impC, impI, impA,
+      likelihood,
+      impact,
+      score,
+      level: band.label,
+      controls, treatment,
+      createdAt: new Date().toISOString()
+    };
+    risks.push(r);
+    save();
+    renderTable();
+    e.target.reset();
+  }
+
+  function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+
+  function onTableClick(e) {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    const id = btn.dataset.id;
+    if (btn.dataset.action === "del") {
+      risks = risks.filter(r => r.id !== id);
+      save(); renderTable();
+    }
+    if (btn.dataset.action === "edit") {
+      const r = risks.find(x => x.id === id);
+      if (!r) return;
+      const asset = prompt("Asset", r.asset); if (asset===null) return;
+      const threat = prompt("Threat", r.threat); if (threat===null) return;
+      const vuln = prompt("Vulnerability", r.vuln); if (vuln===null) return;
+      const impC = clamp(parseInt(prompt("Confidentiality (1–5)", r.impC) || r.impC),1,5);
+      const impI = clamp(parseInt(prompt("Integrity (1–5)", r.impI) || r.impI),1,5);
+      const impA = clamp(parseInt(prompt("Availability (1–5)", r.impA) || r.impA),1,5);
+      const likelihood = clamp(parseInt(prompt("Likelihood (1–5)", r.likelihood) || r.likelihood),1,5);
+      const controls = prompt("Existing Controls", r.controls || "") ?? r.controls;
+      const treatment = prompt("Proposed Treatment", r.treatment || "") ?? r.treatment;
+      const impact = Math.max(impC, impI, impA);
+      const score = impact * likelihood;
+      const band = impactBand(score);
+      Object.assign(r, {asset,threat,vuln,impC,impI,impA,likelihood,impact,score,level:band.label,controls,treatment});
+      save(); renderTable();
+    }
+  }
+
+  // Event bindings
+  document.addEventListener("DOMContentLoaded", () => {
+    renderMatrix();
+    renderTable();
+    el("riskForm").addEventListener("submit", addRisk);
+    el("riskRows").addEventListener("click", onTableClick);
+    el("search").addEventListener("input", (e)=>{ filter=e.target.value; renderTable(); });
+    el("exportCSV").addEventListener("click", exportCSV);
+    el("exportJSON").addEventListener("click", exportJSON);
+    el("exportPDF").addEventListener("click", exportPDF);
+    el("resetAll").addEventListener("click", () => {
+      if (confirm("Clear all risks?")) { risks = []; save(); renderTable(); }
+    });
+  });
+</script>
+</body>
+</html>
+"""
+
+# Write the index.html
+with open("/mnt/data/index.html", "w", encoding="utf-8") as f:
+    f.write(index_html)
+
+# Create a zip for easy download
+zip_path = "/mnt/data/nfcrm-risk-app.zip"
+with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as z:
+    z.writestr("index.html", index_html)
+
+zip_path
