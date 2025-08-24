@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Metaworks - NCA ECC V1 & V2 Compliance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(135deg, #121212, #1e1e1e, #2d2d2d);
+      color: white;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container { max-width: 1000px; margin: 0 auto; }
+    .glass {
+      background: rgba(30, 30, 30, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 173, 181, 0.3);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    h1, h2, h3 { font-weight: 700; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      margin-bottom: 30px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo svg {
+      width: 40px;
+      height: 40px;
+      stroke: #00adb5;
+    }
+    .logo h1 {
+      font-size: 1.8rem;
+      background: linear-gradient(to right, #00adb5, #00c896);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .lang-toggle {
+      background: #00adb5;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn {
+      background: linear-gradient(to right, #00adb5, #00c896);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: all 0.3s;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 173, 181, 0.4); }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid rgba(0, 173, 181, 0.5);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    input::placeholder { color: rgba(255, 255, 255, 0.6); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    th { color: #00adb5; }
+    .progress-container {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      margin: 16px 0;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 10px;
+      background: linear-gradient(to right, #00adb5, #00c896);
+      width: 0%;
+    }
+    .hidden { display: none; }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Header -->
+    <header>
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#00adb5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          <path d="M9 12l2 2 4-4"></path>
+        </svg>
+        <h1>Metaworks</h1>
+      </div>
+      <button class="lang-toggle" onclick="toggleLang()">EN</button>
+    </header>
+
+    <!-- Landing -->
+    <div id="landing" class="glass">
+      <h2>Welcome to Metaworks</h2>
+      <p style="margin: 16px 0; color: #e0fefe;">Your NCA ECC V1 & V2 Compliance Journey Starts Here</p>
+      <button class="btn" onclick="showSection('dashboard')">Begin Compliance</button>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="glass hidden">
+      <h2>Compliance Dashboard</h2>
+      <div class="progress-container">
+        <div class="progress-bar" id="dashboard-progress" style="width: 25%;"></div>
+      </div>
+      <p>25% Complete — Start with ECC V1</p>
+
+      <div class="glass" style="padding: 16px;">
+        <h3>📘 NCA ECC V1 (2018)</h3>
+        <p>Status: <span style="color: #00adb5;">In Progress</span></p>
+        <button class="btn" onclick="showSection('ecc-v1')">Continue</button>
+      </div>
+
+      <div class="glass" style="padding: 16px;">
+        <h3>📘 NCA ECC V2 (2024)</h3>
+        <p>Status: <span style="color: #ffcc00;">Locked (Complete V1 First)</span></p>
+      </div>
+    </div>
+
+    <!-- ECC V1 -->
+    <div id="ecc-v1" class="glass hidden">
+      <h2>NCA ECC V1: Cybersecurity Governance</h2>
+      <p>Complete all domains to unlock ECC V2.</p>
+
+      <button class="btn" onclick="showSection('template-manager')">📤 Upload Policy Templates</button>
+      <button class="btn" style="margin-top: 10px;" onclick="showSection('create-policy')">📄 Generate Policy</button>
+      <button class="btn" style="margin-top: 10px;" onclick="showSection('v1-controls')">📋 View All Controls</button>
+      <button class="btn" style="background: #6c757d; margin-top: 10px;" onclick="showSection('dashboard')">Back</button>
+    </div>
+
+    <!-- Template Manager -->
+    <div id="template-manager" class="glass hidden">
+      <h2>📤 Upload Policy Templates</h2>
+      <p>Upload your custom NCA ECC V1/V2 policy templates (.docx only).</p>
+
+      <form id="upload-form" onsubmit="uploadTemplate(event)" style="margin: 20px 0;">
+        <div style="margin-bottom: 16px;">
+          <label>Policy Name</label>
+          <input type="text" id="template-name" placeholder="e.g., Access Control Policy" required />
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label>Upload .docx File</label>
+          <input type="file" id="template-file" accept=".docx" required />
+        </div>
+        <button type="submit" class="btn">Upload Template</button>
+      </form>
+
+      <h3>Uploaded Templates</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>File</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="template-list">
+          <tr><td>Access Control Policy</td><td>access_control.docx</td><td>2025-04-05</td></tr>
+        </tbody>
+      </table>
+
+      <button class="btn" onclick="showSection('ecc-v1')">Back</button>
+    </div>
+
+    <!-- Create Policy -->
+    <div id="create-policy" class="glass hidden">
+      <h2>Create Policy</h2>
+      <div style="margin-bottom: 16px;">
+        <label>Select Template</label>
+        <select id="template-select">
+          <option value="access">Access Control Policy</option>
+          <option value="password">Password Policy</option>
+          <option value="backup">Backup Policy</option>
+          <option value="incident">Incident Response Plan</option>
+        </select>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label>Company Name</label>
+        <input type="text" placeholder="Enter company name" />
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label>CIO Name</label>
+        <input type="text" placeholder="Enter CIO name" />
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label>Effective Date</label>
+        <input type="date" />
+      </div>
+      <button class="btn" onclick="alert('Policy generated and saved!')">Generate Policy</button>
+      <button class="btn" style="background: #6c757d; margin-left: 10px;" onclick="showSection('ecc-v1')">Cancel</button>
+    </div>
+
+    <!-- V1 Controls -->
+    <div id="v1-controls" class="glass hidden">
+      <h2>NCA ECC V1 Controls</h2>
+      <p>Aligned with Saudi Ceramics Assessment & NCA Guidelines</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Control</th>
+            <th>Description</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1.2.1</td><td>Cybersecurity Management</td><td>Not Implemented</td></tr>
+          <tr><td>2.5.2</td><td>Network Security Management</td><td>Implemented</td></tr>
+          <tr><td>2.7.2</td><td>Data Protection</td><td>Partially Implemented</td></tr>
+          <tr><td>2.9.3</td><td>Backup Management</td><td>Implemented</td></tr>
+          <tr><td>2.13.3.2</td><td>Incident Classification</td><td>Not Implemented</td></tr>
+          <tr><td>5.1.3.5</td><td>ICS: External Media Limitation</td><td>Not Implemented</td></tr>
+        </tbody>
+      </table>
+
+      <button class="btn" onclick="showSection('ecc-v1')">Back</button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>Metaworks – NCA ECC V1 & V2 Compliance Platform | 2025</p>
+      <p>Aligned with NCA ECC Implementation Guide & Saudi Ceramics Assessment</p>
+    </footer>
+
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('.glass').forEach(el => el.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    let isArabic = false;
+    function toggleLang() {
+      const btn = document.querySelector('.lang-toggle');
+      if (!isArabic) {
+        btn.textContent = 'العربية';
+        document.querySelector('h1').textContent = 'ميتا ووركس';
+        document.querySelectorAll('label')[0].textContent = 'اختر القالب';
+        document.querySelectorAll('label')[1].textContent = 'اسم الشركة';
+        document.querySelectorAll('label')[2].textContent = 'اسم الرئيس التنفيذي للمعلومات';
+        document.querySelectorAll('label')[3].textContent = 'تاريخ السريان';
+        document.querySelector('.btn').textContent = 'إنشاء السياسة';
+        document.querySelector('footer p').textContent = 'ميتا ووركس – منصة الامتثال لنظام NCA ECC';
+        isArabic = true;
+      } else {
+        btn.textContent = 'EN';
+        document.querySelector('h1').textContent = 'Metaworks';
+        document.querySelectorAll('label')[0].textContent = 'Select Template';
+        document.querySelectorAll('label')[1].textContent = 'Company Name';
+        document.querySelectorAll('label')[2].textContent = 'CIO Name';
+        document.querySelectorAll('label')[3].textContent = 'Effective Date';
+        document.querySelector('.btn').textContent = 'Generate Policy';
+        document.querySelector('footer p').textContent = 'Metaworks – NCA ECC Compliance Platform';
+        isArabic = false;
+      }
+    }
+
+    function uploadTemplate(e) {
+      e.preventDefault();
+      const name = document.getElementById('template-name').value;
+      const file = document.getElementById('template-file').files[0];
+      const list = document.getElementById('template-list');
+      const row = document.createElement('tr');
+      row.innerHTML = `<td>${name}</td><td>${file.name}</td><td>${new Date().toISOString().split('T')[0]}</td>`;
+      list.appendChild(row);
+      document.getElementById('upload-form').reset();
+      alert(`تم رفع القالب "${name}" بنجاح!`);
+    }
+
+    showSection('landing');
+  </script>
+</body>
+</html>

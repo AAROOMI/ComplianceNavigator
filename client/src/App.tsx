@@ -12,6 +12,7 @@ import Assessment from "@/pages/assessment";
 import Policies from "@/pages/policies";
 import NcaEcc from "@/pages/nca-ecc";
 import Assistant from "@/pages/assistant";
+import MetaworksCompliance from "@/pages/metaworks-compliance";
 import NotFound from "@/pages/not-found";
 
 export default function App() {
@@ -46,6 +47,9 @@ export default function App() {
             <Layout>
               <Assistant />
             </Layout>
+          </Route>
+          <Route path="/metaworks">
+            <MetaworksCompliance />
           </Route>
           <Route>
             <NotFound />

@@ -12,6 +12,7 @@ export default function Sidebar() {
     { href: "/assessment", label: "Assessment", icon: ClipboardCheck },
     { href: "/policies", label: "Policies", icon: FileText },
     { href: "/nca-ecc", label: "NCA ECC", icon: ShieldCheck },
+    { href: "/metaworks", label: "Metaworks V1&V2", icon: ShieldCheck },
     { href: "/assistant", label: "Assistant", icon: Bot },
   ];
 
