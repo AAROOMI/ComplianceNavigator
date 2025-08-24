@@ -591,10 +591,13 @@ export const usersManagement = pgTable("users_management", {
   id: serial("id").primaryKey(),
   username: varchar("username", { length: 50 }).notNull().unique(),
   email: varchar("email", { length: 100 }).notNull().unique(),
+  passwordHash: varchar("password_hash", { length: 255 }).notNull(),
   firstName: varchar("first_name", { length: 50 }),
   lastName: varchar("last_name", { length: 50 }),
-  role: varchar("role", { length: 20 }).notNull().default("user"), // admin, ciso, it-manager, cto, sysadmin, user
-  department: varchar("department", { length: 50 }),
+  role: varchar("role", { length: 50 }).notNull().default("Employee"), // Super Admin, CISO, IT Manager, Security Analyst, Auditor, Employee
+  department: varchar("department", { length: 100 }),
+  status: varchar("status", { length: 20 }).notNull().default("Active"),
+  permissions: text("permissions").array(),
   isActive: boolean("is_active").notNull().default(true),
   lastLogin: timestamp("last_login"),
   createdAt: timestamp("created_at").defaultNow(),
@@ -602,6 +605,15 @@ export const usersManagement = pgTable("users_management", {
   profileImageUrl: varchar("profile_image_url", { length: 255 }),
   phoneNumber: varchar("phone_number", { length: 20 }),
   preferences: jsonb("preferences").default({}),
+});
+
+// Authentication Sessions
+export const userSessions = pgTable("user_sessions", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => usersManagement.id).notNull(),
+  token: varchar("token", { length: 255 }).notNull().unique(),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Achievement Badges System
@@ -650,13 +662,22 @@ export const policyCollaboration = pgTable("policy_collaboration", {
 export const insertUsersManagementSchema = createInsertSchema(usersManagement).pick({
   username: true,
   email: true,
+  passwordHash: true,
   firstName: true,
   lastName: true,
   role: true,
   department: true,
+  status: true,
+  permissions: true,
   isActive: true,
   phoneNumber: true,
   preferences: true
+});
+
+export const insertUserSessionSchema = createInsertSchema(userSessions).pick({
+  userId: true,
+  token: true,
+  expiresAt: true
 });
 
 export const insertAchievementBadgeSchema = createInsertSchema(achievementBadges).pick({
@@ -690,6 +711,8 @@ export const insertPolicyCollaborationSchema = createInsertSchema(policyCollabor
 
 export type UsersManagement = typeof usersManagement.$inferSelect;
 export type InsertUsersManagement = z.infer<typeof insertUsersManagementSchema>;
+export type UserSession = typeof userSessions.$inferSelect;
+export type InsertUserSession = z.infer<typeof insertUserSessionSchema>;
 export type AchievementBadge = typeof achievementBadges.$inferSelect;
 export type InsertAchievementBadge = z.infer<typeof insertAchievementBadgeSchema>;
 export type UserAchievement = typeof userAchievements.$inferSelect;

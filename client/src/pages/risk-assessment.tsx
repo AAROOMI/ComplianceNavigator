@@ -7,9 +7,11 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertTriangle, CheckCircle, Clock, Target, TrendingUp } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertTriangle, CheckCircle, Clock, Target, TrendingUp, FileSpreadsheet, Upload } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import ExcelRiskImporter from "@/components/assessment/excel-risk-importer";
 
 interface RiskAssessmentQuestion {
   id: number;
@@ -34,6 +36,7 @@ export default function RiskAssessment() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [notes, setNotes] = useState("");
   const [showResults, setShowResults] = useState(false);
+  const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
 
   // Sample risk assessment questions based on risk register
   const riskQuestions: RiskAssessmentQuestion[] = [
@@ -285,12 +288,45 @@ export default function RiskAssessment() {
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="text-center space-y-4">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Interactive Risk Assessment
-        </h1>
-        <p className="text-muted-foreground">
-          Test your understanding of cybersecurity risks and best practices
-        </p>
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Interactive Risk Assessment
+            </h1>
+            <p className="text-muted-foreground">
+              Test your understanding of cybersecurity risks and best practices
+            </p>
+          </div>
+          
+          <Dialog open={isImportDialogOpen} onOpenChange={setIsImportDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="flex items-center gap-2" data-testid="button-import-risks-excel">
+                <FileSpreadsheet className="w-4 h-4" />
+                Import from Excel
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden">
+              <DialogHeader>
+                <DialogTitle>Import Risk Data from Excel</DialogTitle>
+              </DialogHeader>
+              <div className="max-h-[80vh] overflow-y-auto">
+                <ExcelRiskImporter 
+                  userId={1} // This should come from auth context
+                  onImportComplete={(count) => {
+                    toast({
+                      title: "Risks Imported",
+                      description: `Successfully imported ${count} risk management plans.`,
+                    });
+                    setIsImportDialogOpen(false);
+                    // Refresh any relevant data
+                    queryClient.invalidateQueries({ queryKey: ['/api/risk-management-plans'] });
+                  }}
+                  onClose={() => setIsImportDialogOpen(false)}
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       <Card className="glass-card border-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-950/30 dark:to-purple-950/30">

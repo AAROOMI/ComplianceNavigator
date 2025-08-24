@@ -1,6 +1,6 @@
 import { 
   users, assessments, policies, vulnerabilities, riskManagementPlans, riskRegister,
-  usersManagement, achievementBadges, userAchievements, policyFeedback, policyCollaboration,
+  usersManagement, userSessions, achievementBadges, userAchievements, policyFeedback, policyCollaboration,
   type User, type InsertUser, 
   type Assessment, type InsertAssessment, 
   type Policy, type InsertPolicy, 
@@ -8,6 +8,7 @@ import {
   type RiskManagementPlan, type InsertRiskManagementPlan,
   type RiskRegister, type InsertRiskRegister,
   type UsersManagement, type InsertUsersManagement,
+  type UserSession, type InsertUserSession,
   type AchievementBadge, type InsertAchievementBadge,
   type UserAchievement, type InsertUserAchievement,
   type PolicyFeedback, type InsertPolicyFeedback,
@@ -41,9 +42,17 @@ export interface IStorage {
   // User Management
   getUsersManagement(): Promise<UsersManagement[]>;
   getUserManagement(id: number): Promise<UsersManagement | undefined>;
+  getUserManagementByUsername(username: string): Promise<UsersManagement | undefined>;
+  getUserManagementByEmail(email: string): Promise<UsersManagement | undefined>;
   createUserManagement(insertUser: InsertUsersManagement): Promise<UsersManagement>;
   updateUserManagement(id: number, updateData: Partial<InsertUsersManagement>): Promise<UsersManagement>;
   deleteUserManagement(id: number): Promise<void>;
+  
+  // Authentication
+  createUserSession(session: InsertUserSession): Promise<UserSession>;
+  getUserSession(token: string): Promise<UserSession | undefined>;
+  deleteUserSession(token: string): Promise<void>;
+  deleteUserSessions(userId: number): Promise<void>;
   
   // Achievement Badges
   getAchievementBadges(): Promise<AchievementBadge[]>;
@@ -318,6 +327,42 @@ class DatabaseStorage implements IStorage {
     const db = await this.getDb();
     const [created] = await db.insert(policyCollaboration).values(collaboration).returning();
     return created;
+  }
+
+  // User Management Authentication - Database implementation
+  async getUserManagementByUsername(username: string): Promise<UsersManagement | undefined> {
+    const db = await this.getDb();
+    const [user] = await db.select().from(usersManagement).where(eq(usersManagement.username, username));
+    return user;
+  }
+
+  async getUserManagementByEmail(email: string): Promise<UsersManagement | undefined> {
+    const db = await this.getDb();
+    const [user] = await db.select().from(usersManagement).where(eq(usersManagement.email, email));
+    return user;
+  }
+
+  // Authentication Sessions - Database implementation
+  async createUserSession(session: InsertUserSession): Promise<UserSession> {
+    const db = await this.getDb();
+    const [created] = await db.insert(userSessions).values(session).returning();
+    return created;
+  }
+
+  async getUserSession(token: string): Promise<UserSession | undefined> {
+    const db = await this.getDb();
+    const [session] = await db.select().from(userSessions).where(eq(userSessions.token, token));
+    return session;
+  }
+
+  async deleteUserSession(token: string): Promise<void> {
+    const db = await this.getDb();
+    await db.delete(userSessions).where(eq(userSessions.token, token));
+  }
+
+  async deleteUserSessions(userId: number): Promise<void> {
+    const db = await this.getDb();
+    await db.delete(userSessions).where(eq(userSessions.userId, userId));
   }
 }
 
@@ -645,6 +690,44 @@ class InMemoryStorage implements IStorage {
     } as PolicyCollaboration;
     this.policyCollaborationList.push(created);
     return created;
+  }
+
+  // User Management Authentication - InMemory implementation
+  async getUserManagementByUsername(username: string): Promise<UsersManagement | undefined> {
+    return this.usersManagementList.find(u => u.username === username);
+  }
+
+  async getUserManagementByEmail(email: string): Promise<UsersManagement | undefined> {
+    return this.usersManagementList.find(u => u.email === email);
+  }
+
+  // Authentication Sessions - InMemory implementation  
+  private userSessionsList: UserSession[] = [];
+  private sessionIdSeq = 1;
+
+  async createUserSession(session: InsertUserSession): Promise<UserSession> {
+    const created: UserSession = {
+      id: this.sessionIdSeq++,
+      ...session,
+      createdAt: new Date()
+    } as UserSession;
+    this.userSessionsList.push(created);
+    return created;
+  }
+
+  async getUserSession(token: string): Promise<UserSession | undefined> {
+    return this.userSessionsList.find(s => s.token === token);
+  }
+
+  async deleteUserSession(token: string): Promise<void> {
+    const index = this.userSessionsList.findIndex(s => s.token === token);
+    if (index !== -1) {
+      this.userSessionsList.splice(index, 1);
+    }
+  }
+
+  async deleteUserSessions(userId: number): Promise<void> {
+    this.userSessionsList = this.userSessionsList.filter(s => s.userId !== userId);
   }
 }
 
