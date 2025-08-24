@@ -27,6 +27,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { cisoPolicyTypes, cisoPolicyCategories } from "@shared/schema";
 import PolicyCreationForm from "@/components/ciso/policy-creation-form";
+import OnboardingExperience from "@/components/ciso/onboarding-experience";
 
 // Mock data for initial display - in real app this would come from API
 const mockPolicies = [
@@ -104,7 +105,16 @@ export default function CisoPolicies() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [activeTab, setActiveTab] = useState("overview");
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const { toast } = useToast();
+
+  // Check if user has seen onboarding before (in real app, this would be from user preferences/localStorage)
+  useEffect(() => {
+    const hasSeenOnboarding = localStorage.getItem('ciso-policies-onboarding-completed');
+    if (!hasSeenOnboarding) {
+      setShowOnboarding(true);
+    }
+  }, []);
 
   // Filter policies based on search and filters
   const filteredPolicies = policies.filter(policy => {
@@ -175,6 +185,24 @@ export default function CisoPolicies() {
     setSelectedPolicy(policy);
   };
 
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false);
+    localStorage.setItem('ciso-policies-onboarding-completed', 'true');
+    toast({
+      title: "Welcome aboard! 🎉",
+      description: "You're all set to start managing your cybersecurity policies.",
+    });
+  };
+
+  const handleOnboardingSkip = () => {
+    setShowOnboarding(false);
+    localStorage.setItem('ciso-policies-onboarding-completed', 'true');
+  };
+
+  const startOnboardingTour = () => {
+    setShowOnboarding(true);
+  };
+
   const getPolicyStats = () => {
     const total = policies.length;
     const active = policies.filter(p => p.status === "active").length;
@@ -198,10 +226,24 @@ export default function CisoPolicies() {
             <p className="text-muted-foreground">Comprehensive cybersecurity policy management system</p>
           </div>
         </div>
-        <Button onClick={() => handleCreatePolicy()} className="flex items-center gap-2">
-          <Plus className="w-4 h-4" />
-          Create Policy
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            onClick={startOnboardingTour}
+            className="flex items-center gap-2"
+          >
+            <Star className="w-4 h-4" />
+            Take Tour
+          </Button>
+          <Button 
+            onClick={() => handleCreatePolicy()} 
+            className="flex items-center gap-2"
+            data-onboarding="create-button"
+          >
+            <Plus className="w-4 h-4" />
+            Create Policy
+          </Button>
+        </div>
       </div>
 
       {/* Statistics Cards */}
@@ -314,10 +356,10 @@ export default function CisoPolicies() {
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="policies">All Policies</TabsTrigger>
-          <TabsTrigger value="templates">Templates</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="overview" data-onboarding="overview-tab">Overview</TabsTrigger>
+          <TabsTrigger value="policies" data-onboarding="policies-tab">All Policies</TabsTrigger>
+          <TabsTrigger value="templates" data-onboarding="templates-tab">Templates</TabsTrigger>
+          <TabsTrigger value="analytics" data-onboarding="analytics-tab">Analytics</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -637,6 +679,13 @@ export default function CisoPolicies() {
         }}
         selectedTemplate={selectedTemplate}
         onPolicyCreated={handlePolicyCreated}
+      />
+
+      {/* Onboarding Experience */}
+      <OnboardingExperience
+        isVisible={showOnboarding}
+        onComplete={handleOnboardingComplete}
+        onSkip={handleOnboardingSkip}
       />
     </div>
   );
