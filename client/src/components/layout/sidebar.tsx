@@ -220,7 +220,7 @@ export default function Sidebar() {
           {/* AI Consultant */}
           <div className="flex justify-center">
             <img 
-              src="/attached_assets/ceo-removebg-preview_1756016869408.png" 
+              src="/attached_assets/ceo-removebg-preview_1756022760331.png" 
               alt="Sarah Johnson"
               className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-lg"
             />
