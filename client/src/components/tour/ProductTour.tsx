@@ -258,7 +258,125 @@ export default function ProductTour({ isOpen, onClose }: ProductTourProps) {
       ),
       placement: 'right',
     },
-    // Add more Arabic steps...
+    {
+      target: '[data-testid="sidebar-risk-management"]',
+      content: (
+        <div className="space-y-3">
+          <h3 className="font-semibold">⚠️ مجموعة إدارة المخاطر</h3>
+          <p>أدوات شاملة لتقييم وإدارة المخاطر لتحديد وتقييم وتخفيف مخاطر الأمن السيبراني.</p>
+          <ul className="text-sm space-y-1">
+            <li>• استبيانات تقييم المخاطر التفاعلية</li>
+            <li>• إدارة سجل المخاطر</li>
+            <li>• نظام تسجيل النقاط الآلي</li>
+            <li>• تتبع خطط التخفيف</li>
+          </ul>
+        </div>
+      ),
+      placement: 'right',
+    },
+    {
+      target: '[data-testid="sidebar-user-awareness"]',
+      content: (
+        <div className="space-y-3">
+          <h3 className="font-semibold">🎓 برامج التوعية للمستخدمين</h3>
+          <p>وحدات تدريبية تفاعلية لبناء الوعي الأمني لفريقك.</p>
+          <ul className="text-sm space-y-1">
+            <li>• وحدات تدريبية تفاعلية</li>
+            <li>• تتبع التقدم والتحليلات</li>
+            <li>• نظام شارات الكفاءة</li>
+            <li>• اختبارات قابلة للتخصيص</li>
+          </ul>
+          <p className="text-xs text-muted-foreground">حول موظفيك إلى خط الدفاع الأول!</p>
+        </div>
+      ),
+      placement: 'right',
+    },
+    {
+      target: '[data-testid="sidebar-user-management"]',
+      content: (
+        <div className="space-y-3">
+          <h3 className="font-semibold">👥 إدارة المستخدمين</h3>
+          <p>إدارة شاملة لدورة حياة المستخدم مع التحكم في الوصول القائم على الأدوار.</p>
+          <ul className="text-sm space-y-1">
+            <li>• إضافة وتحرير وإدارة المستخدمين</li>
+            <li>• صلاحيات قائمة على الأدوار</li>
+            <li>• تتبع النشاطات</li>
+            <li>• تنظيم الأقسام</li>
+          </ul>
+        </div>
+      ),
+      placement: 'right',
+    },
+    {
+      target: '[data-testid="sidebar-ai-consultant"]',
+      content: (
+        <div className="space-y-3">
+          <h3 className="font-semibold">🤖 المستشار الذكي</h3>
+          <p>خبير الأمن السيبراني المتاح على مدار الساعة مدعوم بتقنية الذكاء الاصطناعي المتقدمة.</p>
+          <ul className="text-sm space-y-1">
+            <li>• إرشادات الامتثال في الوقت الفعلي</li>
+            <li>• توصيات أفضل الممارسات</li>
+            <li>• إجابات فورية على أسئلة الأمان</li>
+            <li>• مساعدة واعية بالسياق</li>
+          </ul>
+        </div>
+      ),
+      placement: 'right',
+    },
+    {
+      target: '[data-testid="theme-toggle"]',
+      content: (
+        <div className="space-y-3">
+          <h3 className="font-semibold">🌓 خيارات التخصيص</h3>
+          <p>خصص تجربتك مع تفضيلات المظهر واللغة.</p>
+          <ul className="text-sm space-y-1">
+            <li>• أوضاع المظهر الفاتح/الداكن</li>
+            <li>• دعم اللغة العربية/الإنجليزية</li>
+            <li>• اتجاه النص من اليمين إلى اليسار للعربية</li>
+            <li>• انتقالات سلسة</li>
+          </ul>
+        </div>
+      ),
+      placement: 'left',
+    },
+    {
+      target: '[data-testid="compliance-overview"]',
+      content: (
+        <div className="space-y-3">
+          <h3 className="font-semibold">📈 مراقبة الامتثال في الوقت الفعلي</h3>
+          <p>راقب حالة امتثال مؤسستك عبر جميع مجالات الهيئة الوطنية للأمن السيبراني في الوقت الفعلي.</p>
+          <ul className="text-sm space-y-1">
+            <li>• تتبع نسبة الامتثال المباشر</li>
+            <li>• تسجيل نقاط خاص بالمجال</li>
+            <li>• تحليل الاتجاهات والتقارير</li>
+            <li>• تنبيهات وإشعارات آلية</li>
+          </ul>
+          <p className="text-xs text-muted-foreground">ابق في المقدمة من متطلبات الامتثال!</p>
+        </div>
+      ),
+      placement: 'bottom',
+    },
+    {
+      target: 'body',
+      content: (
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold">🎉 اكتملت الجولة!</h2>
+          <p>أنت الآن جاهز للاستفادة من القوة الكاملة لمنصة ميتاوركس للامتثال!</p>
+          <div className="bg-muted p-3 rounded-md">
+            <h4 className="font-semibold mb-2">الفوائد الرئيسية:</h4>
+            <ul className="text-sm space-y-1">
+              <li>✅ تقليل وقت الامتثال بنسبة 80%</li>
+              <li>✅ أتمتة إنشاء وإدارة السياسات</li>
+              <li>✅ تقوية وضعك الأمني</li>
+              <li>✅ تحسين وعي الفريق والتدريب</li>
+              <li>✅ تبسيط عمليات إدارة المخاطر</li>
+            </ul>
+          </div>
+          <p className="text-sm text-muted-foreground">جاهز للبدء؟ انقر "إنهاء" وابدأ رحلة الامتثال!</p>
+        </div>
+      ),
+      placement: 'center',
+    },
   ];
 
   const getCurrentSteps = () => {
@@ -300,21 +418,20 @@ export default function ProductTour({ isOpen, onClose }: ProductTourProps) {
     if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)) {
       stopSpeech();
       onClose();
-    } else if (type === EVENTS.STEP_AFTER) {
-      setStepIndex(index + (action === ACTIONS.PREV ? -1 : 1));
+    } else if (type === EVENTS.STEP_AFTER || type === EVENTS.TARGET_NOT_FOUND) {
+      const newIndex = action === ACTIONS.PREV ? Math.max(0, index - 1) : Math.min(getCurrentSteps().length - 1, index + 1);
+      setStepIndex(newIndex);
       
-      // Speak the content of the current step
-      const currentStep = getCurrentSteps()[index];
-      if (currentStep && currentStep.content && !isMuted) {
-        const contentElement = document.createElement('div');
-        if (typeof currentStep.content === 'string') {
-          contentElement.innerHTML = currentStep.content;
-        } else {
-          // Extract text from React elements
+      // Speak the content of the new step
+      setTimeout(() => {
+        const currentStep = getCurrentSteps()[newIndex];
+        if (currentStep && currentStep.content && !isMuted) {
           const textContent = extractTextFromReactElement(currentStep.content);
-          speakText(textContent);
+          if (textContent) {
+            speakText(textContent);
+          }
         }
-      }
+      }, 500);
     }
   };
 
@@ -323,11 +440,17 @@ export default function ProductTour({ isOpen, onClose }: ProductTourProps) {
     if (typeof element === 'number') return element.toString();
     if (!element) return '';
     
-    if (element.props && element.props.children) {
-      if (Array.isArray(element.props.children)) {
-        return element.props.children.map(extractTextFromReactElement).join(' ');
+    if (React.isValidElement(element)) {
+      if (element.props && (element.props as any).children) {
+        if (Array.isArray((element.props as any).children)) {
+          return (element.props as any).children.map(extractTextFromReactElement).join(' ');
+        }
+        return extractTextFromReactElement((element.props as any).children);
       }
-      return extractTextFromReactElement(element.props.children);
+    }
+    
+    if (Array.isArray(element)) {
+      return element.map(extractTextFromReactElement).join(' ');
     }
     
     return '';
@@ -336,10 +459,13 @@ export default function ProductTour({ isOpen, onClose }: ProductTourProps) {
   useEffect(() => {
     if (isOpen && stepIndex === 0 && !isMuted) {
       setTimeout(() => {
-        speakText("Welcome to MetaWorks Compliance Platform! I'm your AI guide, and I'll show you how this powerful cybersecurity compliance platform can transform your organization's security posture.");
+        const welcomeText = language === 'ar' 
+          ? "مرحباً بك في منصة ميتاوركس للامتثال! أنا مرشدك الذكي، وسأوضح لك كيف يمكن لهذه المنصة القوية لامتثال الأمن السيبراني أن تحول الوضع الأمني لمؤسستك."
+          : "Welcome to MetaWorks Compliance Platform! I'm your AI guide, and I'll show you how this powerful cybersecurity compliance platform can transform your organization's security posture.";
+        speakText(welcomeText);
       }, 1000);
     }
-  }, [isOpen, stepIndex, isMuted]);
+  }, [isOpen, stepIndex, isMuted, language]);
 
   return (
     <Joyride
