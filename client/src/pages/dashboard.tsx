@@ -16,6 +16,7 @@ import CTOOnboarding from "@/components/ciso/cto-onboarding";
 import SysAdminOnboarding from "@/components/ciso/sysadmin-onboarding";
 import { Shield, Bot, FileBarChart, Settings, Rocket, Monitor, Users, Database, TrendingUp, FileText } from "lucide-react";
 import { Link } from "wouter";
+import DocumentLifecycleMetrics from "@/components/dashboard/document-lifecycle-metrics";
 
 export default function Dashboard() {
   const { t } = useTranslation();
@@ -206,6 +207,20 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Document Lifecycle Management Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="w-5 h-5" />
+            Document Lifecycle Management
+          </CardTitle>
+          <CardDescription>QR/Barcode tracking and digital approval workflow monitoring</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <DocumentLifecycleMetrics />
+        </CardContent>
+      </Card>
 
       {/* Vulnerability Summary Section */}
       <VulnerabilitySummary userId={userId} />

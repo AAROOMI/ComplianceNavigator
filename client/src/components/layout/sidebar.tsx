@@ -14,6 +14,7 @@ export default function Sidebar() {
   const mainLinks = [
     { href: "/dashboard", label: t('navigation.dashboard'), icon: LayoutDashboard, testId: "sidebar-dashboard" },
     { href: "/policies", label: t('navigation.policies'), icon: FileText, testId: "sidebar-policies" },
+    { href: "/document-management", label: "Document Lifecycle", icon: FileText, testId: "sidebar-document-management" },
     { href: "/nca-ecc", label: "NCA ECC", icon: ShieldCheck, testId: "sidebar-nca-ecc" },
     { href: "/nca-ecc-implementation", label: "NCA ECC Implementation", icon: ShieldCheck, testId: "sidebar-nca-ecc-implementation" },
     { href: "/metaworks", label: "Metaworks V1&V2", icon: ShieldCheck, testId: "sidebar-metaworks" },

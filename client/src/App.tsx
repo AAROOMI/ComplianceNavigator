@@ -30,6 +30,7 @@ import CTODashboard from "@/pages/cto-dashboard";
 import SysAdminTools from "@/pages/sysadmin-tools";
 import CISOPortal from "@/pages/ciso-portal";
 import NCAECCImplementation from "@/pages/nca-ecc-implementation";
+import DocumentManagement from "@/pages/document-management";
 import NotFound from "@/pages/not-found";
 
 export default function App() {
@@ -138,6 +139,11 @@ export default function App() {
           <Route path="/nca-ecc-implementation">
             <Layout>
               <NCAECCImplementation />
+            </Layout>
+          </Route>
+          <Route path="/document-management">
+            <Layout>
+              <DocumentManagement />
             </Layout>
           </Route>
           <Route>
