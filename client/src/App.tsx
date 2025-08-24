@@ -32,6 +32,7 @@ import CISOPortal from "@/pages/ciso-portal";
 import NCAECCImplementation from "@/pages/nca-ecc-implementation";
 import DocumentManagement from "@/pages/document-management";
 import NotFound from "@/pages/not-found";
+import PolicyUpload from "@/pages/policy-upload";
 
 export default function App() {
   return (
@@ -144,6 +145,11 @@ export default function App() {
           <Route path="/document-management">
             <Layout>
               <DocumentManagement />
+            </Layout>
+          </Route>
+          <Route path="/policy-upload">
+            <Layout>
+              <PolicyUpload />
             </Layout>
           </Route>
           <Route>

@@ -1,5 +1,6 @@
 import { Express } from "express";
 import { createServer } from "http";
+import { randomUUID } from "crypto";
 import { storage } from "./storage";
 import { 
   insertAssessmentSchema, 
@@ -14,6 +15,7 @@ import {
 } from "@shared/schema";
 import { generateSecurityPolicy, generateComplianceResponse } from "./services/ai";
 import { seedRiskRegister } from "./risk-register-seed";
+import { ObjectStorageService } from "./objectStorage";
 
 export async function registerRoutes(app: Express) {
   app.get("/api/assessments/:userId", async (req, res) => {
@@ -399,6 +401,54 @@ export async function registerRoutes(app: Express) {
     } catch (error) {
       console.error("Error awarding badge:", error);
       res.status(500).json({ message: "Failed to award badge" });
+    }
+  });
+
+  // Object Storage routes for file uploads
+  app.post("/api/upload/policy", async (req, res) => {
+    try {
+      const objectStorageService = new ObjectStorageService();
+      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
+      res.json({ uploadURL });
+    } catch (error) {
+      console.error("Error getting upload URL:", error);
+      res.status(500).json({ error: "Failed to get upload URL" });
+    }
+  });
+
+  app.post("/api/upload/logo", async (req, res) => {
+    try {
+      const objectStorageService = new ObjectStorageService();
+      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
+      res.json({ uploadURL });
+    } catch (error) {
+      console.error("Error getting logo upload URL:", error);
+      res.status(500).json({ error: "Failed to get upload URL" });
+    }
+  });
+
+  app.post("/api/upload/complete", async (req, res) => {
+    try {
+      const { fileName, fileType, fileUrl, category = 'document' } = req.body;
+      
+      // Store file metadata in storage
+      const fileData = {
+        fileName,
+        fileType,
+        fileUrl,
+        category,
+        uploadedAt: new Date().toISOString()
+      };
+      
+      // Here you would normally save to database
+      res.json({ 
+        success: true, 
+        fileId: randomUUID(),
+        ...fileData 
+      });
+    } catch (error) {
+      console.error("Error completing upload:", error);
+      res.status(500).json({ error: "Failed to complete upload" });
     }
   });
 

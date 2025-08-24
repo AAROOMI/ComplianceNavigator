@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation } from 'wouter';
 import { useSidebar } from '@/components/ui/sidebar-context';
 import { useTranslation } from 'react-i18next';
-import { ShieldCheck, FileText, ClipboardCheck, Bot, LayoutDashboard, AlertTriangle, Shield, Database, Settings, Rocket, Monitor, Users, GraduationCap, Book, Award, Brain } from 'lucide-react';
+import { ShieldCheck, FileText, ClipboardCheck, Bot, LayoutDashboard, AlertTriangle, Shield, Database, Settings, Rocket, Monitor, Users, GraduationCap, Book, Award, Brain, Upload } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { LanguageToggle } from '@/components/ui/language-toggle';
 
@@ -15,6 +15,7 @@ export default function Sidebar() {
     { href: "/dashboard", label: t('navigation.dashboard'), icon: LayoutDashboard, testId: "sidebar-dashboard" },
     { href: "/policies", label: t('navigation.policies'), icon: FileText, testId: "sidebar-policies" },
     { href: "/document-management", label: "Document Lifecycle", icon: FileText, testId: "sidebar-document-management" },
+    { href: "/policy-upload", label: "Policy & Logo Upload", icon: Upload, testId: "sidebar-policy-upload" },
     { href: "/nca-ecc", label: "NCA ECC", icon: ShieldCheck, testId: "sidebar-nca-ecc" },
     { href: "/nca-ecc-implementation", label: "NCA ECC Implementation", icon: ShieldCheck, testId: "sidebar-nca-ecc-implementation" },
     { href: "/metaworks", label: "Metaworks V1&V2", icon: ShieldCheck, testId: "sidebar-metaworks" },

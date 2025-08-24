@@ -246,9 +246,35 @@ export default function DocumentViewer({
           .priority-medium { background-color: #fefce8; color: #ca8a04; }
           .priority-high { background-color: #fef2f2; color: #dc2626; }
           .priority-critical { background-color: #fdf2f8; color: #be185d; }
+          .codes-section {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background-color: #f9fafb;
+          }
+          .code-item {
+            text-align: center;
+          }
+          .code-item img {
+            max-width: 150px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            margin-bottom: 8px;
+          }
+          .code-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+          }
           @media print {
             body { margin: 0; padding: 20px; }
             .document-header { break-after: avoid; }
+            .codes-section { break-inside: avoid; }
           }
         </style>
       </head>
@@ -308,6 +334,21 @@ export default function DocumentViewer({
         </div>
         
         <div class="document-content">${content}</div>
+        
+        ${qrCode && barcode ? `
+        <div class="codes-section">
+          <div class="code-item">
+            <img src="${qrCode}" alt="Document QR Code" />
+            <div class="code-label">QR Code</div>
+            <div style="font-size: 10px; color: #9ca3af;">Scan for online access</div>
+          </div>
+          <div class="code-item">
+            <img src="${barcode}" alt="Document Barcode" />
+            <div class="code-label">Barcode</div>
+            <div style="font-size: 10px; color: #9ca3af;">${documentId}</div>
+          </div>
+        </div>
+        ` : ''}
         
         <div class="document-footer">
           <p>Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
