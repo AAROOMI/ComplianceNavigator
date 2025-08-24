@@ -13,7 +13,6 @@ export default function Sidebar() {
     { href: "/nca-ecc", label: "NCA ECC", icon: ShieldCheck },
     { href: "/metaworks", label: "Metaworks V1&V2", icon: ShieldCheck },
     { href: "/nfrm", label: "NFRM Risk Management", icon: AlertTriangle },
-    { href: "/ciso-policies", label: "CISO Policies", icon: Shield },
     { href: "/assistant", label: "Assistant", icon: Bot },
   ];
 
@@ -21,6 +20,7 @@ export default function Sidebar() {
     { href: "/assessment", label: "Assessment Questionnaire", icon: ClipboardCheck },
     { href: "/risk-register", label: "Risk Register", icon: Database },
     { href: "/risk-assessment", label: "Interactive Risk Assessment", icon: AlertTriangle },
+    { href: "/dashboard", label: "Risk Dashboard", icon: LayoutDashboard },
   ];
 
   const trainingLinks = [
@@ -31,6 +31,7 @@ export default function Sidebar() {
   ];
 
   const roleLinks = [
+    { href: "/ciso-policies", label: "CISO Portal", icon: Shield },
     { href: "/it-manager", label: "IT Manager Portal", icon: Settings },
     { href: "/cto-dashboard", label: "CTO Dashboard", icon: Rocket },
     { href: "/sysadmin-tools", label: "System Admin Tools", icon: Monitor },

@@ -6,6 +6,7 @@ import NCADomainMatrix from "@/components/dashboard/nca-domain-matrix";
 import ApplicationMetrics from "@/components/dashboard/application-metrics";
 import PolicyHealthMonitor from "@/components/dashboard/policy-health-monitor";
 import VulnerabilitySummary from "@/components/dashboard/vulnerability-summary";
+import InteractiveRiskMeters from "@/components/dashboard/interactive-risk-meters";
 import OnboardingExperience from "@/components/ciso/onboarding-experience";
 import ITManagerOnboarding from "@/components/ciso/it-manager-onboarding";
 import CTOOnboarding from "@/components/ciso/cto-onboarding";
@@ -120,6 +121,9 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Interactive Risk Meters */}
+      <InteractiveRiskMeters />
 
       <div className="grid gap-6 md:grid-cols-4">
         {/* Policy Health Monitor */}

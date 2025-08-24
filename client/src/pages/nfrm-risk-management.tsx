@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Shield, Download, Search, Trash2, Edit, FileText, Database, FileSpreadsheet, RotateCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import InteractiveRiskMeters from "@/components/dashboard/interactive-risk-meters";
 
 interface Risk {
   id: string;
@@ -257,6 +258,9 @@ export default function NFRMRiskManagement() {
           TLP: White • Public
         </Badge>
       </div>
+
+      {/* Interactive Risk Meters */}
+      <InteractiveRiskMeters />
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Risk Input Form */}
