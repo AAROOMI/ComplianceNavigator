@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 import ComplianceRiskOverview from "@/components/dashboard/compliance-risk-overview";
 import NCADomainMatrix from "@/components/dashboard/nca-domain-matrix";
 import ApplicationMetrics from "@/components/dashboard/application-metrics";
@@ -15,6 +16,7 @@ import { Shield, Bot, FileBarChart, Settings, Rocket, Monitor, Users, Database, 
 import { Link } from "wouter";
 
 export default function Dashboard() {
+  const { t } = useTranslation();
   const userId = 1; // TODO: Replace with actual user ID when user authentication is implemented
   
   // Role-specific onboarding states
@@ -42,18 +44,21 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Compliance Dashboard</h1>
+        <div>
+          <h1 className="text-3xl font-bold">{t('dashboard.title')}</h1>
+          <p className="text-muted-foreground">{t('dashboard.subtitle')}</p>
+        </div>
         <div className="flex gap-3">
           <Link href="/assessment">
             <Button variant="outline" className="flex items-center gap-2">
               <FileBarChart className="w-4 h-4" />
-              Risk Assessment
+              {t('dashboard.startAssessment')}
             </Button>
           </Link>
           <Link href="/assistant">
             <Button variant="outline" className="flex items-center gap-2">
               <Bot className="w-4 h-4" />
-              AI Assistant
+              {t('navigation.aiConsultant')}
             </Button>
           </Link>
           <Link href="/nca-ecc">
@@ -70,7 +75,7 @@ export default function Dashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="w-5 h-5" />
-            Role-Based Onboarding
+            {t('common.manage')} - Role-Based Onboarding
           </CardTitle>
           <CardDescription>
             Get started with guided tours tailored to your leadership role

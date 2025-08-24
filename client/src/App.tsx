@@ -2,8 +2,11 @@ import { Route, Switch } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { SidebarProvider } from "@/components/ui/sidebar-context";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { queryClient } from "@/lib/queryClient";
 import Layout from "@/components/layout";
+import "@/lib/i18n";
 
 // Import pages
 import Landing from "@/pages/landing";
@@ -27,8 +30,10 @@ import NotFound from "@/pages/not-found";
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <SidebarProvider>
-        <Switch>
+      <ThemeProvider>
+        <LanguageProvider>
+          <SidebarProvider>
+            <Switch>
           <Route path="/">
             <Landing />
           </Route>
@@ -108,9 +113,11 @@ export default function App() {
           <Route>
             <NotFound />
           </Route>
-        </Switch>
-        <Toaster />
-      </SidebarProvider>
+            </Switch>
+            <Toaster />
+          </SidebarProvider>
+        </LanguageProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

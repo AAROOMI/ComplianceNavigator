@@ -1,19 +1,23 @@
 import React from 'react';
 import { useLocation } from 'wouter';
 import { useSidebar } from '@/components/ui/sidebar-context';
+import { useTranslation } from 'react-i18next';
 import { ShieldCheck, FileText, ClipboardCheck, Bot, LayoutDashboard, AlertTriangle, Shield, Database, Settings, Rocket, Monitor, Users, GraduationCap, Book, Award, Brain } from 'lucide-react';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { LanguageToggle } from '@/components/ui/language-toggle';
 
 export default function Sidebar() {
   const [location] = useLocation();
   const { isOpen } = useSidebar();
+  const { t } = useTranslation();
 
   const mainLinks = [
-    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/policies", label: "Policies", icon: FileText },
+    { href: "/dashboard", label: t('navigation.dashboard'), icon: LayoutDashboard },
+    { href: "/policies", label: t('navigation.policies'), icon: FileText },
     { href: "/nca-ecc", label: "NCA ECC", icon: ShieldCheck },
     { href: "/metaworks", label: "Metaworks V1&V2", icon: ShieldCheck },
-    { href: "/nfrm", label: "NFRM Risk Management", icon: AlertTriangle },
-    { href: "/assistant", label: "Assistant", icon: Bot },
+    { href: "/nfrm", label: t('navigation.riskManagement'), icon: AlertTriangle },
+    { href: "/assistant", label: t('navigation.aiConsultant'), icon: Bot },
   ];
 
   const assessmentLinks = [
@@ -24,9 +28,9 @@ export default function Sidebar() {
   ];
 
   const trainingLinks = [
-    { href: "/user-awareness", label: "User Awareness", icon: GraduationCap },
-    { href: "/training-materials", label: "Training Materials", icon: Book },
-    { href: "/competency-badges", label: "Competency & Badges", icon: Award },
+    { href: "/user-awareness", label: t('navigation.userAwareness'), icon: GraduationCap },
+    { href: "/training-materials", label: t('navigation.trainingMaterials'), icon: Book },
+    { href: "/competency-badges", label: t('navigation.competencyBadges'), icon: Award },
     { href: "/security-quizzes", label: "Security Quizzes", icon: Brain },
   ];
 
@@ -38,7 +42,7 @@ export default function Sidebar() {
   ];
 
   const managementLinks = [
-    { href: "/user-management", label: "User Management", icon: Users },
+    { href: "/user-management", label: t('navigation.userManagement'), icon: Users },
   ];
 
   return (
@@ -203,6 +207,12 @@ export default function Sidebar() {
         </nav>
 
         <div className="p-4 border-t space-y-3">
+          {/* Theme and Language Controls */}
+          <div className="flex items-center justify-center gap-2">
+            <ThemeToggle />
+            <LanguageToggle />
+          </div>
+          
           {/* AI Consultant */}
           <div className="flex justify-center">
             <img 
@@ -212,7 +222,7 @@ export default function Sidebar() {
             />
           </div>
           
-          <div className="text-xs text-muted-foreground">
+          <div className="text-xs text-muted-foreground text-center">
             Compliance Hub v1.0
           </div>
         </div>
