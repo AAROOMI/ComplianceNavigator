@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { ShieldCheck, FileText, ClipboardCheck, Bot, LayoutDashboard, AlertTriangle, Shield, Database, Settings, Rocket, Monitor, Users, GraduationCap, Book, Award, Brain } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { LanguageToggle } from '@/components/ui/language-toggle';
-import SarahAIConsultant, { SarahStatus } from '@/components/ai/SarahAIConsultant';
 
 export default function Sidebar() {
   const [location] = useLocation();
@@ -218,12 +217,6 @@ export default function Sidebar() {
             <LanguageToggle />
           </div>
           
-          {/* AI Consultant */}
-          <div className="flex justify-center">
-            <SarahAIConsultant />
-          </div>
-          
-          <SarahStatus />
         </div>
       </div>
     </aside>
