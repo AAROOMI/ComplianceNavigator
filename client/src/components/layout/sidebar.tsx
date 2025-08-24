@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ShieldCheck, FileText, ClipboardCheck, Bot, LayoutDashboard, AlertTriangle, Shield, Database, Settings, Rocket, Monitor, Users, GraduationCap, Book, Award, Brain } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { LanguageToggle } from '@/components/ui/language-toggle';
+import SarahAIConsultant, { SarahStatus } from '@/components/ai/SarahAIConsultant';
 
 export default function Sidebar() {
   const [location] = useLocation();
@@ -219,16 +220,10 @@ export default function Sidebar() {
           
           {/* AI Consultant */}
           <div className="flex justify-center">
-            <img 
-              src="/attached_assets/ceo-removebg-preview_1756022760331.png" 
-              alt="Sarah Johnson"
-              className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-lg"
-            />
+            <SarahAIConsultant />
           </div>
           
-          <div className="text-xs text-muted-foreground text-center">
-            Compliance Hub v1.0
-          </div>
+          <SarahStatus />
         </div>
       </div>
     </aside>
