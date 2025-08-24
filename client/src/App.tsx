@@ -28,6 +28,7 @@ import CompetencyBadges from "@/pages/competency-badges";
 import ITManagerPortal from "@/pages/it-manager";
 import CTODashboard from "@/pages/cto-dashboard";
 import SysAdminTools from "@/pages/sysadmin-tools";
+import CISOPortal from "@/pages/ciso-portal";
 import NotFound from "@/pages/not-found";
 
 export default function App() {
@@ -126,6 +127,11 @@ export default function App() {
           <Route path="/sysadmin-tools">
             <Layout>
               <SysAdminTools />
+            </Layout>
+          </Route>
+          <Route path="/ciso-portal">
+            <Layout>
+              <CISOPortal />
             </Layout>
           </Route>
           <Route>

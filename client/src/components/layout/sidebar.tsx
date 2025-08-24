@@ -35,7 +35,7 @@ export default function Sidebar() {
   ];
 
   const roleLinks = [
-    { href: "/ciso-policies", label: "CISO Portal", icon: Shield, testId: "sidebar-ciso-portal" },
+    { href: "/ciso-portal", label: "CISO Portal", icon: Shield, testId: "sidebar-ciso-portal" },
     { href: "/it-manager", label: "IT Manager Portal", icon: Settings, testId: "sidebar-it-manager" },
     { href: "/cto-dashboard", label: "CTO Dashboard", icon: Rocket, testId: "sidebar-cto-dashboard" },
     { href: "/sysadmin-tools", label: "System Admin Tools", icon: Monitor, testId: "sidebar-sysadmin-tools" },
