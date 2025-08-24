@@ -122,6 +122,15 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
+.glass-card {
+  background: rgba(30, 30, 30, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 173, 181, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
 .glass-button {
   background: linear-gradient(to right, #00adb5, #00c896);
   transition: all 0.3s;
