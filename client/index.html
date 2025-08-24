@@ -7,73 +7,86 @@
     <meta name="description" content="NCA ECC V1 & V2 Compliance Management with AI-powered assistance" />
     
     <!-- D-ID Interactive AI Agent -->
-    <script
-      type="module"
-      src="https://agent.d-id.com/v1/index.js"
-      data-name="did-agent"
-      data-mode="fabio"
-      data-client-key="YXV0aDB8NjdlZWI3NmYwOTYxZDU0Yjg2N2Y4ZWE3OkMwcExqeHpDYkl0VWt0N1dBQ056WQ=="
-      data-agent-id="agt_56bnv71C"
-      data-monitor="true">
-    </script>
+    <!-- D-ID Agent Custom Integration -->
   </head>
   <body>
     <div id="root"></div>
     
-    <!-- D-ID Agent Container -->
-    <div id="did-agent-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;"></div>
+    <!-- Custom D-ID Agent Container -->
+    <div id="did-agent-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 10000;">
+      <div id="did-agent-window" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 800px; height: 1200px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 173, 181, 0.3);">
+        <iframe 
+          id="did-agent-iframe"
+          src="https://studio.d-id.com/agents/share?id=agt_56bnv71C&utm_source=copy&key=WVhWMGFEQjhOamRsWldJM05tWXdPVFk1WkRVMFlqZzJOMlk0WldFM09rTXdjRXhxZUhwRFlrbDBWV3QwTjFkQlEwNTZXUT09"
+          style="width: 100%; height: 100%; border: none; background: white;"
+          allow="microphone; camera"
+          allowfullscreen>
+        </iframe>
+        <button id="close-agent" style="position: absolute; top: 15px; right: 15px; background: rgba(255, 255, 255, 0.9); border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; z-index: 10001; color: #333; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">×</button>
+      </div>
+    </div>
     
     <script type="module" src="/src/main.tsx"></script>
     
-    <!-- D-ID Agent Initialization -->
+    <!-- Custom D-ID Agent Initialization -->
     <script>
-      // Initialize D-ID agent when page loads
       window.addEventListener('load', function() {
-        // Create agent button if not automatically created
-        setTimeout(() => {
-          if (!document.querySelector('[data-name="did-agent"]')) {
-            const agentButton = document.createElement('button');
-            agentButton.innerHTML = '🤖 AI Assistant';
-            agentButton.style.cssText = `
-              position: fixed;
-              bottom: 20px;
-              right: 20px;
-              z-index: 9999;
-              background: linear-gradient(135deg, #00adb5, #00c896);
-              color: white;
-              border: none;
-              border-radius: 50px;
-              padding: 12px 20px;
-              font-size: 14px;
-              font-weight: 600;
-              cursor: pointer;
-              box-shadow: 0 4px 12px rgba(0, 173, 181, 0.3);
-              transition: all 0.3s ease;
-            `;
-            
-            agentButton.addEventListener('mouseenter', function() {
-              this.style.transform = 'translateY(-2px)';
-              this.style.boxShadow = '0 6px 20px rgba(0, 173, 181, 0.4)';
-            });
-            
-            agentButton.addEventListener('mouseleave', function() {
-              this.style.transform = 'translateY(0)';
-              this.style.boxShadow = '0 4px 12px rgba(0, 173, 181, 0.3)';
-            });
-            
-            agentButton.addEventListener('click', function() {
-              // Try to initialize D-ID agent
-              if (window.DIDAgent) {
-                window.DIDAgent.init();
-              } else {
-                // Fallback: Open agent in new window
-                window.open('https://agent.d-id.com/chat/agt_56bnv71C', '_blank', 'width=400,height=600');
-              }
-            });
-            
-            document.body.appendChild(agentButton);
+        // Create custom agent button
+        const agentButton = document.createElement('button');
+        agentButton.innerHTML = '🤖 AI Assistant';
+        agentButton.id = 'open-did-agent';
+        agentButton.style.cssText = `
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          z-index: 9999;
+          background: linear-gradient(135deg, #00adb5, #00c896);
+          color: white;
+          border: none;
+          border-radius: 50px;
+          padding: 15px 25px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          box-shadow: 0 6px 20px rgba(0, 173, 181, 0.4);
+          transition: all 0.3s ease;
+        `;
+        
+        // Hover effects
+        agentButton.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-3px) scale(1.05)';
+          this.style.boxShadow = '0 8px 25px rgba(0, 173, 181, 0.5)';
+        });
+        
+        agentButton.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0) scale(1)';
+          this.style.boxShadow = '0 6px 20px rgba(0, 173, 181, 0.4)';
+        });
+        
+        // Open agent overlay
+        agentButton.addEventListener('click', function() {
+          const overlay = document.getElementById('did-agent-overlay');
+          overlay.style.display = 'block';
+          document.body.style.overflow = 'hidden';
+        });
+        
+        // Close agent overlay
+        document.getElementById('close-agent').addEventListener('click', function() {
+          const overlay = document.getElementById('did-agent-overlay');
+          overlay.style.display = 'none';
+          document.body.style.overflow = 'auto';
+        });
+        
+        // Close on overlay click
+        document.getElementById('did-agent-overlay').addEventListener('click', function(e) {
+          if (e.target === this) {
+            this.style.display = 'none';
+            document.body.style.overflow = 'auto';
           }
-        }, 2000);
+        });
+        
+        // Add agent button to page
+        document.body.appendChild(agentButton);
       });
     </script>
   </body>
