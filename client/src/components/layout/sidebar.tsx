@@ -204,16 +204,12 @@ export default function Sidebar() {
 
         <div className="p-4 border-t space-y-3">
           {/* AI Consultant */}
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30">
+          <div className="flex justify-center">
             <img 
               src="/attached_assets/ceo-removebg-preview_1756016869408.png" 
               alt="Sarah Johnson"
-              className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
+              className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-lg"
             />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground">Sarah Johnson</p>
-              <p className="text-xs text-muted-foreground">MetaWorks AI Consultant</p>
-            </div>
           </div>
           
           <div className="text-xs text-muted-foreground">
