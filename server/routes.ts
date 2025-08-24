@@ -5,9 +5,11 @@ import {
   insertAssessmentSchema, 
   insertPolicySchema, 
   insertVulnerabilitySchema, 
-  insertRiskManagementPlanSchema 
+  insertRiskManagementPlanSchema,
+  insertRiskRegisterSchema
 } from "@shared/schema";
 import { generateSecurityPolicy, generateComplianceResponse } from "./services/ai";
+import { seedRiskRegister } from "./risk-register-seed";
 
 export async function registerRoutes(app: Express) {
   app.get("/api/assessments/:userId", async (req, res) => {
@@ -205,6 +207,89 @@ export async function registerRoutes(app: Express) {
     } catch (error) {
       console.error("Error deleting risk management plan:", error);
       res.status(500).json({ message: "Failed to delete risk management plan" });
+    }
+  });
+
+  // Risk Register seed endpoint
+  app.post("/api/risk-register/seed", async (req, res) => {
+    try {
+      await seedRiskRegister();
+      res.json({ success: true, message: "Risk register seeded successfully" });
+    } catch (error) {
+      console.error("Error seeding risk register:", error);
+      res.status(500).json({ message: "Failed to seed risk register" });
+    }
+  });
+
+  // Risk Register API endpoints
+  app.get("/api/risk-register", async (req, res) => {
+    try {
+      const category = req.query.category?.toString();
+      const riskLevel = req.query.riskLevel?.toString();
+      const entries = await storage.getRiskRegister(category, riskLevel);
+      res.json(entries);
+    } catch (error) {
+      console.error("Error fetching risk register:", error);
+      res.status(500).json({ message: "Failed to fetch risk register" });
+    }
+  });
+
+  app.get("/api/risk-register/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const entry = await storage.getRiskRegisterById(id);
+      
+      if (!entry) {
+        return res.status(404).json({ message: "Risk register entry not found" });
+      }
+      
+      res.json(entry);
+    } catch (error) {
+      console.error("Error fetching risk register entry:", error);
+      res.status(500).json({ message: "Failed to fetch risk register entry" });
+    }
+  });
+
+  app.post("/api/risk-register", async (req, res) => {
+    try {
+      const entry = insertRiskRegisterSchema.parse(req.body);
+      const created = await storage.createRiskRegisterEntry(entry);
+      res.json(created);
+    } catch (error) {
+      console.error("Error creating risk register entry:", error);
+      res.status(500).json({ message: "Failed to create risk register entry" });
+    }
+  });
+
+  app.patch("/api/risk-register/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updated = await storage.updateRiskRegisterEntry(id, req.body);
+      
+      if (!updated) {
+        return res.status(404).json({ message: "Risk register entry not found" });
+      }
+      
+      res.json(updated);
+    } catch (error) {
+      console.error("Error updating risk register entry:", error);
+      res.status(500).json({ message: "Failed to update risk register entry" });
+    }
+  });
+
+  app.delete("/api/risk-register/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const result = await storage.deleteRiskRegisterEntry(id);
+      
+      if (!result) {
+        return res.status(404).json({ message: "Risk register entry not found or could not be deleted" });
+      }
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting risk register entry:", error);
+      res.status(500).json({ message: "Failed to delete risk register entry" });
     }
   });
 

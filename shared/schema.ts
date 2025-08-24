@@ -1,4 +1,5 @@
-import { pgTable, text, serial, integer, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, varchar, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -207,6 +208,28 @@ export const riskManagementPlans = pgTable("risk_management_plans", {
   updatedAt: text("updated_at").notNull(),
 });
 
+// Built-in Risk Register - Pre-defined common cybersecurity risks
+export const riskRegister = pgTable("risk_register", {
+  id: serial("id").primaryKey(),
+  category: text("category").notNull(), // "data_security", "network_security", "access_control", etc.
+  subcategory: text("subcategory"), // More specific classification
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  riskLevel: text("risk_level").notNull(), // "critical", "high", "medium", "low"
+  impact: text("impact").notNull(), // Business impact description
+  likelihood: text("likelihood").notNull(), // "very_high", "high", "medium", "low", "very_low"
+  threats: text("threats").array(), // Array of threat types
+  vulnerabilities: text("vulnerabilities").array(), // Array of vulnerability types
+  assets: text("assets").array(), // Array of asset types affected
+  controls: text("controls").array(), // Array of recommended controls
+  mitigationStrategies: text("mitigation_strategies").array(), // Array of mitigation options
+  complianceFrameworks: text("compliance_frameworks").array(), // NIST, ISO27001, etc.
+  tags: text("tags").array(), // Additional tags for filtering
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // CISO Policies and Procedures Management
 export const cisoPolicyCategories = [
   "Strategic Planning",
@@ -405,6 +428,24 @@ export const insertRiskManagementPlanSchema = createInsertSchema(riskManagementP
   updatedAt: true,
 });
 
+export const insertRiskRegisterSchema = createInsertSchema(riskRegister).pick({
+  category: true,
+  subcategory: true,
+  title: true,
+  description: true,
+  riskLevel: true,
+  impact: true,
+  likelihood: true,
+  threats: true,
+  vulnerabilities: true,
+  assets: true,
+  controls: true,
+  mitigationStrategies: true,
+  complianceFrameworks: true,
+  tags: true,
+  isActive: true,
+});
+
 export const insertCisoPolicySchema = createInsertSchema(cisoPolicies).pick({
   userId: true,
   policyType: true,
@@ -470,3 +511,77 @@ export type InsertCisoPolicyTemplate = z.infer<typeof insertCisoPolicyTemplateSc
 
 export type CisoPolicyReview = typeof cisoPolicyReviews.$inferSelect;
 export type InsertCisoPolicyReview = z.infer<typeof insertCisoPolicyReviewSchema>;
+
+// Notification system tables
+export const notifications = pgTable("notifications", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull(),
+  type: varchar("type").notNull(), // policy_review, policy_expiry, policy_created, policy_updated
+  title: varchar("title").notNull(),
+  message: text("message").notNull(),
+  priority: varchar("priority").default("medium"), // low, medium, high, critical
+  category: varchar("category").notNull(), // policy, system, security, general
+  relatedId: varchar("related_id"), // ID of related policy/item
+  relatedType: varchar("related_type"), // policy, assessment, etc
+  isRead: boolean("is_read").default(false),
+  isArchived: boolean("is_archived").default(false),
+  actionUrl: varchar("action_url"), // URL for notification action
+  actionText: varchar("action_text"), // Text for action button
+  metadata: jsonb("metadata"), // Additional notification data
+  createdAt: timestamp("created_at").defaultNow(),
+  readAt: timestamp("read_at"),
+  archivedAt: timestamp("archived_at")
+});
+
+export const notificationPreferences = pgTable("notification_preferences", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().unique(),
+  emailEnabled: boolean("email_enabled").default(true),
+  browserEnabled: boolean("browser_enabled").default(true),
+  policyReviewReminders: boolean("policy_review_reminders").default(true),
+  policyExpiryAlerts: boolean("policy_expiry_alerts").default(true),
+  newPolicyNotifications: boolean("new_policy_notifications").default(true),
+  teamUpdates: boolean("team_updates").default(true),
+  systemAlerts: boolean("system_alerts").default(true),
+  reminderFrequency: varchar("reminder_frequency").default("daily"), // daily, weekly, monthly
+  quietHoursStart: varchar("quiet_hours_start").default("22:00"),
+  quietHoursEnd: varchar("quiet_hours_end").default("08:00"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow()
+});
+
+export const insertNotificationSchema = createInsertSchema(notifications).pick({
+  userId: true,
+  type: true,
+  title: true,
+  message: true,
+  priority: true,
+  category: true,
+  relatedId: true,
+  relatedType: true,
+  actionUrl: true,
+  actionText: true,
+  metadata: true
+});
+
+export const insertNotificationPreferencesSchema = createInsertSchema(notificationPreferences).pick({
+  userId: true,
+  emailEnabled: true,
+  browserEnabled: true,
+  policyReviewReminders: true,
+  policyExpiryAlerts: true,
+  newPolicyNotifications: true,
+  teamUpdates: true,
+  systemAlerts: true,
+  reminderFrequency: true,
+  quietHoursStart: true,
+  quietHoursEnd: true
+});
+
+export type Notification = typeof notifications.$inferSelect;
+export type InsertNotification = z.infer<typeof insertNotificationSchema>;
+export type NotificationPreferences = typeof notificationPreferences.$inferSelect;
+export type InsertNotificationPreferences = z.infer<typeof insertNotificationPreferencesSchema>;
+
+export type RiskRegister = typeof riskRegister.$inferSelect;
+export type InsertRiskRegister = z.infer<typeof insertRiskRegisterSchema>;

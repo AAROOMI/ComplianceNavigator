@@ -1,10 +1,11 @@
 import { 
-  users, assessments, policies, vulnerabilities, riskManagementPlans,
+  users, assessments, policies, vulnerabilities, riskManagementPlans, riskRegister,
   type User, type InsertUser, 
   type Assessment, type InsertAssessment, 
   type Policy, type InsertPolicy, 
   type Vulnerability, type InsertVulnerability,
-  type RiskManagementPlan, type InsertRiskManagementPlan
+  type RiskManagementPlan, type InsertRiskManagementPlan,
+  type RiskRegister, type InsertRiskRegister
 } from "@shared/schema";
 import { eq, and } from "drizzle-orm";
 
@@ -24,6 +25,12 @@ export interface IStorage {
   createRiskManagementPlan(plan: InsertRiskManagementPlan): Promise<RiskManagementPlan>;
   updateRiskManagementPlan(id: number, plan: Partial<InsertRiskManagementPlan>): Promise<RiskManagementPlan | undefined>;
   deleteRiskManagementPlan(id: number): Promise<boolean>;
+  // Risk Register methods
+  getRiskRegister(category?: string, riskLevel?: string): Promise<RiskRegister[]>;
+  getRiskRegisterById(id: number): Promise<RiskRegister | undefined>;
+  createRiskRegisterEntry(entry: InsertRiskRegister): Promise<RiskRegister>;
+  updateRiskRegisterEntry(id: number, entry: Partial<InsertRiskRegister>): Promise<RiskRegister | undefined>;
+  deleteRiskRegisterEntry(id: number): Promise<boolean>;
 }
 
 class DatabaseStorage implements IStorage {
@@ -159,6 +166,54 @@ class DatabaseStorage implements IStorage {
       .where(eq(riskManagementPlans.id, id));
     return true;
   }
+
+  // Risk Register methods
+  async getRiskRegister(category?: string, riskLevel?: string): Promise<RiskRegister[]> {
+    const db = await this.getDb();
+    let query = db.select().from(riskRegister).where(eq(riskRegister.isActive, true));
+    
+    if (category) {
+      query = query.where(and(eq(riskRegister.isActive, true), eq(riskRegister.category, category)));
+    }
+    if (riskLevel) {
+      const conditions = [eq(riskRegister.isActive, true)];
+      if (category) conditions.push(eq(riskRegister.category, category));
+      conditions.push(eq(riskRegister.riskLevel, riskLevel));
+      query = db.select().from(riskRegister).where(and(...conditions));
+    }
+    
+    return query;
+  }
+
+  async getRiskRegisterById(id: number): Promise<RiskRegister | undefined> {
+    const db = await this.getDb();
+    const [entry] = await db.select()
+      .from(riskRegister)
+      .where(eq(riskRegister.id, id));
+    return entry;
+  }
+
+  async createRiskRegisterEntry(entry: InsertRiskRegister): Promise<RiskRegister> {
+    const db = await this.getDb();
+    const [created] = await db.insert(riskRegister).values(entry).returning();
+    return created;
+  }
+
+  async updateRiskRegisterEntry(id: number, entry: Partial<InsertRiskRegister>): Promise<RiskRegister | undefined> {
+    const db = await this.getDb();
+    const [updated] = await db.update(riskRegister)
+      .set({ ...entry, updatedAt: new Date() })
+      .where(eq(riskRegister.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteRiskRegisterEntry(id: number): Promise<boolean> {
+    const db = await this.getDb();
+    await db.delete(riskRegister)
+      .where(eq(riskRegister.id, id));
+    return true;
+  }
 }
 
 class InMemoryStorage implements IStorage {
@@ -248,6 +303,56 @@ class InMemoryStorage implements IStorage {
     const before = this.riskManagementPlans.length;
     this.riskManagementPlans = this.riskManagementPlans.filter(r => r.id !== id);
     return this.riskManagementPlans.length < before;
+  }
+
+  // Risk Register methods
+  private riskRegisterEntries: RiskRegister[] = [];
+  private riskRegisterIdSeq = 1;
+
+  async getRiskRegister(category?: string, riskLevel?: string): Promise<RiskRegister[]> {
+    let filtered = this.riskRegisterEntries.filter(r => r.isActive);
+    
+    if (category) {
+      filtered = filtered.filter(r => r.category === category);
+    }
+    if (riskLevel) {
+      filtered = filtered.filter(r => r.riskLevel === riskLevel);
+    }
+    
+    return filtered;
+  }
+
+  async getRiskRegisterById(id: number): Promise<RiskRegister | undefined> {
+    return this.riskRegisterEntries.find(r => r.id === id);
+  }
+
+  async createRiskRegisterEntry(entry: InsertRiskRegister): Promise<RiskRegister> {
+    const created: RiskRegister = { 
+      id: this.riskRegisterIdSeq++, 
+      ...entry,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    } as RiskRegister;
+    this.riskRegisterEntries.push(created);
+    return created;
+  }
+
+  async updateRiskRegisterEntry(id: number, entry: Partial<InsertRiskRegister>): Promise<RiskRegister | undefined> {
+    const index = this.riskRegisterEntries.findIndex(r => r.id === id);
+    if (index === -1) return undefined;
+    const updated = { 
+      ...this.riskRegisterEntries[index], 
+      ...entry,
+      updatedAt: new Date()
+    } as RiskRegister;
+    this.riskRegisterEntries[index] = updated;
+    return updated;
+  }
+
+  async deleteRiskRegisterEntry(id: number): Promise<boolean> {
+    const before = this.riskRegisterEntries.length;
+    this.riskRegisterEntries = this.riskRegisterEntries.filter(r => r.id !== id);
+    return this.riskRegisterEntries.length < before;
   }
 }
 
