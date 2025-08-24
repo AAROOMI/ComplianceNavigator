@@ -17,6 +17,11 @@ import NFRMRiskManagement from "@/pages/nfrm-risk-management";
 import CisoPolicies from "@/pages/ciso-policies";
 import RiskRegisterPage from "@/pages/risk-register";
 import UserManagement from "@/pages/user-management";
+import RiskAssessment from "@/pages/risk-assessment";
+import UserAwareness from "@/pages/user-awareness";
+import SecurityQuizzes from "@/pages/security-quizzes";
+import TrainingMaterials from "@/pages/training-materials";
+import CompetencyBadges from "@/pages/competency-badges";
 import NotFound from "@/pages/not-found";
 
 export default function App() {
@@ -73,6 +78,31 @@ export default function App() {
           <Route path="/user-management">
             <Layout>
               <UserManagement />
+            </Layout>
+          </Route>
+          <Route path="/risk-assessment">
+            <Layout>
+              <RiskAssessment />
+            </Layout>
+          </Route>
+          <Route path="/user-awareness">
+            <Layout>
+              <UserAwareness />
+            </Layout>
+          </Route>
+          <Route path="/security-quizzes">
+            <Layout>
+              <SecurityQuizzes />
+            </Layout>
+          </Route>
+          <Route path="/training-materials">
+            <Layout>
+              <TrainingMaterials />
+            </Layout>
+          </Route>
+          <Route path="/competency-badges">
+            <Layout>
+              <CompetencyBadges />
             </Layout>
           </Route>
           <Route>

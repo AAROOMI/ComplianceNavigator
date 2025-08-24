@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'wouter';
 import { useSidebar } from '@/components/ui/sidebar-context';
-import { ShieldCheck, FileText, ClipboardCheck, Bot, LayoutDashboard, AlertTriangle, Shield, Database, Settings, Rocket, Monitor, Users } from 'lucide-react';
+import { ShieldCheck, FileText, ClipboardCheck, Bot, LayoutDashboard, AlertTriangle, Shield, Database, Settings, Rocket, Monitor, Users, GraduationCap, Book, Award, Brain } from 'lucide-react';
 
 export default function Sidebar() {
   const [location] = useLocation();
@@ -9,14 +9,25 @@ export default function Sidebar() {
 
   const mainLinks = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/assessment", label: "Assessment", icon: ClipboardCheck },
     { href: "/policies", label: "Policies", icon: FileText },
     { href: "/nca-ecc", label: "NCA ECC", icon: ShieldCheck },
     { href: "/metaworks", label: "Metaworks V1&V2", icon: ShieldCheck },
     { href: "/nfrm", label: "NFRM Risk Management", icon: AlertTriangle },
-    { href: "/risk-register", label: "Risk Register", icon: Database },
     { href: "/ciso-policies", label: "CISO Policies", icon: Shield },
     { href: "/assistant", label: "Assistant", icon: Bot },
+  ];
+
+  const assessmentLinks = [
+    { href: "/assessment", label: "Assessment Questionnaire", icon: ClipboardCheck },
+    { href: "/risk-register", label: "Risk Register", icon: Database },
+    { href: "/risk-assessment", label: "Interactive Risk Assessment", icon: AlertTriangle },
+  ];
+
+  const trainingLinks = [
+    { href: "/user-awareness", label: "User Awareness", icon: GraduationCap },
+    { href: "/training-materials", label: "Training Materials", icon: Book },
+    { href: "/competency-badges", label: "Competency & Badges", icon: Award },
+    { href: "/security-quizzes", label: "Security Quizzes", icon: Brain },
   ];
 
   const roleLinks = [
@@ -66,6 +77,64 @@ export default function Sidebar() {
                     >
                       <Icon className="w-4 h-4" />
                       <span>{link.label}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {/* Assessment & Risk Management */}
+          <div className="mb-6">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+              Assessment & Risk
+            </h3>
+            <ul className="space-y-1">
+              {assessmentLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = location === link.href;
+
+                return (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                        isActive
+                          ? "bg-primary text-primary-foreground"
+                          : "hover:bg-muted"
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      <span className="text-sm">{link.label}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {/* User Awareness & Training */}
+          <div className="mb-6">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+              User Awareness & Training
+            </h3>
+            <ul className="space-y-1">
+              {trainingLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = location === link.href;
+
+                return (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                        isActive
+                          ? "bg-primary text-primary-foreground"
+                          : "hover:bg-muted"
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      <span className="text-sm">{link.label}</span>
                     </a>
                   </li>
                 );
