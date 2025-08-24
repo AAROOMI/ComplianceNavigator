@@ -83,8 +83,8 @@ const categories = [
 ];
 
 export default function RiskRegister() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [selectedRiskLevel, setSelectedRiskLevel] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedRiskLevel, setSelectedRiskLevel] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState<RiskRegisterEntry | null>(null);
@@ -99,8 +99,8 @@ export default function RiskRegister() {
     queryFn: () => {
       let url = "/api/risk-register";
       const params = new URLSearchParams();
-      if (selectedCategory) params.append("category", selectedCategory);
-      if (selectedRiskLevel) params.append("riskLevel", selectedRiskLevel);
+      if (selectedCategory && selectedCategory !== "all") params.append("category", selectedCategory);
+      if (selectedRiskLevel && selectedRiskLevel !== "all") params.append("riskLevel", selectedRiskLevel);
       if (params.toString()) url += "?" + params.toString();
       return apiRequest<RiskRegisterEntry[]>("GET", url);
     },
@@ -273,7 +273,7 @@ export default function RiskRegister() {
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Categories</SelectItem>
+                  <SelectItem value="all">All Categories</SelectItem>
                   {categories.map((category) => (
                     <SelectItem key={category} value={category}>{category}</SelectItem>
                   ))}
@@ -285,7 +285,7 @@ export default function RiskRegister() {
                   <SelectValue placeholder="All Levels" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Levels</SelectItem>
+                  <SelectItem value="all">All Levels</SelectItem>
                   {riskLevels.map((level) => (
                     <SelectItem key={level} value={level}>{level}</SelectItem>
                   ))}
