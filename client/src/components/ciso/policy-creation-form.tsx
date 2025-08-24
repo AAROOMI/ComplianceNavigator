@@ -237,6 +237,402 @@ Critical functions shall be divided among multiple individuals to prevent fraud 
 - Privileged account activity logging
 - Unusual access pattern detection`,
     requiredFields: ["organization_name", "access_administrator", "review_frequency"]
+  },
+
+  "Network Architecture Plan": {
+    description: "Comprehensive network design and architecture documentation",
+    sections: ["Network Design", "Infrastructure Components", "Security Architecture", "Performance Requirements", "Implementation Plan"],
+    template: `# Network Architecture Plan
+
+## 1. Executive Summary
+This Network Architecture Plan provides a comprehensive design for [Organization Name]'s network infrastructure to support current and future business requirements.
+
+## 2. Network Design Overview
+### 2.1 Design Principles
+- Scalability and flexibility for future growth
+- High availability and redundancy
+- Security-first approach with defense in depth
+- Performance optimization and traffic management
+
+### 2.2 Network Topology
+- Core-distribution-access layer design
+- Redundant links and failover mechanisms
+- Logical network segmentation for security and performance
+
+## 3. Infrastructure Components
+### 3.1 Core Network Equipment
+- Core switches and routers specifications
+- Distribution layer equipment requirements
+- Access layer switch configurations
+
+### 3.2 Network Services
+- DHCP and DNS services architecture
+- Network time protocol (NTP) implementation
+- Network monitoring and management systems
+
+## 4. Security Architecture
+### 4.1 Network Segmentation
+- VLAN design and implementation
+- DMZ configuration for external services
+- Internal network isolation strategies
+
+### 4.2 Security Controls
+- Firewall placement and rule sets
+- Intrusion detection and prevention systems
+- Network access control (NAC) implementation
+
+## 5. Performance and Capacity Planning
+### 5.1 Bandwidth Requirements
+- Current and projected bandwidth needs
+- Quality of Service (QoS) policies
+- Traffic analysis and optimization
+
+### 5.2 Network Performance Metrics
+- Latency and throughput targets
+- Availability and uptime requirements
+- Monitoring and alerting thresholds
+
+## 6. Implementation Timeline
+### 6.1 Phase 1: Core Infrastructure
+- Core network equipment installation
+- Basic connectivity establishment
+- Initial security configuration
+
+### 6.2 Phase 2: Distribution and Access
+- Distribution layer deployment
+- Access layer rollout
+- End-user connectivity enablement
+
+### 6.3 Phase 3: Advanced Services
+- Advanced security features activation
+- Performance optimization implementation
+- Monitoring and management tools deployment`,
+    requiredFields: ["organization_name", "network_architect", "implementation_timeline"]
+  },
+
+  "IT Staffing Plan": {
+    description: "Strategic plan for IT human resources and staffing requirements",
+    sections: ["Current State Analysis", "Future Requirements", "Staffing Strategy", "Skills Development", "Budget Planning"],
+    template: `# IT Staffing Plan
+
+## 1. Executive Summary
+This IT Staffing Plan outlines the human resource strategy for [Organization Name]'s IT department to meet current and future technology objectives.
+
+## 2. Current State Analysis
+### 2.1 Existing Staff Assessment
+- Current IT team structure and roles
+- Skills inventory and competency mapping
+- Performance and productivity analysis
+
+### 2.2 Gap Analysis
+- Identified skill gaps and deficiencies
+- Workload distribution assessment
+- Technology evolution requirements
+
+## 3. Future Staffing Requirements
+### 3.1 Strategic Technology Initiatives
+- Cloud migration project staffing needs
+- Digital transformation requirements
+- Emerging technology adoption plans
+
+### 3.2 Operational Requirements
+- Infrastructure maintenance and support
+- Application development and maintenance
+- Help desk and user support services
+
+## 4. Staffing Strategy
+### 4.1 Recruitment Plan
+- Key positions to be filled
+- Internal promotion opportunities
+- External hiring requirements and timeline
+
+### 4.2 Skills Development
+- Training and certification programs
+- Professional development initiatives
+- Knowledge transfer and mentoring
+
+## 5. Organizational Structure
+### 5.1 Proposed IT Organization Chart
+- Department structure and reporting lines
+- Role definitions and responsibilities
+- Career progression pathways
+
+### 5.2 Team Collaboration Model
+- Cross-functional team arrangements
+- Project-based staffing strategies
+- Vendor and contractor management
+
+## 6. Budget and Resource Planning
+### 6.1 Staffing Costs
+- Salary and benefits projections
+- Training and development budget
+- Recruitment and onboarding costs
+
+### 6.2 ROI and Performance Metrics
+- Productivity improvement targets
+- Cost per IT service delivery
+- Staff retention and satisfaction goals`,
+    requiredFields: ["organization_name", "it_manager", "budget_period"]
+  },
+
+  "System Upgrade Proposal": {
+    description: "Comprehensive proposal for system modernization and upgrades",
+    sections: ["Current System Assessment", "Upgrade Requirements", "Technical Specifications", "Cost-Benefit Analysis", "Implementation Plan"],
+    template: `# System Upgrade Proposal
+
+## 1. Executive Summary
+This proposal outlines the system upgrade initiative for [Organization Name] to modernize IT infrastructure and improve operational efficiency.
+
+## 2. Current System Assessment
+### 2.1 Existing Infrastructure Analysis
+- Hardware and software inventory
+- Performance and capacity limitations
+- Security vulnerabilities and risks
+
+### 2.2 Business Impact
+- Current system limitations on business operations
+- User experience and productivity issues
+- Maintenance costs and resource allocation
+
+## 3. Upgrade Requirements
+### 3.1 Business Objectives
+- Improved system performance and reliability
+- Enhanced security and compliance posture
+- Scalability for future growth requirements
+
+### 3.2 Technical Requirements
+- Hardware specifications and compatibility
+- Software licensing and feature requirements
+- Integration with existing systems
+
+## 4. Proposed Solution
+### 4.1 Technology Architecture
+- Recommended hardware and software platforms
+- Cloud vs on-premises considerations
+- Integration and migration strategies
+
+### 4.2 Technical Specifications
+- Server and storage requirements
+- Network infrastructure needs
+- Security and backup solutions
+
+## 5. Cost-Benefit Analysis
+### 5.1 Investment Requirements
+- Hardware and software costs
+- Implementation and migration expenses
+- Training and support costs
+
+### 5.2 Expected Benefits
+- Operational cost savings
+- Productivity improvements
+- Risk mitigation and compliance benefits
+
+## 6. Implementation Plan
+### 6.1 Project Timeline
+- Phase-based implementation approach
+- Key milestones and deliverables
+- Resource allocation and dependencies
+
+### 6.2 Risk Management
+- Identified risks and mitigation strategies
+- Contingency planning and rollback procedures
+- Change management and user adoption`,
+    requiredFields: ["organization_name", "project_manager", "budget_amount"]
+  },
+
+  "IT Budget Proposal": {
+    description: "Strategic IT budget planning and resource allocation proposal",
+    sections: ["Budget Overview", "Capital Expenditures", "Operational Expenses", "ROI Analysis", "Approval Process"],
+    template: `# IT Budget Proposal
+
+## 1. Executive Summary
+This IT Budget Proposal presents the financial requirements for [Organization Name]'s information technology operations and strategic initiatives for [Budget Period].
+
+## 2. Budget Overview
+### 2.1 Total Budget Request
+- Total IT budget requirement: $[Amount]
+- Percentage of overall organizational budget
+- Year-over-year budget comparison
+
+### 2.2 Budget Categories
+- Capital expenditures (CAPEX)
+- Operational expenditures (OPEX)
+- Strategic initiative investments
+
+## 3. Capital Expenditures
+### 3.1 Infrastructure Investments
+- Server and storage hardware upgrades
+- Network equipment and security appliances
+- End-user devices and equipment
+
+### 3.2 Software Licensing
+- Enterprise software license renewals
+- New software acquisitions and implementations
+- Cloud service subscriptions and migrations
+
+## 4. Operational Expenses
+### 4.1 Personnel Costs
+- IT staff salaries and benefits
+- Training and professional development
+- Contractor and consultant services
+
+### 4.2 Ongoing Operations
+- Maintenance and support contracts
+- Utilities and facility costs
+- Telecommunications and connectivity
+
+## 5. Strategic Initiatives
+### 5.1 Digital Transformation Projects
+- Cloud migration initiatives
+- Business process automation
+- Data analytics and business intelligence
+
+### 5.2 Security and Compliance
+- Cybersecurity enhancement programs
+- Compliance and audit requirements
+- Risk management initiatives
+
+## 6. Return on Investment
+### 6.1 Cost Savings and Efficiency Gains
+- Operational cost reductions
+- Productivity improvements
+- Process automation benefits
+
+### 6.2 Business Value Creation
+- Revenue enablement through technology
+- Customer experience improvements
+- Competitive advantage initiatives`,
+    requiredFields: ["organization_name", "cfo_approval", "budget_period"]
+  },
+
+  "IT Policy Document": {
+    description: "Comprehensive IT governance and operational policies",
+    sections: ["IT Governance", "Acceptable Use", "Security Requirements", "Data Management", "Compliance"],
+    template: `# IT Policy Document
+
+## 1. Purpose and Scope
+This IT Policy Document establishes the governance framework and operational policies for information technology within [Organization Name].
+
+## 2. IT Governance Framework
+### 2.1 IT Governance Structure
+- IT steering committee roles and responsibilities
+- Decision-making authority and escalation procedures
+- Performance measurement and reporting
+
+### 2.2 IT Service Management
+- Service delivery standards and expectations
+- Service level agreements and metrics
+- Incident and problem management procedures
+
+## 3. Acceptable Use Policy
+### 3.1 System Usage Guidelines
+- Authorized use of IT resources and systems
+- Prohibited activities and security violations
+- Personal use policies and restrictions
+
+### 3.2 Email and Communication
+- Professional communication standards
+- Email retention and privacy policies
+- Social media and external communication guidelines
+
+## 4. Security Requirements
+### 4.1 Information Security Standards
+- Data classification and handling procedures
+- Access control and authentication requirements
+- Security incident reporting and response
+
+### 4.2 System Security
+- Workstation and device security requirements
+- Software installation and update policies
+- Network security and remote access procedures
+
+## 5. Data Management
+### 5.1 Data Governance
+- Data ownership and stewardship roles
+- Data quality and integrity standards
+- Data retention and disposal procedures
+
+### 5.2 Backup and Recovery
+- Data backup requirements and schedules
+- Disaster recovery procedures and testing
+- Business continuity planning and execution
+
+## 6. Compliance and Enforcement
+### 6.1 Regulatory Compliance
+- Industry-specific compliance requirements
+- Audit and assessment procedures
+- Documentation and record-keeping standards
+
+### 6.2 Policy Enforcement
+- Violation reporting and investigation procedures
+- Disciplinary actions and consequences
+- Policy review and update processes`,
+    requiredFields: ["organization_name", "it_director", "compliance_officer"]
+  },
+
+  "IT Service Level Agreement": {
+    description: "Service level commitments and operational expectations",
+    sections: ["Service Description", "Performance Metrics", "Availability Targets", "Support Procedures", "Reporting"],
+    template: `# IT Service Level Agreement
+
+## 1. Agreement Overview
+This IT Service Level Agreement (SLA) defines the service commitments between [IT Department] and [Business Units] within [Organization Name].
+
+## 2. Service Description
+### 2.1 Covered Services
+- Infrastructure services and system availability
+- Application support and maintenance
+- Help desk and user support services
+
+### 2.2 Service Hours
+- Standard business hours: [Hours]
+- Extended support hours: [Hours]
+- Emergency support availability
+
+## 3. Performance Metrics
+### 3.1 System Availability
+- Network availability: 99.5% uptime target
+- Server availability: 99.9% uptime target
+- Application availability: 99.7% uptime target
+
+### 3.2 Response Times
+- Critical issues: 1 hour response time
+- High priority issues: 4 hour response time
+- Standard issues: 24 hour response time
+
+## 4. Support Procedures
+### 4.1 Incident Reporting
+- Service desk contact information and procedures
+- Incident classification and priority levels
+- Escalation procedures and timelines
+
+### 4.2 Change Management
+- Change request procedures and approval process
+- Maintenance windows and notifications
+- Emergency change procedures
+
+## 5. Roles and Responsibilities
+### 5.1 IT Department Responsibilities
+- Service delivery and performance monitoring
+- Incident response and problem resolution
+- Communication and reporting
+
+### 5.2 Business Unit Responsibilities
+- Proper use of IT services and resources
+- Timely reporting of issues and requirements
+- Participation in testing and validation
+
+## 6. Service Credits and Penalties
+### 6.1 Service Level Credits
+- Availability below 99% - 5% service credit
+- Availability below 98% - 10% service credit
+- Availability below 95% - 25% service credit
+
+### 6.2 Exclusions
+- Scheduled maintenance windows
+- Force majeure events and external factors
+- User error or unauthorized modifications`,
+    requiredFields: ["organization_name", "service_manager", "sla_period"]
   }
 };
 
@@ -299,7 +695,21 @@ export default function PolicyCreationForm({
         "Security Architecture Document": "Network & Infrastructure",
         "Security Metrics Report": "Governance & Compliance",
         "Compliance Audit Report": "Governance & Compliance",
-        "Data Breach Notification Plan": "Incident & Crisis Management"
+        "Data Breach Notification Plan": "Incident & Crisis Management",
+        "Network Architecture Plan": "IT Infrastructure & Architecture",
+        "IT Staffing Plan": "IT Project & Resource Management",
+        "System Upgrade Proposal": "IT Infrastructure & Architecture",
+        "IT Budget Proposal": "IT Project & Resource Management",
+        "IT Policy Document": "IT Management & Operations",
+        "IT Compliance Audit Report": "Governance & Compliance",
+        "IT Project Management Plan": "IT Project & Resource Management",
+        "IT Vendor Evaluation Document": "Third-Party Management",
+        "Data Security Plan": "Data Protection",
+        "IT Risk Assessment Document": "Risk Management",
+        "IT Service Level Agreement": "IT Service Management",
+        "IT Incident Response Plan": "Incident & Crisis Management",
+        "IT Infrastructure Maintenance Plan": "IT Infrastructure & Architecture",
+        "IT Strategic Plan": "Strategic Planning"
       };
       
       const category = categoryMapping[policyType] || "Governance & Compliance";

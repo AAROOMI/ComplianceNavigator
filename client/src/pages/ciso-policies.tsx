@@ -78,6 +78,54 @@ const mockPolicies = [
     aiGenerated: false,
     createdAt: "2024-06-10T16:45:00Z",
     updatedAt: "2024-08-22T13:10:00Z"
+  },
+  {
+    id: 4,
+    policyType: "Network Architecture Plan",
+    category: "IT Infrastructure & Architecture",
+    title: "Enterprise Network Architecture Plan 2024",
+    description: "Comprehensive network design and infrastructure architecture for scalable enterprise operations",
+    status: "active",
+    priority: "critical",
+    owner: "IT Manager",
+    version: "3.0",
+    reviewDate: "2024-12-15",
+    expiryDate: "2025-12-15",
+    aiGenerated: false,
+    createdAt: "2024-03-01T09:00:00Z",
+    updatedAt: "2024-08-24T10:15:00Z"
+  },
+  {
+    id: 5,
+    policyType: "IT Staffing Plan",
+    category: "IT Project & Resource Management",
+    title: "IT Department Staffing Strategy 2024-2025",
+    description: "Strategic plan for IT human resources, skills development, and team expansion initiatives",
+    status: "approved",
+    priority: "high",
+    owner: "IT Manager",
+    version: "2.1",
+    reviewDate: "2024-11-01",
+    expiryDate: "2025-11-01",
+    aiGenerated: true,
+    createdAt: "2024-07-15T14:30:00Z",
+    updatedAt: "2024-08-20T16:45:00Z"
+  },
+  {
+    id: 6,
+    policyType: "IT Service Level Agreement",
+    category: "IT Service Management",
+    title: "Internal IT Service Level Agreement",
+    description: "Service commitments and performance standards for internal IT service delivery",
+    status: "active",
+    priority: "medium",
+    owner: "IT Operations",
+    version: "1.8",
+    reviewDate: "2024-09-30",
+    expiryDate: "2025-09-30",
+    aiGenerated: false,
+    createdAt: "2024-05-20T11:20:00Z",
+    updatedAt: "2024-08-23T08:30:00Z"
   }
 ];
 
@@ -222,8 +270,8 @@ export default function CisoPolicies() {
         <div className="flex items-center gap-3">
           <Shield className="w-8 h-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold">CISO Policies & Procedures</h1>
-            <p className="text-muted-foreground">Comprehensive cybersecurity policy management system</p>
+            <h1 className="text-3xl font-bold">CISO & IT Manager Policies</h1>
+            <p className="text-muted-foreground">Comprehensive cybersecurity and IT policy management system</p>
           </div>
         </div>
         <div className="flex items-center gap-2">

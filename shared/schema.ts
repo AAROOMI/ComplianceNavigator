@@ -219,7 +219,11 @@ export const cisoPolicyCategories = [
   "Data Protection",
   "Network & Infrastructure",
   "Third-Party Management",
-  "Training & Awareness"
+  "Training & Awareness",
+  "IT Management & Operations",
+  "IT Infrastructure & Architecture",
+  "IT Service Management",
+  "IT Project & Resource Management"
 ] as const;
 
 export const cisoPolicyTypes = [
@@ -241,7 +245,21 @@ export const cisoPolicyTypes = [
   "Encryption Policy",
   "Information Security Policy",
   "Disaster Recovery Plan",
-  "Incident Response Plan"
+  "Incident Response Plan",
+  "Network Architecture Plan",
+  "IT Staffing Plan",
+  "System Upgrade Proposal",
+  "IT Budget Proposal",
+  "IT Policy Document",
+  "IT Compliance Audit Report",
+  "IT Project Management Plan",
+  "IT Vendor Evaluation Document",
+  "Data Security Plan",
+  "IT Risk Assessment Document",
+  "IT Service Level Agreement",
+  "IT Incident Response Plan",
+  "IT Infrastructure Maintenance Plan",
+  "IT Strategic Plan"
 ] as const;
 
 export const cisoPolicies = pgTable("ciso_policies", {
