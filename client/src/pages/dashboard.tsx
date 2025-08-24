@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
+import TourButton, { FloatingTourButton } from "@/components/tour/TourButton";
+import WelcomeTour from "@/components/tour/WelcomeTour";
 import ComplianceRiskOverview from "@/components/dashboard/compliance-risk-overview";
 import NCADomainMatrix from "@/components/dashboard/nca-domain-matrix";
 import ApplicationMetrics from "@/components/dashboard/application-metrics";
@@ -18,6 +20,9 @@ import { Link } from "wouter";
 export default function Dashboard() {
   const { t } = useTranslation();
   const userId = 1; // TODO: Replace with actual user ID when user authentication is implemented
+  
+  // Tour states
+  const [showWelcomeTour, setShowWelcomeTour] = useState(false);
   
   // Role-specific onboarding states
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -39,6 +44,19 @@ export default function Dashboard() {
   const handleOnboardingSkip = () => {
     setShowOnboarding(false);
     localStorage.setItem('dashboard-ciso-onboarding-completed', 'true');
+  };
+
+  // Check if user is new (show welcome tour)
+  useEffect(() => {
+    const hasSeenTour = localStorage.getItem('dashboard-tour-completed');
+    if (!hasSeenTour) {
+      setShowWelcomeTour(true);
+    }
+  }, []);
+
+  const handleWelcomeTourClose = () => {
+    setShowWelcomeTour(false);
+    localStorage.setItem('dashboard-tour-completed', 'true');
   };
 
   return (
@@ -67,6 +85,7 @@ export default function Dashboard() {
               NCA ECC Framework
             </Button>
           </Link>
+          <TourButton variant="outline" className="flex items-center gap-2" />
         </div>
       </div>
 
@@ -146,7 +165,7 @@ export default function Dashboard() {
         </Card>
 
         {/* Compliance Risk Overview */}
-        <Card>
+        <Card data-testid="compliance-overview">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Shield className="w-5 h-5" />
@@ -233,6 +252,15 @@ export default function Dashboard() {
           localStorage.setItem('dashboard-sysadmin-onboarding-completed', 'true');
         }}
       />
+
+      {/* Welcome Tour Modal */}
+      <WelcomeTour 
+        isVisible={showWelcomeTour} 
+        onClose={handleWelcomeTourClose} 
+      />
+
+      {/* Floating Tour Button */}
+      <FloatingTourButton />
     </div>
   );
 }

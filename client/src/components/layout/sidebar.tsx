@@ -12,37 +12,37 @@ export default function Sidebar() {
   const { t } = useTranslation();
 
   const mainLinks = [
-    { href: "/dashboard", label: t('navigation.dashboard'), icon: LayoutDashboard },
-    { href: "/policies", label: t('navigation.policies'), icon: FileText },
-    { href: "/nca-ecc", label: "NCA ECC", icon: ShieldCheck },
-    { href: "/metaworks", label: "Metaworks V1&V2", icon: ShieldCheck },
-    { href: "/nfrm", label: t('navigation.riskManagement'), icon: AlertTriangle },
-    { href: "/assistant", label: t('navigation.aiConsultant'), icon: Bot },
+    { href: "/dashboard", label: t('navigation.dashboard'), icon: LayoutDashboard, testId: "sidebar-dashboard" },
+    { href: "/policies", label: t('navigation.policies'), icon: FileText, testId: "sidebar-policies" },
+    { href: "/nca-ecc", label: "NCA ECC", icon: ShieldCheck, testId: "sidebar-nca-ecc" },
+    { href: "/metaworks", label: "Metaworks V1&V2", icon: ShieldCheck, testId: "sidebar-metaworks" },
+    { href: "/nfrm", label: t('navigation.riskManagement'), icon: AlertTriangle, testId: "sidebar-risk-management" },
+    { href: "/assistant", label: t('navigation.aiConsultant'), icon: Bot, testId: "sidebar-ai-consultant" },
   ];
 
   const assessmentLinks = [
-    { href: "/assessment", label: "Assessment Questionnaire", icon: ClipboardCheck },
-    { href: "/risk-register", label: "Risk Register", icon: Database },
-    { href: "/risk-assessment", label: "Interactive Risk Assessment", icon: AlertTriangle },
-    { href: "/dashboard", label: "Risk Dashboard", icon: LayoutDashboard },
+    { href: "/assessment", label: "Assessment Questionnaire", icon: ClipboardCheck, testId: "sidebar-assessment" },
+    { href: "/risk-register", label: "Risk Register", icon: Database, testId: "sidebar-risk-register" },
+    { href: "/risk-assessment", label: "Interactive Risk Assessment", icon: AlertTriangle, testId: "sidebar-risk-assessment" },
+    { href: "/dashboard", label: "Risk Dashboard", icon: LayoutDashboard, testId: "sidebar-risk-dashboard" },
   ];
 
   const trainingLinks = [
-    { href: "/user-awareness", label: t('navigation.userAwareness'), icon: GraduationCap },
-    { href: "/training-materials", label: t('navigation.trainingMaterials'), icon: Book },
-    { href: "/competency-badges", label: t('navigation.competencyBadges'), icon: Award },
-    { href: "/security-quizzes", label: "Security Quizzes", icon: Brain },
+    { href: "/user-awareness", label: t('navigation.userAwareness'), icon: GraduationCap, testId: "sidebar-user-awareness" },
+    { href: "/training-materials", label: t('navigation.trainingMaterials'), icon: Book, testId: "sidebar-training-materials" },
+    { href: "/competency-badges", label: t('navigation.competencyBadges'), icon: Award, testId: "sidebar-competency-badges" },
+    { href: "/security-quizzes", label: "Security Quizzes", icon: Brain, testId: "sidebar-security-quizzes" },
   ];
 
   const roleLinks = [
-    { href: "/ciso-policies", label: "CISO Portal", icon: Shield },
-    { href: "/it-manager", label: "IT Manager Portal", icon: Settings },
-    { href: "/cto-dashboard", label: "CTO Dashboard", icon: Rocket },
-    { href: "/sysadmin-tools", label: "System Admin Tools", icon: Monitor },
+    { href: "/ciso-policies", label: "CISO Portal", icon: Shield, testId: "sidebar-ciso-portal" },
+    { href: "/it-manager", label: "IT Manager Portal", icon: Settings, testId: "sidebar-it-manager" },
+    { href: "/cto-dashboard", label: "CTO Dashboard", icon: Rocket, testId: "sidebar-cto-dashboard" },
+    { href: "/sysadmin-tools", label: "System Admin Tools", icon: Monitor, testId: "sidebar-sysadmin-tools" },
   ];
 
   const managementLinks = [
-    { href: "/user-management", label: t('navigation.userManagement'), icon: Users },
+    { href: "/user-management", label: t('navigation.userManagement'), icon: Users, testId: "sidebar-user-management" },
   ];
 
   return (
@@ -103,6 +103,7 @@ export default function Sidebar() {
                   <li key={link.href}>
                     <a
                       href={link.href}
+                      data-testid={link.testId || ''}
                       className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
                         isActive
                           ? "bg-primary text-primary-foreground"
@@ -132,6 +133,7 @@ export default function Sidebar() {
                   <li key={link.href}>
                     <a
                       href={link.href}
+                      data-testid={link.testId || ''}
                       className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
                         isActive
                           ? "bg-primary text-primary-foreground"
@@ -161,6 +163,7 @@ export default function Sidebar() {
                   <li key={link.href}>
                     <a
                       href={link.href}
+                      data-testid={link.testId || ''}
                       className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
                         isActive
                           ? "bg-primary text-primary-foreground"
@@ -190,6 +193,7 @@ export default function Sidebar() {
                   <li key={link.href}>
                     <a
                       href={link.href}
+                      data-testid={link.testId || ''}
                       className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
                         isActive
                           ? "bg-primary text-primary-foreground"
@@ -208,7 +212,7 @@ export default function Sidebar() {
 
         <div className="p-4 border-t space-y-3">
           {/* Theme and Language Controls */}
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex items-center justify-center gap-2" data-testid="theme-toggle">
             <ThemeToggle />
             <LanguageToggle />
           </div>
