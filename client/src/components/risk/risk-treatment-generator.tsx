@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import DocumentViewer from "@/components/common/document-viewer";
 import { 
   Wand2, 
   Shield, 
@@ -21,7 +22,8 @@ import {
   Lock,
   Monitor,
   Database,
-  FileText
+  FileText,
+  Eye
 } from "lucide-react";
 
 interface Risk {
@@ -292,9 +294,8 @@ export default function RiskTreatmentGenerator({ risk, onRecommendationGenerated
     });
   };
 
-  const copyRecommendation = (recommendation: TreatmentRecommendation) => {
-    const text = `
-Risk Treatment Recommendation: ${recommendation.title}
+  const generateTreatmentDocument = (recommendation: TreatmentRecommendation) => {
+    return `Risk Treatment Recommendation: ${recommendation.title}
 
 Strategy: ${recommendation.strategy.toUpperCase()}
 Priority: ${recommendation.priority.toUpperCase()}
@@ -316,8 +317,16 @@ ${recommendation.metrics.join(', ')}
 
 Key Considerations:
 ${recommendation.considerations.map(consideration => `• ${consideration}`).join('\n')}
-    `.trim();
 
+Risk Asset: ${risk.asset}
+Risk Score: ${risk.score}
+Risk Level: ${risk.level}
+
+Generated on: ${new Date().toLocaleDateString()}`;
+  };
+
+  const copyRecommendation = (recommendation: TreatmentRecommendation) => {
+    const text = generateTreatmentDocument(recommendation);
     navigator.clipboard.writeText(text);
     toast({
       title: "Copied to Clipboard",
@@ -520,6 +529,28 @@ ${recommendation.considerations.map(consideration => `• ${consideration}`).joi
                           >
                             <Copy className="w-3 h-3" />
                           </Button>
+                          <DocumentViewer
+                            content={generateTreatmentDocument(recommendation)}
+                            metadata={{
+                              title: `Risk Treatment Plan - ${recommendation.title}`,
+                              type: 'Risk Treatment Plan',
+                              description: `${recommendation.strategy.toUpperCase()} strategy for ${risk.asset}`,
+                              author: 'Risk Management System',
+                              createdDate: new Date().toLocaleDateString(),
+                              status: 'draft',
+                              priority: recommendation.priority,
+                              category: 'Risk Management'
+                            }}
+                            triggerButton={
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Eye className="w-3 h-3" />
+                              </Button>
+                            }
+                          />
                         </div>
                       </div>
                     </CardContent>

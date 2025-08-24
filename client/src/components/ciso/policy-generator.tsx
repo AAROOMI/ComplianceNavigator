@@ -8,7 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Download, FileText, Wand2, Settings, Users, Shield } from "lucide-react";
+import DocumentViewer from "@/components/common/document-viewer";
+import { Loader2, Download, FileText, Wand2, Settings, Users, Shield, Eye } from "lucide-react";
 
 interface PolicyGeneratorProps {}
 
@@ -365,10 +366,32 @@ This policy will be reviewed annually or as needed to address changing threats a
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <Badge variant="secondary">Policy Generated</Badge>
-                  <Button onClick={handleDownload} size="sm" variant="outline">
-                    <Download className="w-4 h-4 mr-2" />
-                    Download
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button onClick={handleDownload} size="sm" variant="outline">
+                      <Download className="w-4 h-4 mr-2" />
+                      Download
+                    </Button>
+                    <DocumentViewer
+                      content={generatedPolicy}
+                      metadata={{
+                        title: `${POLICY_TYPES.find(p => p.id === formData.policyType)?.name || 'Policy Document'}`,
+                        type: 'Security Policy',
+                        description: `AI-generated security policy for ${formData.companyName}`,
+                        author: 'AI Policy Generator',
+                        company: formData.companyName,
+                        createdDate: new Date().toLocaleDateString(),
+                        status: 'draft',
+                        priority: 'medium',
+                        category: POLICY_TYPES.find(p => p.id === formData.policyType)?.category || 'Security'
+                      }}
+                      triggerButton={
+                        <Button size="sm" variant="outline">
+                          <Eye className="w-4 h-4 mr-2" />
+                          View Document
+                        </Button>
+                      }
+                    />
+                  </div>
                 </div>
                 <div className="bg-muted p-4 rounded-lg max-h-96 overflow-y-auto">
                   <pre className="text-sm whitespace-pre-wrap">{generatedPolicy}</pre>

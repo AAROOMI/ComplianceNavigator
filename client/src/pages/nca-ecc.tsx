@@ -2,12 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Shield, ChevronRight, FileText, Loader2, ListChecks } from "lucide-react";
+import { Shield, ChevronRight, FileText, Loader2, ListChecks, Eye } from "lucide-react";
 import { useState } from "react";
 import { ncaEccDomains, ncaEccStructure } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import DocumentViewer from "@/components/common/document-viewer";
 
 export default function NcaEcc() {
   const [generating, setGenerating] = useState(false);

@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import DocumentViewer from "@/components/common/document-viewer";
 import { 
   FileText, 
   Download, 
@@ -26,7 +27,8 @@ import {
   Archive,
   Package,
   Activity,
-  AlertTriangle
+  AlertTriangle,
+  Eye
 } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import CryptoJS from "crypto-js";
@@ -265,6 +267,642 @@ Data owners, led by {COMPLIANCE_OFFICER}, must ensure appropriate handling of cl
 Management Authority: {CEO_NAME}, Chief Executive Officer
 Information Security Officer: {CISO_NAME}
 Website: {WEBSITE}`
+  },
+  {
+    id: 'gov-006',
+    title: 'Privacy Policy',
+    category: 'Governance',
+    priority: 'High',
+    domain: 'Governance',
+    description: 'Data privacy and protection requirements',
+    controls: ['GOV-12', 'GOV-13'],
+    selected: true,
+    template: `# Privacy Policy
+
+## 1. Privacy Commitment
+{COMPANY_NAME} is committed to protecting the privacy and confidentiality of personal information entrusted to us by customers, employees, and business partners.
+
+## 2. Privacy Governance
+Privacy oversight is managed by {COMPLIANCE_OFFICER} with executive sponsorship from {CEO_NAME} and technical implementation by {IT_MANAGER_NAME}.
+
+## 3. Personal Data Collection
+We collect personal data only for legitimate business purposes and with appropriate consent or legal basis.
+
+## 4. Data Processing Principles
+- Lawfulness, fairness, and transparency
+- Purpose limitation
+- Data minimization
+- Accuracy
+- Storage limitation
+- Security
+- Accountability
+
+## 5. Individual Rights
+Data subjects have the right to:
+- Access their personal data
+- Rectify inaccurate information
+- Erase personal data
+- Restrict processing
+- Data portability
+- Object to processing
+
+## 6. Privacy by Design
+{IT_MANAGER_NAME} ensures privacy considerations are integrated into all systems and processes from design stage.
+
+Company: {COMPANY_NAME}
+Executive Authority: {CEO_NAME}
+Privacy Officer: {COMPLIANCE_OFFICER}`
+  },
+  {
+    id: 'gov-007',
+    title: 'Document Control Policy',
+    category: 'Governance',
+    priority: 'Medium',
+    domain: 'Governance',
+    description: 'Document management and version control',
+    controls: ['GOV-14', 'GOV-15'],
+    selected: true,
+    template: `# Document Control Policy
+
+## 1. Document Management Framework
+{COMPANY_NAME} maintains controlled documentation to ensure accuracy, availability, and appropriate use of information.
+
+## 2. Document Control Authority
+Document control is managed by {COMPLIANCE_OFFICER} with technical support from {IT_MANAGER_NAME} and approval authority from {CEO_NAME}.
+
+## 3. Document Classification
+- Level 1: Public documents
+- Level 2: Internal use only
+- Level 3: Confidential
+- Level 4: Restricted access
+
+## 4. Version Control
+All controlled documents must include:
+- Version number
+- Approval date
+- Review date
+- Authorized approver
+- Distribution list
+
+## 5. Document Lifecycle
+- Creation and authoring
+- Review and approval
+- Publication and distribution
+- Maintenance and updates
+- Archival and disposal
+
+Company: {COMPANY_NAME}
+Document Controller: {COMPLIANCE_OFFICER}
+IT Support: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'gov-008',
+    title: 'Training and Awareness Policy',
+    category: 'Governance',
+    priority: 'Medium',
+    domain: 'Governance',
+    description: 'Security awareness and training requirements',
+    controls: ['GOV-16', 'GOV-17'],
+    selected: true,
+    template: `# Training and Awareness Policy
+
+## 1. Training Objectives
+{COMPANY_NAME} provides comprehensive security awareness training to ensure all personnel understand their security responsibilities.
+
+## 2. Training Program Management
+Training programs are coordinated by {CISO_NAME} with content development by {IT_MANAGER_NAME} and executive support from {CEO_NAME}.
+
+## 3. Mandatory Training
+All employees must complete:
+- Security awareness training (annual)
+- Role-specific training
+- Incident response training
+- Privacy training
+- Compliance training
+
+## 4. Training Content
+- Threat landscape awareness
+- Phishing and social engineering
+- Data protection requirements
+- Incident reporting procedures
+- Company policies and procedures
+
+## 5. Training Effectiveness
+Training effectiveness is measured through:
+- Knowledge assessments
+- Simulated phishing exercises
+- Incident response drills
+- Feedback surveys
+
+Organization: {COMPANY_NAME}
+Training Coordinator: {CISO_NAME}
+Executive Sponsor: {CEO_NAME}`
+  },
+  {
+    id: 'gov-009',
+    title: 'Vendor Risk Management Policy',
+    category: 'Governance',
+    priority: 'High',
+    domain: 'Governance',
+    description: 'Third-party vendor risk assessment and management',
+    controls: ['GOV-18', 'GOV-19'],
+    selected: true,
+    template: `# Vendor Risk Management Policy
+
+## 1. Vendor Risk Framework
+{COMPANY_NAME} implements comprehensive vendor risk management to protect against third-party risks and ensure vendor compliance.
+
+## 2. Vendor Risk Governance
+Vendor risk management is led by {COMPLIANCE_OFFICER} with security assessment by {CISO_NAME} and executive oversight by {CEO_NAME}.
+
+## 3. Vendor Categories
+- Critical vendors: High business impact
+- Important vendors: Medium business impact
+- Standard vendors: Low business impact
+
+## 4. Risk Assessment Process
+All vendors undergo:
+- Initial risk assessment
+- Due diligence review
+- Contract risk analysis
+- Ongoing monitoring
+- Annual reassessment
+
+## 5. Security Requirements
+Vendors must demonstrate:
+- Security certifications
+- Incident response capabilities
+- Data protection measures
+- Business continuity plans
+- Insurance coverage
+
+Company: {COMPANY_NAME}
+Vendor Risk Manager: {COMPLIANCE_OFFICER}
+Security Reviewer: {CISO_NAME}`
+  },
+  {
+    id: 'gov-010',
+    title: 'Records Management Policy',
+    category: 'Governance',
+    priority: 'Medium',
+    domain: 'Governance',
+    description: 'Information records retention and disposal',
+    controls: ['GOV-20', 'GOV-21'],
+    selected: true,
+    template: `# Records Management Policy
+
+## 1. Records Management Objectives
+{COMPANY_NAME} maintains proper records management to ensure compliance, support business operations, and protect information assets.
+
+## 2. Records Management Authority
+Records management is overseen by {COMPLIANCE_OFFICER} with technical implementation by {IT_MANAGER_NAME} and executive approval from {CEO_NAME}.
+
+## 3. Record Categories
+- Business records: 7 years retention
+- Financial records: 10 years retention
+- Personnel records: 7 years after termination
+- Legal records: Permanent retention
+- Technical records: 5 years retention
+
+## 4. Retention Schedule
+Records retention based on:
+- Legal requirements
+- Regulatory obligations
+- Business needs
+- Historical value
+
+## 5. Secure Disposal
+End-of-life records disposal includes:
+- Secure deletion procedures
+- Physical destruction methods
+- Certificate of destruction
+- Audit trail maintenance
+
+Company: {COMPANY_NAME}
+Records Manager: {COMPLIANCE_OFFICER}
+Location: {HEADQUARTERS_LOCATION}`
+  },
+  {
+    id: 'gov-011',
+    title: 'Asset Management Policy',
+    category: 'Governance',
+    priority: 'Medium',
+    domain: 'Governance',
+    description: 'Information asset inventory and protection',
+    controls: ['GOV-22', 'GOV-23'],
+    selected: true,
+    template: `# Asset Management Policy
+
+## 1. Asset Management Framework
+{COMPANY_NAME} maintains comprehensive asset management to protect, track, and properly utilize information assets.
+
+## 2. Asset Management Responsibility
+Asset management is coordinated by {IT_MANAGER_NAME} with security oversight from {CISO_NAME} and governance from {CEO_NAME}.
+
+## 3. Asset Classification
+- Hardware assets
+- Software assets
+- Information assets
+- Personnel assets
+- Facilities assets
+
+## 4. Asset Inventory
+Asset inventory includes:
+- Asset identification
+- Asset ownership
+- Asset classification
+- Asset location
+- Asset condition
+
+## 5. Asset Lifecycle
+- Acquisition and procurement
+- Deployment and configuration
+- Operation and maintenance
+- Retirement and disposal
+
+Company: {COMPANY_NAME}
+Asset Manager: {IT_MANAGER_NAME}
+Security Oversight: {CISO_NAME}`
+  },
+  {
+    id: 'gov-012',
+    title: 'Communication Security Policy',
+    category: 'Governance',
+    priority: 'Medium',
+    domain: 'Governance',
+    description: 'Secure communication standards and protocols',
+    controls: ['GOV-24', 'GOV-25'],
+    selected: true,
+    template: `# Communication Security Policy
+
+## 1. Communication Security Framework
+{COMPANY_NAME} ensures secure communication channels to protect information during transmission and collaboration.
+
+## 2. Communication Security Management
+Communication security is managed by {IT_MANAGER_NAME} with policy oversight from {CISO_NAME} and executive support from {CEO_NAME}.
+
+## 3. Communication Channels
+- Email communications
+- Instant messaging
+- Video conferencing
+- File sharing
+- Voice communications
+
+## 4. Security Requirements
+All communications must use:
+- Approved platforms
+- Encryption in transit
+- Access controls
+- Audit logging
+- Data loss prevention
+
+## 5. External Communications
+External communications require:
+- Approved channels only
+- Classification marking
+- Recipient verification
+- Encryption when required
+
+Organization: {COMPANY_NAME}
+Communications Manager: {IT_MANAGER_NAME}
+Industry: {INDUSTRY}`
+  },
+  {
+    id: 'gov-013',
+    title: 'Physical Security Policy',
+    category: 'Governance',
+    priority: 'High',
+    domain: 'Governance',
+    description: 'Physical security controls and access management',
+    controls: ['GOV-26', 'GOV-27'],
+    selected: true,
+    template: `# Physical Security Policy
+
+## 1. Physical Security Objectives
+{COMPANY_NAME} implements physical security controls to protect personnel, facilities, and information assets from physical threats.
+
+## 2. Physical Security Authority
+Physical security is managed by {IT_MANAGER_NAME} with coordination from {CISO_NAME} and executive oversight from {CEO_NAME}.
+
+## 3. Access Control
+Physical access control includes:
+- Badge-based access systems
+- Visitor management procedures
+- Security guards and monitoring
+- Restricted area controls
+
+## 4. Facility Security
+- Perimeter security
+- Building access controls
+- Server room security
+- Environmental monitoring
+
+## 5. Equipment Security
+- Asset tracking
+- Secure storage
+- Equipment disposal
+- Mobile device controls
+
+Company: {COMPANY_NAME}
+Facility Manager: {IT_MANAGER_NAME}
+Location: {HEADQUARTERS_LOCATION}`
+  },
+  {
+    id: 'gov-014',
+    title: 'Business Impact Analysis Policy',
+    category: 'Governance',
+    priority: 'Medium',
+    domain: 'Governance',
+    description: 'Business impact assessment and analysis procedures',
+    controls: ['GOV-28', 'GOV-29'],
+    selected: true,
+    template: `# Business Impact Analysis Policy
+
+## 1. Business Impact Analysis Framework
+{COMPANY_NAME} conducts regular business impact analysis to understand critical business functions and recovery requirements.
+
+## 2. BIA Governance
+Business impact analysis is led by {CISO_NAME} with business input coordinated by {COMPLIANCE_OFFICER} and executive support from {CEO_NAME}.
+
+## 3. Analysis Scope
+BIA covers:
+- Critical business processes
+- Supporting technology systems
+- Key personnel requirements
+- Vendor dependencies
+- Regulatory obligations
+
+## 4. Impact Assessment
+Impact analysis includes:
+- Financial impact
+- Operational impact
+- Regulatory impact
+- Reputational impact
+- Customer impact
+
+## 5. Recovery Requirements
+- Recovery time objectives (RTO)
+- Recovery point objectives (RPO)
+- Minimum staffing levels
+- Essential resources
+
+Company: {COMPANY_NAME}
+BIA Coordinator: {CISO_NAME}
+Executive Sponsor: {CEO_NAME}`
+  },
+  {
+    id: 'gov-015',
+    title: 'Legal and Regulatory Compliance Policy',
+    category: 'Governance',
+    priority: 'High',
+    domain: 'Governance',
+    description: 'Legal and regulatory compliance framework',
+    controls: ['GOV-30', 'GOV-31'],
+    selected: true,
+    template: `# Legal and Regulatory Compliance Policy
+
+## 1. Compliance Framework
+{COMPANY_NAME} maintains compliance with applicable laws, regulations, and contractual obligations governing our business operations.
+
+## 2. Compliance Governance
+Compliance management is led by {COMPLIANCE_OFFICER} with technical support from {IT_MANAGER_NAME} and executive oversight from {CEO_NAME}.
+
+## 3. Applicable Regulations
+- Data protection laws (GDPR, CCPA)
+- Industry regulations
+- Financial regulations
+- Employment laws
+- Environmental regulations
+
+## 4. Compliance Program
+- Regulatory monitoring
+- Gap assessments
+- Remediation planning
+- Training and awareness
+- Audit and reporting
+
+## 5. Compliance Monitoring
+Regular compliance reviews include:
+- Legal requirement updates
+- Policy compliance assessment
+- Control effectiveness testing
+- Corrective action tracking
+
+Organization: {COMPANY_NAME}
+Compliance Officer: {COMPLIANCE_OFFICER}
+Legal Authority: {CEO_NAME}
+Industry Sector: {INDUSTRY}`
+  },
+  {
+    id: 'gov-016',
+    title: 'Project Security Policy',
+    category: 'Governance',
+    priority: 'Medium',
+    domain: 'Governance',
+    description: 'Security requirements for project management',
+    controls: ['GOV-32', 'GOV-33'],
+    selected: true,
+    template: `# Project Security Policy
+
+## 1. Project Security Framework
+{COMPANY_NAME} integrates security requirements into all project lifecycle phases to ensure secure delivery of business capabilities.
+
+## 2. Project Security Governance
+Project security is coordinated by {CISO_NAME} with project management support from {IT_MANAGER_NAME} and executive sponsorship from {CEO_NAME}.
+
+## 3. Security Requirements
+All projects must include:
+- Security requirements analysis
+- Risk assessment and mitigation
+- Security architecture review
+- Security testing and validation
+- Security training and documentation
+
+## 4. Project Phases
+- Initiation: Security requirements definition
+- Planning: Security architecture design
+- Execution: Security control implementation
+- Monitoring: Security testing and validation
+- Closure: Security documentation and handover
+
+## 5. Project Security Roles
+- Project Security Officer: {CISO_NAME}
+- Technical Security Lead: {IT_MANAGER_NAME}
+- Business Security Liaison: {COMPLIANCE_OFFICER}
+
+Company: {COMPANY_NAME}
+Project Security Lead: {CISO_NAME}
+Executive Sponsor: {CEO_NAME}`
+  },
+  {
+    id: 'gov-017',
+    title: 'Information Handling Policy',
+    category: 'Governance',
+    priority: 'Medium',
+    domain: 'Governance',
+    description: 'Information handling and processing guidelines',
+    controls: ['GOV-34', 'GOV-35'],
+    selected: true,
+    template: `# Information Handling Policy
+
+## 1. Information Handling Framework
+{COMPANY_NAME} establishes clear guidelines for proper handling, processing, and protection of information assets.
+
+## 2. Information Handling Authority
+Information handling standards are managed by {COMPLIANCE_OFFICER} with technical implementation by {IT_MANAGER_NAME} and governance from {CEO_NAME}.
+
+## 3. Handling Requirements
+Information handling includes:
+- Classification marking
+- Access controls
+- Transmission security
+- Storage protection
+- Disposal procedures
+
+## 4. Processing Guidelines
+Information processing must follow:
+- Authorized purpose only
+- Minimal access principle
+- Data quality standards
+- Retention requirements
+- Audit trail maintenance
+
+## 5. Sharing and Disclosure
+Information sharing requires:
+- Authorized recipients only
+- Appropriate protection measures
+- Legal compliance verification
+- Tracking and logging
+
+Company: {COMPANY_NAME}
+Information Officer: {COMPLIANCE_OFFICER}
+Technical Lead: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'gov-018',
+    title: 'Audit and Assurance Policy',
+    category: 'Governance',
+    priority: 'Medium',
+    domain: 'Governance',
+    description: 'Internal audit and assurance framework',
+    controls: ['GOV-36', 'GOV-37'],
+    selected: true,
+    template: `# Audit and Assurance Policy
+
+## 1. Audit Framework
+{COMPANY_NAME} maintains independent audit and assurance activities to verify compliance and effectiveness of controls.
+
+## 2. Audit Governance
+Audit activities are coordinated by {COMPLIANCE_OFFICER} with technical audit support from {CISO_NAME} and executive oversight from {CEO_NAME}.
+
+## 3. Audit Types
+- Compliance audits
+- Security audits
+- Operational audits
+- Financial audits
+- Vendor audits
+
+## 4. Audit Process
+- Audit planning and scoping
+- Evidence collection and analysis
+- Finding documentation
+- Corrective action planning
+- Follow-up verification
+
+## 5. Audit Reporting
+Audit reports include:
+- Executive summary
+- Detailed findings
+- Risk ratings
+- Recommendations
+- Management responses
+
+Organization: {COMPANY_NAME}
+Chief Auditor: {COMPLIANCE_OFFICER}
+Audit Committee Chair: {CEO_NAME}`
+  },
+  {
+    id: 'gov-019',
+    title: 'Performance Management Policy',
+    category: 'Governance',
+    priority: 'Medium',
+    domain: 'Governance',
+    description: 'Security performance monitoring and measurement',
+    controls: ['GOV-38', 'GOV-39'],
+    selected: true,
+    template: `# Performance Management Policy
+
+## 1. Performance Management Framework
+{COMPANY_NAME} monitors and measures security performance to ensure effectiveness and continuous improvement.
+
+## 2. Performance Management Authority
+Performance management is led by {CISO_NAME} with metrics coordination by {IT_MANAGER_NAME} and executive review by {CEO_NAME}.
+
+## 3. Key Performance Indicators
+- Security incident trends
+- Vulnerability remediation rates
+- Training completion rates
+- Compliance levels
+- System availability
+
+## 4. Performance Monitoring
+Regular monitoring includes:
+- Real-time dashboards
+- Monthly performance reports
+- Quarterly trend analysis
+- Annual performance reviews
+
+## 5. Performance Improvement
+Continuous improvement through:
+- Performance gap analysis
+- Root cause investigation
+- Corrective action implementation
+- Best practice identification
+
+Company: {COMPANY_NAME}
+Performance Manager: {CISO_NAME}
+Executive Review: {CEO_NAME}`
+  },
+  {
+    id: 'gov-020',
+    title: 'Crisis Management Policy',
+    category: 'Governance',
+    priority: 'High',
+    domain: 'Governance',
+    description: 'Crisis response and management procedures',
+    controls: ['GOV-40', 'GOV-41'],
+    selected: true,
+    template: `# Crisis Management Policy
+
+## 1. Crisis Management Framework
+{COMPANY_NAME} maintains crisis management capabilities to respond effectively to major incidents and emergencies.
+
+## 2. Crisis Management Authority
+Crisis management is led by {CEO_NAME} with operational coordination by {CISO_NAME} and communication management by {COMPLIANCE_OFFICER}.
+
+## 3. Crisis Categories
+- Security breaches
+- Natural disasters
+- Technology failures
+- Pandemic response
+- Business disruption
+
+## 4. Crisis Response Team
+- Crisis Commander: {CEO_NAME}
+- Operations Lead: {CISO_NAME}
+- Communications Lead: {COMPLIANCE_OFFICER}
+- Technical Lead: {IT_MANAGER_NAME}
+
+## 5. Crisis Response Process
+- Crisis detection and assessment
+- Response team activation
+- Immediate response actions
+- Ongoing crisis management
+- Recovery and lessons learned
+
+Organization: {COMPANY_NAME}
+Crisis Commander: {CEO_NAME}
+Headquarters: {HEADQUARTERS_LOCATION}`
   },
 
   // Cybersecurity Defence Domain (20 policies)
@@ -541,6 +1179,855 @@ Organization: {COMPANY_NAME}
 Industry: {INDUSTRY}
 Chief Executive: {CEO_NAME}
 Security Officer: {CISO_NAME}`
+  },
+  {
+    id: 'def-006',
+    title: 'Data Loss Prevention Policy',
+    category: 'Defence',
+    priority: 'High',
+    domain: 'Cybersecurity Defence',
+    description: 'Data leak detection and prevention controls',
+    controls: ['DEF-13', 'DEF-14'],
+    selected: true,
+    template: `# Data Loss Prevention Policy
+
+## 1. DLP Framework
+{COMPANY_NAME} implements data loss prevention to protect sensitive information from unauthorized disclosure or exfiltration.
+
+## 2. DLP Management
+DLP program is managed by {CISO_NAME} with technical implementation by {IT_MANAGER_NAME} and executive oversight from {CEO_NAME}.
+
+## 3. Protected Data Types
+- Customer personal information
+- Financial data
+- Intellectual property
+- Trade secrets
+- Regulated information
+
+## 4. DLP Controls
+- Email content scanning
+- Web traffic monitoring
+- Removable media controls
+- Cloud application monitoring
+- Endpoint data protection
+
+## 5. Incident Response
+DLP violations trigger:
+- Automatic blocking/quarantine
+- Alert to security team
+- Investigation procedures
+- Remediation actions
+
+Company: {COMPANY_NAME}
+DLP Administrator: {CISO_NAME}
+Technical Lead: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'def-007',
+    title: 'Malware Protection Policy',
+    category: 'Defence',
+    priority: 'High',
+    domain: 'Cybersecurity Defence',
+    description: 'Malware detection and prevention measures',
+    controls: ['DEF-15', 'DEF-16'],
+    selected: true,
+    template: `# Malware Protection Policy
+
+## 1. Malware Protection Framework
+{COMPANY_NAME} implements comprehensive malware protection to defend against malicious software threats.
+
+## 2. Malware Protection Management
+Malware protection is coordinated by {IT_MANAGER_NAME} with security oversight from {CISO_NAME} and executive support from {CEO_NAME}.
+
+## 3. Protection Layers
+- Email gateway filtering
+- Web content filtering
+- Endpoint protection
+- Network-based detection
+- Behavioral analysis
+
+## 4. Detection and Response
+- Real-time scanning
+- Signature-based detection
+- Heuristic analysis
+- Sandboxing
+- Automatic remediation
+
+## 5. Incident Handling
+Malware incidents require:
+- Immediate isolation
+- Forensic analysis
+- System remediation
+- Security team notification
+
+Organization: {COMPANY_NAME}
+Malware Protection Lead: {IT_MANAGER_NAME}
+Security Oversight: {CISO_NAME}`
+  },
+  {
+    id: 'def-008',
+    title: 'Database Security Policy',
+    category: 'Defence',
+    priority: 'High',
+    domain: 'Cybersecurity Defence',
+    description: 'Database security and access controls',
+    controls: ['DEF-17', 'DEF-18'],
+    selected: true,
+    template: `# Database Security Policy
+
+## 1. Database Security Framework
+{COMPANY_NAME} protects database systems and data through comprehensive security controls and monitoring.
+
+## 2. Database Security Management
+Database security is managed by {IT_MANAGER_NAME} with policy oversight from {CISO_NAME} and governance from {CEO_NAME}.
+
+## 3. Security Controls
+- Access control and authentication
+- Data encryption at rest and in transit
+- Database activity monitoring
+- Vulnerability management
+- Backup and recovery
+
+## 4. Access Management
+Database access requires:
+- Role-based permissions
+- Principle of least privilege
+- Regular access reviews
+- Administrative oversight
+
+## 5. Monitoring and Auditing
+- User activity logging
+- Privileged access monitoring
+- Query analysis
+- Anomaly detection
+
+Company: {COMPANY_NAME}
+Database Administrator: {IT_MANAGER_NAME}
+Security Officer: {CISO_NAME}`
+  },
+  {
+    id: 'def-009',
+    title: 'Cryptography Policy',
+    category: 'Defence',
+    priority: 'High',
+    domain: 'Cybersecurity Defence',
+    description: 'Cryptographic controls and key management',
+    controls: ['DEF-19', 'DEF-20'],
+    selected: true,
+    template: `# Cryptography Policy
+
+## 1. Cryptographic Framework
+{COMPANY_NAME} uses cryptography to protect confidentiality, integrity, and authenticity of information.
+
+## 2. Cryptography Management
+Cryptographic controls are managed by {CISO_NAME} with technical implementation by {IT_MANAGER_NAME} and governance from {CEO_NAME}.
+
+## 3. Cryptographic Standards
+- AES-256 for symmetric encryption
+- RSA-2048/ECC-256 for asymmetric encryption
+- SHA-256 for hashing
+- Approved algorithms only
+
+## 4. Key Management
+- Secure key generation
+- Protected key storage
+- Regular key rotation
+- Secure key disposal
+
+## 5. Implementation Requirements
+- Use of approved libraries
+- Regular algorithm reviews
+- Performance considerations
+- Compliance validation
+
+Organization: {COMPANY_NAME}
+Cryptography Officer: {CISO_NAME}
+Implementation Lead: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'def-010',
+    title: 'Mobile Device Security Policy',
+    category: 'Defence',
+    priority: 'Medium',
+    domain: 'Cybersecurity Defence',
+    description: 'Mobile device security and management',
+    controls: ['DEF-21', 'DEF-22'],
+    selected: true,
+    template: `# Mobile Device Security Policy
+
+## 1. Mobile Security Framework
+{COMPANY_NAME} secures mobile devices accessing corporate resources to protect against mobile-specific threats.
+
+## 2. Mobile Security Management
+Mobile security is managed by {IT_MANAGER_NAME} with policy coordination from {CISO_NAME} and executive support from {CEO_NAME}.
+
+## 3. Device Categories
+- Corporate-owned devices
+- Personal devices (BYOD)
+- Contractor devices
+- Visitor devices
+
+## 4. Security Requirements
+- Device enrollment and management
+- Application control
+- Data encryption
+- Remote wipe capabilities
+
+## 5. Usage Guidelines
+- Approved applications only
+- Regular security updates
+- Physical device protection
+- Incident reporting
+
+Company: {COMPANY_NAME}
+Mobile Device Administrator: {IT_MANAGER_NAME}
+Security Policy: {CISO_NAME}`
+  },
+  {
+    id: 'def-011',
+    title: 'Secure Configuration Policy',
+    category: 'Defence',
+    priority: 'Medium',
+    domain: 'Cybersecurity Defence',
+    description: 'System hardening and configuration standards',
+    controls: ['DEF-23', 'DEF-24'],
+    selected: true,
+    template: `# Secure Configuration Policy
+
+## 1. Configuration Management Framework
+{COMPANY_NAME} implements secure configuration baselines to reduce attack surface and improve security posture.
+
+## 2. Configuration Management Authority
+Configuration management is led by {IT_MANAGER_NAME} with security validation by {CISO_NAME} and governance from {CEO_NAME}.
+
+## 3. Configuration Standards
+- Operating system hardening
+- Application security settings
+- Network device configuration
+- Database security parameters
+
+## 4. Configuration Process
+- Baseline development
+- Testing and validation
+- Deployment procedures
+- Compliance monitoring
+
+## 5. Change Control
+Configuration changes require:
+- Security impact assessment
+- Testing in non-production
+- Approval workflows
+- Documentation updates
+
+Organization: {COMPANY_NAME}
+Configuration Manager: {IT_MANAGER_NAME}
+Security Validator: {CISO_NAME}`
+  },
+  {
+    id: 'def-012',
+    title: 'Penetration Testing Policy',
+    category: 'Defence',
+    priority: 'Medium',
+    domain: 'Cybersecurity Defence',
+    description: 'Authorized penetration testing procedures',
+    controls: ['DEF-25', 'DEF-26'],
+    selected: true,
+    template: `# Penetration Testing Policy
+
+## 1. Penetration Testing Framework
+{COMPANY_NAME} conducts regular penetration testing to identify vulnerabilities and validate security controls.
+
+## 2. Testing Management
+Penetration testing is coordinated by {CISO_NAME} with technical oversight from {IT_MANAGER_NAME} and executive approval from {CEO_NAME}.
+
+## 3. Testing Scope
+- External network testing
+- Internal network testing
+- Web application testing
+- Wireless network testing
+- Social engineering testing
+
+## 4. Testing Methodology
+- Planning and reconnaissance
+- Vulnerability assessment
+- Exploitation attempts
+- Post-exploitation analysis
+- Reporting and remediation
+
+## 5. Testing Authorization
+All testing requires:
+- Written authorization
+- Scope definition
+- Timeline agreement
+- Incident procedures
+
+Company: {COMPANY_NAME}
+Testing Coordinator: {CISO_NAME}
+Executive Authorization: {CEO_NAME}`
+  },
+  {
+    id: 'def-013',
+    title: 'Log Management Policy',
+    category: 'Defence',
+    priority: 'Medium',
+    domain: 'Cybersecurity Defence',
+    description: 'System logging and log analysis requirements',
+    controls: ['DEF-27', 'DEF-28'],
+    selected: true,
+    template: `# Log Management Policy
+
+## 1. Log Management Framework
+{COMPANY_NAME} maintains comprehensive logging to support security monitoring, incident response, and compliance requirements.
+
+## 2. Log Management Authority
+Log management is coordinated by {IT_MANAGER_NAME} with security analysis by {CISO_NAME} and governance from {CEO_NAME}.
+
+## 3. Logging Requirements
+- Security events
+- System events
+- Application events
+- Network events
+- Administrative actions
+
+## 4. Log Collection and Storage
+- Centralized log collection
+- Secure log transmission
+- Protected log storage
+- Long-term retention
+
+## 5. Log Analysis
+- Real-time monitoring
+- Trend analysis
+- Anomaly detection
+- Correlation analysis
+
+Organization: {COMPANY_NAME}
+Log Administrator: {IT_MANAGER_NAME}
+Security Analyst: {CISO_NAME}`
+  },
+  {
+    id: 'def-014',
+    title: 'Security Testing Policy',
+    category: 'Defence',
+    priority: 'Medium',
+    domain: 'Cybersecurity Defence',
+    description: 'Security testing standards and procedures',
+    controls: ['DEF-29', 'DEF-30'],
+    selected: true,
+    template: `# Security Testing Policy
+
+## 1. Security Testing Framework
+{COMPANY_NAME} implements comprehensive security testing to validate the effectiveness of security controls and identify vulnerabilities.
+
+## 2. Testing Management
+Security testing is managed by {CISO_NAME} with technical execution by {IT_MANAGER_NAME} and executive oversight from {CEO_NAME}.
+
+## 3. Testing Types
+- Vulnerability scanning
+- Security code review
+- Configuration testing
+- Access control testing
+- Encryption validation
+
+## 4. Testing Schedule
+- Continuous automated testing
+- Monthly vulnerability scans
+- Quarterly security assessments
+- Annual penetration tests
+
+## 5. Testing Documentation
+- Test plans and procedures
+- Results documentation
+- Remediation tracking
+- Lessons learned
+
+Company: {COMPANY_NAME}
+Security Testing Lead: {CISO_NAME}
+Technical Execution: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'def-015',
+    title: 'Security Architecture Policy',
+    category: 'Defence',
+    priority: 'High',
+    domain: 'Cybersecurity Defence',
+    description: 'Security architecture design and implementation',
+    controls: ['DEF-31', 'DEF-32'],
+    selected: true,
+    template: `# Security Architecture Policy
+
+## 1. Security Architecture Framework
+{COMPANY_NAME} implements security architecture principles to ensure comprehensive protection across all systems and applications.
+
+## 2. Architecture Authority
+Security architecture is led by {CISO_NAME} with technical design by {IT_MANAGER_NAME} and executive approval from {CEO_NAME}.
+
+## 3. Architecture Principles
+- Defense in depth
+- Least privilege access
+- Fail-safe defaults
+- Complete mediation
+- Separation of duties
+
+## 4. Architecture Components
+- Network security architecture
+- Application security architecture
+- Data security architecture
+- Identity architecture
+
+## 5. Architecture Governance
+- Design reviews
+- Architecture standards
+- Technology selection
+- Implementation oversight
+
+Organization: {COMPANY_NAME}
+Chief Architect: {CISO_NAME}
+Technical Lead: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'def-016',
+    title: 'Threat Intelligence Policy',
+    category: 'Defence',
+    priority: 'Medium',
+    domain: 'Cybersecurity Defence',
+    description: 'Threat intelligence collection and analysis',
+    controls: ['DEF-33', 'DEF-34'],
+    selected: true,
+    template: `# Threat Intelligence Policy
+
+## 1. Threat Intelligence Framework
+{COMPANY_NAME} leverages threat intelligence to enhance security awareness and improve defensive capabilities.
+
+## 2. Intelligence Management
+Threat intelligence is managed by {CISO_NAME} with analysis support from {IT_MANAGER_NAME} and strategic oversight from {CEO_NAME}.
+
+## 3. Intelligence Sources
+- Commercial threat feeds
+- Government advisories
+- Industry sharing groups
+- Open source intelligence
+- Internal analysis
+
+## 4. Intelligence Process
+- Collection requirements
+- Processing and analysis
+- Dissemination and sharing
+- Action and response
+
+## 5. Intelligence Application
+- Security tool enhancement
+- Risk assessment updates
+- Incident response support
+- Training and awareness
+
+Company: {COMPANY_NAME}
+Threat Intelligence Lead: {CISO_NAME}
+Analysis Support: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'def-017',
+    title: 'Security Operations Policy',
+    category: 'Defence',
+    priority: 'High',
+    domain: 'Cybersecurity Defence',
+    description: '24/7 security operations and monitoring',
+    controls: ['DEF-35', 'DEF-36'],
+    selected: true,
+    template: `# Security Operations Policy
+
+## 1. Security Operations Framework
+{COMPANY_NAME} maintains 24/7 security operations to detect, analyze, and respond to security threats and incidents.
+
+## 2. Operations Management
+Security operations are led by {CISO_NAME} with operational management by {IT_MANAGER_NAME} and executive support from {CEO_NAME}.
+
+## 3. Operations Scope
+- Continuous monitoring
+- Incident detection
+- Threat analysis
+- Response coordination
+- Forensic support
+
+## 4. Operations Team
+- Security Operations Center (SOC)
+- Incident response team
+- Threat hunters
+- Forensic analysts
+
+## 5. Operations Procedures
+- Event monitoring
+- Alert triage
+- Incident escalation
+- Response execution
+
+Organization: {COMPANY_NAME}
+SOC Manager: {CISO_NAME}
+Operations Lead: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'def-018',
+    title: 'API Security Policy',
+    category: 'Defence',
+    priority: 'High',
+    domain: 'Cybersecurity Defence',
+    description: 'API security design and implementation standards',
+    controls: ['DEF-37', 'DEF-38'],
+    selected: true,
+    template: `# API Security Policy
+
+## 1. API Security Framework
+{COMPANY_NAME} secures application programming interfaces (APIs) to protect against unauthorized access and data exposure.
+
+## 2. API Security Management
+API security is managed by {CISO_NAME} with development support from {IT_MANAGER_NAME} and governance from {CEO_NAME}.
+
+## 3. API Security Controls
+- Authentication and authorization
+- Input validation
+- Rate limiting
+- Encryption and signing
+- Monitoring and logging
+
+## 4. API Design Requirements
+- Security by design
+- Minimal data exposure
+- Error handling
+- Version management
+
+## 5. API Testing
+- Security testing
+- Penetration testing
+- Vulnerability scanning
+- Code review
+
+Company: {COMPANY_NAME}
+API Security Lead: {CISO_NAME}
+Development Support: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'def-019',
+    title: 'Secure Development Policy',
+    category: 'Defence',
+    priority: 'High',
+    domain: 'Cybersecurity Defence',
+    description: 'Secure software development lifecycle practices',
+    controls: ['DEF-39', 'DEF-40'],
+    selected: true,
+    template: `# Secure Development Policy
+
+## 1. Secure Development Framework
+{COMPANY_NAME} integrates security throughout the software development lifecycle to prevent vulnerabilities and ensure secure applications.
+
+## 2. Development Security Management
+Secure development is coordinated by {CISO_NAME} with development leadership from {IT_MANAGER_NAME} and executive support from {CEO_NAME}.
+
+## 3. Security Requirements
+- Security requirements analysis
+- Threat modeling
+- Secure coding standards
+- Security testing
+- Code review
+
+## 4. Development Controls
+- Static application security testing (SAST)
+- Dynamic application security testing (DAST)
+- Interactive application security testing (IAST)
+- Software composition analysis (SCA)
+
+## 5. Development Training
+- Secure coding training
+- Security awareness
+- Threat modeling techniques
+- Tool usage training
+
+Organization: {COMPANY_NAME}
+Secure Development Lead: {CISO_NAME}
+Development Manager: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'def-020',
+    title: 'Identity Governance Policy',
+    category: 'Defence',
+    priority: 'High',
+    domain: 'Cybersecurity Defence',
+    description: 'Identity lifecycle governance and access certification',
+    controls: ['DEF-41', 'DEF-42'],
+    selected: true,
+    template: `# Identity Governance Policy
+
+## 1. Identity Governance Framework
+{COMPANY_NAME} implements identity governance to ensure appropriate access rights throughout the identity lifecycle.
+
+## 2. Governance Authority
+Identity governance is managed by {IT_MANAGER_NAME} with policy oversight from {CISO_NAME} and executive approval from {CEO_NAME}.
+
+## 3. Identity Lifecycle
+- Identity creation and provisioning
+- Access request and approval
+- Periodic access certification
+- Access modification
+- Identity deprovisioning
+
+## 4. Governance Processes
+- Role-based access control
+- Segregation of duties
+- Access reviews and certification
+- Privileged access governance
+
+## 5. Governance Reporting
+- Access compliance reports
+- Identity risk assessments
+- Governance metrics
+- Audit trail documentation
+
+Company: {COMPANY_NAME}
+Identity Governance Lead: {IT_MANAGER_NAME}
+Policy Authority: {CISO_NAME}
+Executive Oversight: {CEO_NAME}`
+  },
+
+  // Continue with remaining Defence policies (15-20)
+  {
+    id: 'def-015',
+    title: 'Security Architecture Policy',
+    category: 'Defence',
+    priority: 'High',
+    domain: 'Cybersecurity Defence',
+    description: 'Security architecture design and implementation',
+    controls: ['DEF-31', 'DEF-32'],
+    selected: true,
+    template: `# Security Architecture Policy
+
+## 1. Security Architecture Framework
+{COMPANY_NAME} implements security architecture principles to ensure comprehensive protection across all systems and applications.
+
+## 2. Architecture Authority
+Security architecture is led by {CISO_NAME} with technical design by {IT_MANAGER_NAME} and executive approval from {CEO_NAME}.
+
+## 3. Architecture Principles
+- Defense in depth
+- Least privilege access
+- Fail-safe defaults
+- Complete mediation
+- Separation of duties
+
+## 4. Architecture Components
+- Network security architecture
+- Application security architecture
+- Data security architecture
+- Identity architecture
+
+## 5. Architecture Governance
+- Design reviews
+- Architecture standards
+- Technology selection
+- Implementation oversight
+
+Organization: {COMPANY_NAME}
+Chief Architect: {CISO_NAME}
+Technical Lead: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'def-016',
+    title: 'Threat Intelligence Policy',
+    category: 'Defence',
+    priority: 'Medium',
+    domain: 'Cybersecurity Defence',
+    description: 'Threat intelligence collection and analysis',
+    controls: ['DEF-33', 'DEF-34'],
+    selected: true,
+    template: `# Threat Intelligence Policy
+
+## 1. Threat Intelligence Framework
+{COMPANY_NAME} leverages threat intelligence to enhance security awareness and improve defensive capabilities.
+
+## 2. Intelligence Management
+Threat intelligence is managed by {CISO_NAME} with analysis support from {IT_MANAGER_NAME} and strategic oversight from {CEO_NAME}.
+
+## 3. Intelligence Sources
+- Commercial threat feeds
+- Government advisories
+- Industry sharing groups
+- Open source intelligence
+- Internal analysis
+
+## 4. Intelligence Process
+- Collection requirements
+- Processing and analysis
+- Dissemination and sharing
+- Action and response
+
+## 5. Intelligence Application
+- Security tool enhancement
+- Risk assessment updates
+- Incident response support
+- Training and awareness
+
+Company: {COMPANY_NAME}
+Threat Intelligence Lead: {CISO_NAME}
+Analysis Support: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'def-017',
+    title: 'Security Operations Policy',
+    category: 'Defence',
+    priority: 'High',
+    domain: 'Cybersecurity Defence',
+    description: '24/7 security operations and monitoring',
+    controls: ['DEF-35', 'DEF-36'],
+    selected: true,
+    template: `# Security Operations Policy
+
+## 1. Security Operations Framework
+{COMPANY_NAME} maintains 24/7 security operations to detect, analyze, and respond to security threats and incidents.
+
+## 2. Operations Management
+Security operations are led by {CISO_NAME} with operational management by {IT_MANAGER_NAME} and executive support from {CEO_NAME}.
+
+## 3. Operations Scope
+- Continuous monitoring
+- Incident detection
+- Threat analysis
+- Response coordination
+- Forensic support
+
+## 4. Operations Team
+- Security Operations Center (SOC)
+- Incident response team
+- Threat hunters
+- Forensic analysts
+
+## 5. Operations Procedures
+- Event monitoring
+- Alert triage
+- Incident escalation
+- Response execution
+
+Organization: {COMPANY_NAME}
+SOC Manager: {CISO_NAME}
+Operations Lead: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'def-018',
+    title: 'API Security Policy',
+    category: 'Defence',
+    priority: 'High',
+    domain: 'Cybersecurity Defence',
+    description: 'API security design and implementation standards',
+    controls: ['DEF-37', 'DEF-38'],
+    selected: true,
+    template: `# API Security Policy
+
+## 1. API Security Framework
+{COMPANY_NAME} secures application programming interfaces (APIs) to protect against unauthorized access and data exposure.
+
+## 2. API Security Management
+API security is managed by {CISO_NAME} with development support from {IT_MANAGER_NAME} and governance from {CEO_NAME}.
+
+## 3. API Security Controls
+- Authentication and authorization
+- Input validation
+- Rate limiting
+- Encryption and signing
+- Monitoring and logging
+
+## 4. API Design Requirements
+- Security by design
+- Minimal data exposure
+- Error handling
+- Version management
+
+## 5. API Testing
+- Security testing
+- Penetration testing
+- Vulnerability scanning
+- Code review
+
+Company: {COMPANY_NAME}
+API Security Lead: {CISO_NAME}
+Development Support: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'def-019',
+    title: 'Secure Development Policy',
+    category: 'Defence',
+    priority: 'High',
+    domain: 'Cybersecurity Defence',
+    description: 'Secure software development lifecycle practices',
+    controls: ['DEF-39', 'DEF-40'],
+    selected: true,
+    template: `# Secure Development Policy
+
+## 1. Secure Development Framework
+{COMPANY_NAME} integrates security throughout the software development lifecycle to prevent vulnerabilities and ensure secure applications.
+
+## 2. Development Security Management
+Secure development is coordinated by {CISO_NAME} with development leadership from {IT_MANAGER_NAME} and executive support from {CEO_NAME}.
+
+## 3. Security Requirements
+- Security requirements analysis
+- Threat modeling
+- Secure coding standards
+- Security testing
+- Code review
+
+## 4. Development Controls
+- Static application security testing (SAST)
+- Dynamic application security testing (DAST)
+- Interactive application security testing (IAST)
+- Software composition analysis (SCA)
+
+## 5. Development Training
+- Secure coding training
+- Security awareness
+- Threat modeling techniques
+- Tool usage training
+
+Organization: {COMPANY_NAME}
+Secure Development Lead: {CISO_NAME}
+Development Manager: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'def-020',
+    title: 'Identity Governance Policy',
+    category: 'Defence',
+    priority: 'High',
+    domain: 'Cybersecurity Defence',
+    description: 'Identity lifecycle governance and access certification',
+    controls: ['DEF-41', 'DEF-42'],
+    selected: true,
+    template: `# Identity Governance Policy
+
+## 1. Identity Governance Framework
+{COMPANY_NAME} implements identity governance to ensure appropriate access rights throughout the identity lifecycle.
+
+## 2. Governance Authority
+Identity governance is managed by {IT_MANAGER_NAME} with policy oversight from {CISO_NAME} and executive approval from {CEO_NAME}.
+
+## 3. Identity Lifecycle
+- Identity creation and provisioning
+- Access request and approval
+- Periodic access certification
+- Access modification
+- Identity deprovisioning
+
+## 4. Governance Processes
+- Role-based access control
+- Segregation of duties
+- Access reviews and certification
+- Privileged access governance
+
+## 5. Governance Reporting
+- Access compliance reports
+- Identity risk assessments
+- Governance metrics
+- Audit trail documentation
+
+Company: {COMPANY_NAME}
+Identity Governance Lead: {IT_MANAGER_NAME}
+Policy Authority: {CISO_NAME}
+Executive Oversight: {CEO_NAME}`
   },
 
   // Cybersecurity Resilience Domain (20 policies)
@@ -862,6 +2349,609 @@ Founded: {ESTABLISHED_YEAR}
 Workforce: {EMPLOYEE_COUNT}
 Industry: {INDUSTRY}
 Headquarters: {HEADQUARTERS_LOCATION}`
+  },
+  {
+    id: 'res-006',
+    title: 'Disaster Recovery Policy',
+    category: 'Resilience',
+    priority: 'High',
+    domain: 'Cybersecurity Resilience',
+    description: 'Disaster recovery planning and procedures',
+    controls: ['RES-11', 'RES-12'],
+    selected: true,
+    template: `# Disaster Recovery Policy
+
+## 1. Disaster Recovery Framework
+{COMPANY_NAME} maintains comprehensive disaster recovery capabilities to restore critical operations following major disruptions.
+
+## 2. DR Management
+Disaster recovery is led by {CISO_NAME} with operational coordination by {IT_MANAGER_NAME} and executive oversight from {CEO_NAME}.
+
+## 3. Recovery Strategies
+- Data backup and restoration
+- System recovery procedures
+- Alternative site operations
+- Communication plans
+
+## 4. Recovery Teams
+- Disaster Recovery Coordinator: {CISO_NAME}
+- Technical Recovery Team: {IT_MANAGER_NAME}
+- Business Recovery Team: {COMPLIANCE_OFFICER}
+- Executive Command: {CEO_NAME}
+
+## 5. Testing and Maintenance
+- Annual DR exercises
+- Plan updates and reviews
+- Technology refresh
+- Training programs
+
+Company: {COMPANY_NAME}
+DR Coordinator: {CISO_NAME}
+Executive Sponsor: {CEO_NAME}`
+  },
+  {
+    id: 'res-007',
+    title: 'Incident Management Policy',
+    category: 'Resilience',
+    priority: 'High',
+    domain: 'Cybersecurity Resilience',
+    description: 'IT service incident management procedures',
+    controls: ['RES-13', 'RES-14'],
+    selected: true,
+    template: `# Incident Management Policy
+
+## 1. Incident Management Framework
+{COMPANY_NAME} implements structured incident management to minimize business impact and restore normal operations quickly.
+
+## 2. Incident Management Authority
+Incident management is coordinated by {IT_MANAGER_NAME} with security incidents escalated to {CISO_NAME} and executive notification to {CEO_NAME}.
+
+## 3. Incident Categories
+- Priority 1: Critical business impact
+- Priority 2: High business impact
+- Priority 3: Medium business impact
+- Priority 4: Low business impact
+
+## 4. Response Procedures
+- Incident detection and logging
+- Classification and prioritization
+- Investigation and diagnosis
+- Resolution and recovery
+- Closure and review
+
+## 5. Escalation Matrix
+- Level 1: Service Desk
+- Level 2: Technical Specialists
+- Level 3: Senior Engineers
+- Level 4: Vendor Support
+
+Organization: {COMPANY_NAME}
+Incident Manager: {IT_MANAGER_NAME}
+Security Escalation: {CISO_NAME}`
+  },
+  {
+    id: 'res-008',
+    title: 'Problem Management Policy',
+    category: 'Resilience',
+    priority: 'Medium',
+    domain: 'Cybersecurity Resilience',
+    description: 'Root cause analysis and problem resolution',
+    controls: ['RES-15', 'RES-16'],
+    selected: true,
+    template: `# Problem Management Policy
+
+## 1. Problem Management Framework
+{COMPANY_NAME} implements proactive problem management to identify and resolve root causes of recurring incidents.
+
+## 2. Problem Management Authority
+Problem management is led by {IT_MANAGER_NAME} with quality oversight from {CISO_NAME} and governance from {CEO_NAME}.
+
+## 3. Problem Categories
+- Known problems with workarounds
+- Problem under investigation
+- Problem requiring vendor support
+- Proactive problem identification
+
+## 4. Problem Process
+- Problem identification
+- Problem investigation
+- Workaround implementation
+- Root cause analysis
+- Permanent solution
+
+## 5. Problem Review
+- Monthly problem reviews
+- Trend analysis
+- Process improvements
+- Knowledge base updates
+
+Company: {COMPANY_NAME}
+Problem Manager: {IT_MANAGER_NAME}
+Quality Oversight: {CISO_NAME}`
+  },
+  {
+    id: 'res-009',
+    title: 'Service Continuity Policy',
+    category: 'Resilience',
+    priority: 'High',
+    domain: 'Cybersecurity Resilience',
+    description: 'IT service continuity planning and management',
+    controls: ['RES-17', 'RES-18'],
+    selected: true,
+    template: `# Service Continuity Policy
+
+## 1. Service Continuity Framework
+{COMPANY_NAME} ensures continuity of critical IT services to support business operations during disruptions.
+
+## 2. Continuity Management
+Service continuity is managed by {IT_MANAGER_NAME} with business alignment by {COMPLIANCE_OFFICER} and executive support from {CEO_NAME}.
+
+## 3. Service Dependencies
+- Critical business services
+- Supporting IT services
+- Infrastructure dependencies
+- Vendor service dependencies
+
+## 4. Continuity Strategies
+- Service redundancy
+- Failover procedures
+- Load balancing
+- Geographic distribution
+
+## 5. Testing and Validation
+- Regular continuity testing
+- Service impact analysis
+- Recovery validation
+- Plan maintenance
+
+Organization: {COMPANY_NAME}
+Service Continuity Manager: {IT_MANAGER_NAME}
+Business Liaison: {COMPLIANCE_OFFICER}`
+  },
+  {
+    id: 'res-010',
+    title: 'Configuration Management Policy',
+    category: 'Resilience',
+    priority: 'Medium',
+    domain: 'Cybersecurity Resilience',
+    description: 'IT configuration management and CMDB',
+    controls: ['RES-19', 'RES-20'],
+    selected: true,
+    template: `# Configuration Management Policy
+
+## 1. Configuration Management Framework
+{COMPANY_NAME} maintains accurate configuration information to support effective IT service management and change control.
+
+## 2. Configuration Management Authority
+Configuration management is led by {IT_MANAGER_NAME} with data governance from {CISO_NAME} and oversight from {CEO_NAME}.
+
+## 3. Configuration Items (CIs)
+- Hardware components
+- Software applications
+- Network components
+- Documentation
+- Personnel information
+
+## 4. CMDB Management
+- Configuration discovery
+- Data accuracy validation
+- Relationship mapping
+- Change tracking
+
+## 5. Configuration Control
+- Baseline establishment
+- Change authorization
+- Version control
+- Audit procedures
+
+Company: {COMPANY_NAME}
+Configuration Manager: {IT_MANAGER_NAME}
+Data Governance: {CISO_NAME}`
+  },
+  {
+    id: 'res-011',
+    title: 'Availability Management Policy',
+    category: 'Resilience',
+    priority: 'Medium',
+    domain: 'Cybersecurity Resilience',
+    description: 'IT service availability planning and monitoring',
+    controls: ['RES-21', 'RES-22'],
+    selected: true,
+    template: `# Availability Management Policy
+
+## 1. Availability Management Framework
+{COMPANY_NAME} ensures IT services meet agreed availability requirements to support business objectives.
+
+## 2. Availability Management Authority
+Availability management is coordinated by {IT_MANAGER_NAME} with reliability engineering support and executive oversight from {CEO_NAME}.
+
+## 3. Availability Requirements
+- Service level agreements
+- Business availability requirements
+- Recovery time objectives
+- Recovery point objectives
+
+## 4. Availability Design
+- Redundancy planning
+- Fault tolerance
+- Load distribution
+- Maintenance windows
+
+## 5. Availability Monitoring
+- Real-time monitoring
+- Performance trending
+- Availability reporting
+- Improvement planning
+
+Organization: {COMPANY_NAME}
+Availability Manager: {IT_MANAGER_NAME}
+Executive Sponsor: {CEO_NAME}`
+  },
+  {
+    id: 'res-012',
+    title: 'Performance Management Policy',
+    category: 'Resilience',
+    priority: 'Medium',
+    domain: 'Cybersecurity Resilience',
+    description: 'IT performance monitoring and optimization',
+    controls: ['RES-23', 'RES-24'],
+    selected: true,
+    template: `# Performance Management Policy
+
+## 1. Performance Management Framework
+{COMPANY_NAME} monitors and optimizes IT performance to ensure services meet business requirements and user expectations.
+
+## 2. Performance Management Authority
+Performance management is led by {IT_MANAGER_NAME} with analytics support and governance from {CEO_NAME}.
+
+## 3. Performance Metrics
+- Response time
+- Throughput
+- Resource utilization
+- Error rates
+- User satisfaction
+
+## 4. Performance Monitoring
+- Real-time monitoring
+- Trend analysis
+- Threshold alerting
+- Capacity planning
+
+## 5. Performance Optimization
+- Bottleneck identification
+- Tuning activities
+- Capacity upgrades
+- Process improvements
+
+Company: {COMPANY_NAME}
+Performance Manager: {IT_MANAGER_NAME}
+Analytics Lead: {CISO_NAME}`
+  },
+  {
+    id: 'res-013',
+    title: 'IT Asset Recovery Policy',
+    category: 'Resilience',
+    priority: 'Medium',
+    domain: 'Cybersecurity Resilience',
+    description: 'IT asset recovery and restoration procedures',
+    controls: ['RES-25', 'RES-26'],
+    selected: true,
+    template: `# IT Asset Recovery Policy
+
+## 1. Asset Recovery Framework
+{COMPANY_NAME} maintains procedures for rapid recovery and restoration of critical IT assets during and after incidents.
+
+## 2. Recovery Management
+Asset recovery is coordinated by {IT_MANAGER_NAME} with security validation by {CISO_NAME} and executive oversight from {CEO_NAME}.
+
+## 3. Asset Categories
+- Critical servers and systems
+- Network infrastructure
+- Data storage systems
+- Security appliances
+- Communication systems
+
+## 4. Recovery Procedures
+- Asset inventory verification
+- Damage assessment
+- Recovery prioritization
+- Restoration execution
+- Validation testing
+
+## 5. Recovery Resources
+- Spare equipment inventory
+- Vendor support contracts
+- Emergency procurement
+- Alternative solutions
+
+Organization: {COMPANY_NAME}
+Asset Recovery Lead: {IT_MANAGER_NAME}
+Security Validation: {CISO_NAME}`
+  },
+  {
+    id: 'res-014',
+    title: 'Data Recovery Policy',
+    category: 'Resilience',
+    priority: 'High',
+    domain: 'Cybersecurity Resilience',
+    description: 'Data recovery and restoration procedures',
+    controls: ['RES-27', 'RES-28'],
+    selected: true,
+    template: `# Data Recovery Policy
+
+## 1. Data Recovery Framework
+{COMPANY_NAME} implements comprehensive data recovery procedures to restore critical information following data loss incidents.
+
+## 2. Recovery Authority
+Data recovery is managed by {IT_MANAGER_NAME} with security oversight from {CISO_NAME} and business coordination by {COMPLIANCE_OFFICER}.
+
+## 3. Data Recovery Scope
+- Database restoration
+- File system recovery
+- Application data recovery
+- Configuration data restoration
+
+## 4. Recovery Procedures
+- Data loss assessment
+- Recovery point determination
+- Backup verification
+- Recovery execution
+- Data integrity validation
+
+## 5. Recovery Testing
+- Regular recovery drills
+- Backup integrity testing
+- Recovery time validation
+- Process improvement
+
+Company: {COMPANY_NAME}
+Data Recovery Manager: {IT_MANAGER_NAME}
+Security Oversight: {CISO_NAME}
+Business Coordination: {COMPLIANCE_OFFICER}`
+  },
+  {
+    id: 'res-015',
+    title: 'Communication Recovery Policy',
+    category: 'Resilience',
+    priority: 'Medium',
+    domain: 'Cybersecurity Resilience',
+    description: 'Communication system recovery and continuity',
+    controls: ['RES-29', 'RES-30'],
+    selected: true,
+    template: `# Communication Recovery Policy
+
+## 1. Communication Recovery Framework
+{COMPANY_NAME} ensures rapid recovery of communication systems to maintain business operations and stakeholder connectivity.
+
+## 2. Recovery Management
+Communication recovery is led by {IT_MANAGER_NAME} with coordination support from {COMPLIANCE_OFFICER} and executive oversight from {CEO_NAME}.
+
+## 3. Communication Systems
+- Email systems
+- Voice communications
+- Video conferencing
+- Instant messaging
+- External communications
+
+## 4. Recovery Strategies
+- Redundant communication paths
+- Alternative service providers
+- Mobile communication options
+- Emergency communication procedures
+
+## 5. Recovery Procedures
+- System status assessment
+- Alternative activation
+- User notification
+- Service restoration
+- Normal operations resume
+
+Organization: {COMPANY_NAME}
+Communication Recovery Lead: {IT_MANAGER_NAME}
+Coordination: {COMPLIANCE_OFFICER}`
+  },
+  {
+    id: 'res-016',
+    title: 'Supply Chain Resilience Policy',
+    category: 'Resilience',
+    priority: 'Medium',
+    domain: 'Cybersecurity Resilience',
+    description: 'IT supply chain resilience and continuity',
+    controls: ['RES-31', 'RES-32'],
+    selected: true,
+    template: `# Supply Chain Resilience Policy
+
+## 1. Supply Chain Resilience Framework
+{COMPANY_NAME} builds resilience into IT supply chain relationships to ensure continuity of critical services and supplies.
+
+## 2. Resilience Management
+Supply chain resilience is managed by {COMPLIANCE_OFFICER} with technical assessment by {IT_MANAGER_NAME} and governance from {CEO_NAME}.
+
+## 3. Critical Suppliers
+- Technology vendors
+- Service providers
+- Cloud providers
+- Maintenance contractors
+- Security suppliers
+
+## 4. Resilience Strategies
+- Supplier diversification
+- Alternate supply sources
+- Contract terms for continuity
+- Supplier monitoring
+
+## 5. Continuity Planning
+- Supplier risk assessment
+- Contingency procedures
+- Emergency procurement
+- Relationship management
+
+Company: {COMPANY_NAME}
+Supply Chain Manager: {COMPLIANCE_OFFICER}
+Technical Assessment: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'res-017',
+    title: 'Operational Resilience Policy',
+    category: 'Resilience',
+    priority: 'High',
+    domain: 'Cybersecurity Resilience',
+    description: 'Overall operational resilience framework',
+    controls: ['RES-33', 'RES-34'],
+    selected: true,
+    template: `# Operational Resilience Policy
+
+## 1. Operational Resilience Framework
+{COMPANY_NAME} builds operational resilience to absorb, adapt, and recover from operational disruptions while maintaining critical functions.
+
+## 2. Resilience Governance
+Operational resilience is led by {CEO_NAME} with coordination by {CISO_NAME} and operational management by {IT_MANAGER_NAME}.
+
+## 3. Resilience Capabilities
+- Risk identification and assessment
+- Impact tolerance setting
+- Scenario testing
+- Response and recovery
+- Learning and adaptation
+
+## 4. Critical Operations
+- Customer-facing services
+- Payment processing
+- Data processing
+- Communication systems
+- Security functions
+
+## 5. Resilience Testing
+- Scenario-based testing
+- Stress testing
+- Recovery exercises
+- Lessons learned integration
+
+Organization: {COMPANY_NAME}
+Chief Resilience Officer: {CEO_NAME}
+Operational Lead: {CISO_NAME}`
+  },
+  {
+    id: 'res-018',
+    title: 'Crisis Communication Policy',
+    category: 'Resilience',
+    priority: 'High',
+    domain: 'Cybersecurity Resilience',
+    description: 'Crisis communication procedures and protocols',
+    controls: ['RES-35', 'RES-36'],
+    selected: true,
+    template: `# Crisis Communication Policy
+
+## 1. Crisis Communication Framework
+{COMPANY_NAME} maintains effective crisis communication to ensure timely, accurate information flow during emergencies.
+
+## 2. Communication Authority
+Crisis communication is led by {CEO_NAME} with operational coordination by {COMPLIANCE_OFFICER} and technical support from {CISO_NAME}.
+
+## 3. Communication Audiences
+- Internal stakeholders
+- Customers and clients
+- Regulatory authorities
+- Media and public
+- Business partners
+
+## 4. Communication Channels
+- Internal communication systems
+- Public relations channels
+- Regulatory reporting
+- Customer notification
+- Social media management
+
+## 5. Message Management
+- Approved messaging templates
+- Fact verification procedures
+- Spokesperson designation
+- Timeline coordination
+
+Company: {COMPANY_NAME}
+Crisis Communication Lead: {CEO_NAME}
+Operational Coordinator: {COMPLIANCE_OFFICER}`
+  },
+  {
+    id: 'res-019',
+    title: 'Recovery Testing Policy',
+    category: 'Resilience',
+    priority: 'Medium',
+    domain: 'Cybersecurity Resilience',
+    description: 'Recovery and resilience testing procedures',
+    controls: ['RES-37', 'RES-38'],
+    selected: true,
+    template: `# Recovery Testing Policy
+
+## 1. Recovery Testing Framework
+{COMPANY_NAME} conducts regular recovery testing to validate the effectiveness of business continuity and disaster recovery plans.
+
+## 2. Testing Management
+Recovery testing is coordinated by {CISO_NAME} with technical execution by {IT_MANAGER_NAME} and executive oversight from {CEO_NAME}.
+
+## 3. Testing Types
+- Desktop exercises
+- Functional testing
+- Full-scale exercises
+- Component testing
+- End-to-end testing
+
+## 4. Testing Schedule
+- Monthly component tests
+- Quarterly functional tests
+- Annual full-scale exercises
+- Ad-hoc scenario testing
+
+## 5. Testing Documentation
+- Test plans and procedures
+- Results and findings
+- Improvement recommendations
+- Plan updates
+
+Organization: {COMPANY_NAME}
+Recovery Testing Lead: {CISO_NAME}
+Technical Execution: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'res-020',
+    title: 'Resilience Metrics Policy',
+    category: 'Resilience',
+    priority: 'Medium',
+    domain: 'Cybersecurity Resilience',
+    description: 'Resilience measurement and reporting',
+    controls: ['RES-39', 'RES-40'],
+    selected: true,
+    template: `# Resilience Metrics Policy
+
+## 1. Resilience Metrics Framework
+{COMPANY_NAME} measures and reports on resilience capabilities to demonstrate preparedness and drive continuous improvement.
+
+## 2. Metrics Management
+Resilience metrics are managed by {CISO_NAME} with data collection by {IT_MANAGER_NAME} and reporting to {CEO_NAME}.
+
+## 3. Key Metrics
+- Recovery time actuals vs. objectives
+- System availability performance
+- Incident response effectiveness
+- Test exercise success rates
+- Business impact minimization
+
+## 4. Reporting Framework
+- Monthly operational reports
+- Quarterly resilience assessments
+- Annual resilience reviews
+- Executive dashboards
+
+## 5. Improvement Process
+- Metric trend analysis
+- Performance gap identification
+- Corrective action planning
+- Best practice implementation
+
+Company: {COMPANY_NAME}
+Resilience Metrics Lead: {CISO_NAME}
+Data Collection: {IT_MANAGER_NAME}
+Executive Reporting: {CEO_NAME}`
   },
 
   // Third Party Cloud Computing Domain (10 policies)
@@ -1223,6 +3313,207 @@ Corporate Website: {WEBSITE}
 Year Established: {ESTABLISHED_YEAR}
 Workforce: {EMPLOYEE_COUNT} employees
 Headquarters Location: {HEADQUARTERS_LOCATION}`
+  },
+  {
+    id: 'cloud-006',
+    title: 'Cloud Incident Response Policy',
+    category: 'Cloud',
+    priority: 'High',
+    domain: 'Third Party Cloud Computing',
+    description: 'Cloud-specific incident response procedures',
+    controls: ['CLOUD-11', 'CLOUD-12'],
+    selected: true,
+    template: `# Cloud Incident Response Policy
+
+## 1. Cloud Incident Response Framework
+{COMPANY_NAME} implements specialized incident response procedures for cloud environments to address unique cloud security challenges.
+
+## 2. Cloud Incident Management
+Cloud incident response is led by {CISO_NAME} with cloud operations support from {IT_MANAGER_NAME} and executive coordination by {CEO_NAME}.
+
+## 3. Cloud Incident Types
+- Data breaches in cloud storage
+- Compromised cloud accounts
+- Misconfigured cloud services
+- Cloud service outages
+- Unauthorized cloud access
+
+## 4. Response Procedures
+- Cloud-specific detection and analysis
+- Cloud service provider notification
+- Evidence preservation in cloud
+- Containment and eradication
+- Cloud service restoration
+
+## 5. Cloud Provider Coordination
+- Incident notification procedures
+- Evidence collection support
+- Forensic investigation assistance
+- Recovery coordination
+
+Company: {COMPANY_NAME}
+Cloud Incident Lead: {CISO_NAME}
+Cloud Operations: {IT_MANAGER_NAME}
+Executive Coordination: {CEO_NAME}`
+  },
+  {
+    id: 'cloud-007',
+    title: 'Cloud Configuration Management Policy',
+    category: 'Cloud',
+    priority: 'Medium',
+    domain: 'Third Party Cloud Computing',
+    description: 'Cloud service configuration and hardening standards',
+    controls: ['CLOUD-13', 'CLOUD-14'],
+    selected: true,
+    template: `# Cloud Configuration Management Policy
+
+## 1. Cloud Configuration Framework
+{COMPANY_NAME} implements secure configuration standards for all cloud services to reduce security risks and ensure compliance.
+
+## 2. Configuration Management Authority
+Cloud configuration is managed by {IT_MANAGER_NAME} with security validation by {CISO_NAME} and governance from {CEO_NAME}.
+
+## 3. Configuration Standards
+- Identity and access management settings
+- Network security configurations
+- Storage security settings
+- Logging and monitoring configurations
+- Encryption implementations
+
+## 4. Configuration Baseline
+- Secure configuration templates
+- Automated deployment scripts
+- Compliance validation tools
+- Configuration drift detection
+
+## 5. Change Management
+- Configuration change approval
+- Testing in non-production
+- Security impact assessment
+- Rollback procedures
+
+Organization: {COMPANY_NAME}
+Cloud Configuration Manager: {IT_MANAGER_NAME}
+Security Validation: {CISO_NAME}`
+  },
+  {
+    id: 'cloud-008',
+    title: 'Multi-Cloud Security Policy',
+    category: 'Cloud',
+    priority: 'Medium',
+    domain: 'Third Party Cloud Computing',
+    description: 'Security requirements for multi-cloud environments',
+    controls: ['CLOUD-15', 'CLOUD-16'],
+    selected: true,
+    template: `# Multi-Cloud Security Policy
+
+## 1. Multi-Cloud Security Framework
+{COMPANY_NAME} implements consistent security controls across multiple cloud providers to maintain unified security posture.
+
+## 2. Multi-Cloud Governance
+Multi-cloud security is coordinated by {CISO_NAME} with cloud architecture by {IT_MANAGER_NAME} and strategy oversight by {CEO_NAME}.
+
+## 3. Cloud Provider Requirements
+- Consistent security baselines
+- Standardized access controls
+- Unified monitoring and logging
+- Common incident response procedures
+
+## 4. Cross-Cloud Security
+- Identity federation
+- Network connectivity security
+- Data transfer protection
+- Compliance consistency
+
+## 5. Cloud Integration
+- API security between clouds
+- Workload portability security
+- Disaster recovery across clouds
+- Cost optimization security
+
+Company: {COMPANY_NAME}
+Multi-Cloud Security Lead: {CISO_NAME}
+Cloud Architecture: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'cloud-009',
+    title: 'Cloud Backup and Recovery Policy',
+    category: 'Cloud',
+    priority: 'High',
+    domain: 'Third Party Cloud Computing',
+    description: 'Cloud-based backup and recovery procedures',
+    controls: ['CLOUD-17', 'CLOUD-18'],
+    selected: true,
+    template: `# Cloud Backup and Recovery Policy
+
+## 1. Cloud Backup Framework
+{COMPANY_NAME} implements comprehensive cloud backup and recovery procedures to protect data and ensure business continuity.
+
+## 2. Backup Management
+Cloud backup is managed by {IT_MANAGER_NAME} with security oversight from {CISO_NAME} and business coordination by {CEO_NAME}.
+
+## 3. Backup Strategy
+- Automated cloud backups
+- Cross-region replication
+- Point-in-time recovery
+- Long-term archival
+
+## 4. Recovery Procedures
+- Recovery time objectives (RTO)
+- Recovery point objectives (RPO)
+- Business priority restoration
+- Data integrity validation
+
+## 5. Testing and Validation
+- Regular recovery testing
+- Backup integrity verification
+- Cross-cloud recovery testing
+- Disaster simulation exercises
+
+Organization: {COMPANY_NAME}
+Cloud Backup Manager: {IT_MANAGER_NAME}
+Security Oversight: {CISO_NAME}
+Business Coordination: {CEO_NAME}`
+  },
+  {
+    id: 'cloud-010',
+    title: 'Cloud Cost Security Policy',
+    category: 'Cloud',
+    priority: 'Medium',
+    domain: 'Third Party Cloud Computing',
+    description: 'Security considerations for cloud cost management',
+    controls: ['CLOUD-19', 'CLOUD-20'],
+    selected: true,
+    template: `# Cloud Cost Security Policy
+
+## 1. Cloud Cost Security Framework
+{COMPANY_NAME} integrates security considerations into cloud cost management to prevent cost-related security compromises.
+
+## 2. Cost Security Management
+Cloud cost security is coordinated by {COMPLIANCE_OFFICER} with technical implementation by {IT_MANAGER_NAME} and oversight by {CEO_NAME}.
+
+## 3. Cost Security Principles
+- Security controls maintained during cost optimization
+- Resource right-sizing without security compromise
+- Reserved instance security validation
+- Cost monitoring for security anomalies
+
+## 4. Financial Security Controls
+- Budget alerts for security services
+- Cost center security accountability
+- Vendor payment security
+- Contract security compliance
+
+## 5. Cost-Security Balance
+- Security investment justification
+- Risk-based cost decisions
+- Security service optimization
+- Compliance cost management
+
+Company: {COMPANY_NAME}
+Cloud Financial Security: {COMPLIANCE_OFFICER}
+Technical Implementation: {IT_MANAGER_NAME}
+Executive Oversight: {CEO_NAME}`
   },
 
   // Industrial Control Systems Domain (10 policies)
@@ -1595,6 +3886,210 @@ Establishment Date: {ESTABLISHED_YEAR}
 Workforce Size: {EMPLOYEE_COUNT}
 Corporate Headquarters: {HEADQUARTERS_LOCATION}
 Corporate Website: {WEBSITE}`
+  },
+  {
+    id: 'ics-006',
+    title: 'OT Network Security Policy',
+    category: 'ICS',
+    priority: 'High',
+    domain: 'Industrial Control Systems',
+    description: 'Operational technology network security requirements',
+    controls: ['ICS-11', 'ICS-12'],
+    selected: false,
+    template: `# OT Network Security Policy
+
+## 1. OT Network Security Framework
+{COMPANY_NAME} implements specialized network security controls for operational technology environments to protect industrial processes.
+
+## 2. OT Network Management
+OT network security is managed by {CISO_NAME} with operational support from {IT_MANAGER_NAME} and business oversight by {CEO_NAME}.
+
+## 3. Network Architecture
+- Air-gapped OT networks
+- Industrial DMZ implementation
+- Secure remote access
+- Network micro-segmentation
+
+## 4. Network Monitoring
+- Industrial protocol monitoring
+- Anomaly detection systems
+- Network traffic analysis
+- Security event correlation
+
+## 5. Access Controls
+- Role-based network access
+- Time-based access restrictions
+- Multi-factor authentication
+- Session monitoring
+
+Company: {COMPANY_NAME}
+OT Network Security Lead: {CISO_NAME}
+Operations Support: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'ics-007',
+    title: 'Industrial Asset Management Policy',
+    category: 'ICS',
+    priority: 'Medium',
+    domain: 'Industrial Control Systems',
+    description: 'Industrial asset inventory and lifecycle management',
+    controls: ['ICS-13', 'ICS-14'],
+    selected: false,
+    template: `# Industrial Asset Management Policy
+
+## 1. Industrial Asset Framework
+{COMPANY_NAME} maintains comprehensive inventory and lifecycle management of industrial control system assets.
+
+## 2. Asset Management Authority
+Industrial asset management is coordinated by {IT_MANAGER_NAME} with security classification by {CISO_NAME} and governance by {CEO_NAME}.
+
+## 3. Asset Categories
+- Control system hardware
+- Industrial software applications
+- Network infrastructure
+- Safety systems
+- Monitoring equipment
+
+## 4. Lifecycle Management
+- Asset procurement and deployment
+- Configuration and commissioning
+- Operational maintenance
+- End-of-life disposal
+
+## 5. Security Integration
+- Asset security assessment
+- Vulnerability management
+- Patch management coordination
+- Security configuration validation
+
+Organization: {COMPANY_NAME}
+Industrial Asset Manager: {IT_MANAGER_NAME}
+Security Classification: {CISO_NAME}`
+  },
+  {
+    id: 'ics-008',
+    title: 'Industrial Incident Response Policy',
+    category: 'ICS',
+    priority: 'High',
+    domain: 'Industrial Control Systems',
+    description: 'ICS-specific incident response procedures',
+    controls: ['ICS-15', 'ICS-16'],
+    selected: false,
+    template: `# Industrial Incident Response Policy
+
+## 1. Industrial Incident Framework
+{COMPANY_NAME} implements specialized incident response procedures for industrial control systems with safety and operational priorities.
+
+## 2. Incident Response Authority
+Industrial incident response is led by {CISO_NAME} with operational coordination by {IT_MANAGER_NAME} and executive oversight by {CEO_NAME}.
+
+## 3. Incident Types
+- Control system compromises
+- Safety system failures
+- Production disruptions
+- OT network intrusions
+- Industrial malware infections
+
+## 4. Response Priorities
+1. Personnel safety
+2. Environmental protection
+3. Asset protection
+4. Production continuity
+5. Evidence preservation
+
+## 5. Response Procedures
+- Safety-first assessment
+- Operational impact analysis
+- Containment strategies
+- Recovery coordination
+- Lessons learned integration
+
+Company: {COMPANY_NAME}
+Industrial Incident Lead: {CISO_NAME}
+Operations Coordination: {IT_MANAGER_NAME}`
+  },
+  {
+    id: 'ics-009',
+    title: 'Industrial Compliance Policy',
+    category: 'ICS',
+    priority: 'Medium',
+    domain: 'Industrial Control Systems',
+    description: 'Industrial control system regulatory compliance',
+    controls: ['ICS-17', 'ICS-18'],
+    selected: false,
+    template: `# Industrial Compliance Policy
+
+## 1. Industrial Compliance Framework
+{COMPANY_NAME} ensures industrial control systems comply with applicable safety, security, and operational regulations.
+
+## 2. Compliance Management
+Industrial compliance is managed by {COMPLIANCE_OFFICER} with technical assessment by {CISO_NAME} and executive accountability by {CEO_NAME}.
+
+## 3. Regulatory Requirements
+- Industry-specific safety standards
+- Cybersecurity frameworks (NIST, IEC 62443)
+- Environmental regulations
+- Operational compliance requirements
+
+## 4. Compliance Program
+- Regulatory monitoring
+- Gap assessments
+- Remediation planning
+- Audit coordination
+
+## 5. Compliance Reporting
+- Regulatory submissions
+- Compliance metrics
+- Audit findings
+- Corrective actions
+
+Organization: {COMPANY_NAME}
+Industrial Compliance Lead: {COMPLIANCE_OFFICER}
+Technical Assessment: {CISO_NAME}`
+  },
+  {
+    id: 'ics-010',
+    title: 'Industrial Training and Awareness Policy',
+    category: 'ICS',
+    priority: 'Medium',
+    domain: 'Industrial Control Systems',
+    description: 'ICS security training and awareness programs',
+    controls: ['ICS-19', 'ICS-20'],
+    selected: false,
+    template: `# Industrial Training and Awareness Policy
+
+## 1. Industrial Training Framework
+{COMPANY_NAME} provides specialized security training for industrial control system operators and maintainers.
+
+## 2. Training Management
+Industrial security training is coordinated by {CISO_NAME} with operational input from {IT_MANAGER_NAME} and executive support from {CEO_NAME}.
+
+## 3. Training Audience
+- Control system operators
+- Maintenance technicians
+- Engineering staff
+- Management personnel
+- Vendor personnel
+
+## 4. Training Content
+- ICS security fundamentals
+- Threat landscape awareness
+- Safe operational procedures
+- Incident response procedures
+- Regulatory requirements
+
+## 5. Training Delivery
+- Role-specific curricula
+- Hands-on simulations
+- Regular refresher training
+- Competency assessments
+
+Company: {COMPANY_NAME}
+Industrial Training Lead: {CISO_NAME}
+Operational Input: {IT_MANAGER_NAME}
+Executive Support: {CEO_NAME}
+Industry: {INDUSTRY}
+Location: {HEADQUARTERS_LOCATION}`
   }
 ];
 
@@ -2019,6 +4514,28 @@ export default function PolicyTemplateGenerator() {
                     ))}
                   </div>
                 </div>
+                <DocumentViewer
+                  content={replaceTemplateVariables(template.template)}
+                  metadata={{
+                    title: template.title,
+                    type: 'Policy Template',
+                    description: template.description,
+                    author: 'Policy Template System',
+                    createdDate: new Date().toLocaleDateString(),
+                    status: 'draft',
+                    priority: template.priority.toLowerCase() as 'high' | 'medium' | 'low',
+                    category: template.category
+                  }}
+                  triggerButton={
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Eye className="w-3 h-3" />
+                    </Button>
+                  }
+                />
               </div>
             ))}
           </div>
