@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import ComplianceScore from "@/components/dashboard/compliance-score";
-import DomainScores from "@/components/dashboard/domain-scores";
+import ComplianceRiskOverview from "@/components/dashboard/compliance-risk-overview";
+import NCADomainMatrix from "@/components/dashboard/nca-domain-matrix";
+import ApplicationMetrics from "@/components/dashboard/application-metrics";
 import VulnerabilitySummary from "@/components/dashboard/vulnerability-summary";
 import OnboardingExperience from "@/components/ciso/onboarding-experience";
 import ITManagerOnboarding from "@/components/ciso/it-manager-onboarding";
 import CTOOnboarding from "@/components/ciso/cto-onboarding";
 import SysAdminOnboarding from "@/components/ciso/sysadmin-onboarding";
-import { Shield, Bot, FileBarChart, Settings, Rocket, Monitor, Users } from "lucide-react";
+import { Shield, Bot, FileBarChart, Settings, Rocket, Monitor, Users, Database, TrendingUp } from "lucide-react";
 import { Link } from "wouter";
 
 export default function Dashboard() {
@@ -119,22 +120,46 @@ export default function Dashboard() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-3">
+        {/* Compliance Risk Overview */}
         <Card>
           <CardHeader>
-            <CardTitle>Overall Compliance</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Shield className="w-5 h-5" />
+              Compliance Risk Overview
+            </CardTitle>
+            <CardDescription>Real-time compliance scoring based on assessments and vulnerabilities</CardDescription>
           </CardHeader>
           <CardContent>
-            <ComplianceScore />
+            <ComplianceRiskOverview userId={userId} />
           </CardContent>
         </Card>
 
-        <Card className="md:col-span-2">
+        {/* NCA Domain Matrix */}
+        <Card>
           <CardHeader>
-            <CardTitle>Domain Scores</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Database className="w-5 h-5" />
+              NCA ECC Domain Matrix
+            </CardTitle>
+            <CardDescription>Domain-specific compliance tracking across the NCA framework</CardDescription>
           </CardHeader>
           <CardContent>
-            <DomainScores />
+            <NCADomainMatrix userId={userId} />
+          </CardContent>
+        </Card>
+
+        {/* Application Metrics */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5" />
+              Platform Metrics
+            </CardTitle>
+            <CardDescription>Application feature utilization and risk library coverage</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ApplicationMetrics userId={userId} />
           </CardContent>
         </Card>
       </div>
