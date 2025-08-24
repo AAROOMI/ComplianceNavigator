@@ -1068,6 +1068,619 @@ This Technology Evaluation Report assesses [Technology Name/Solution] for potent
 - Implementation planning and resource allocation
 - Success metrics and evaluation criteria`,
     requiredFields: ["organization_name", "evaluator", "technology_name"]
+  },
+
+  "IT Infrastructure Budget Document": {
+    description: "Comprehensive IT infrastructure budget planning and resource allocation",
+    sections: ["Budget Overview", "Infrastructure Costs", "Operational Expenses", "Capital Investments", "Cost Optimization"],
+    template: `# IT Infrastructure Budget Document
+
+## 1. Executive Summary
+This IT Infrastructure Budget Document outlines the financial planning and resource allocation for [Organization Name]'s IT infrastructure requirements for [Budget Period].
+
+## 2. Budget Overview
+### 2.1 Total Infrastructure Investment
+- Total infrastructure budget: $[Amount]
+- Hardware and equipment: [Amount]
+- Software licensing: [Amount]
+- Cloud services: [Amount]
+- Maintenance and support: [Amount]
+
+### 2.2 Budget Categories
+- **Server Infrastructure**: [Percentage]% ($[Amount])
+- **Network Equipment**: [Percentage]% ($[Amount])
+- **Storage Systems**: [Percentage]% ($[Amount])
+- **Security Hardware/Software**: [Percentage]% ($[Amount])
+- **Cloud Services**: [Percentage]% ($[Amount])
+
+## 3. Hardware Infrastructure Costs
+### 3.1 Server and Compute Infrastructure
+- Physical servers and virtualization hosts
+- Server licensing and support contracts
+- Load balancers and application delivery controllers
+- High-availability clustering solutions
+
+### 3.2 Network Infrastructure
+- Switches, routers, and wireless access points
+- Firewall and security appliances
+- Network monitoring and management tools
+- Cabling and infrastructure improvements
+
+### 3.3 Storage Infrastructure
+- SAN/NAS storage systems and expansion
+- Backup and archive storage solutions
+- Storage management and optimization software
+- Data replication and disaster recovery systems
+
+## 4. Software and Licensing Costs
+### 4.1 Operating System Licensing
+- Windows Server and Client Access Licenses (CALs)
+- Linux enterprise support subscriptions
+- Virtualization platform licensing
+- Container orchestration platforms
+
+### 4.2 Infrastructure Software
+- Database management systems
+- Backup and recovery software
+- System monitoring and management tools
+- Security and antivirus software
+
+## 5. Cloud Services and Subscriptions
+### 5.1 Public Cloud Infrastructure
+- Compute instances and virtual machines
+- Storage services and data transfer costs
+- Database and managed services
+- Content delivery and edge services
+
+### 5.2 Hybrid Cloud Solutions
+- Hybrid connectivity and VPN services
+- Cloud management and orchestration platforms
+- Identity and access management services
+- Disaster recovery as a service (DRaaS)
+
+## 6. Operational and Maintenance Costs
+### 6.1 Support and Maintenance
+- Hardware maintenance contracts and warranties
+- Software support and subscription renewals
+- Vendor support and professional services
+- Emergency response and break-fix services
+
+### 6.2 Utilities and Facilities
+- Power and cooling infrastructure costs
+- Data center space and co-location fees
+- Network connectivity and bandwidth costs
+- Environmental monitoring and safety systems
+
+## 7. Cost Optimization and Efficiency
+### 7.1 Cost Reduction Initiatives
+- Server consolidation and virtualization projects
+- Cloud migration and optimization strategies
+- Energy-efficient hardware replacements
+- Software license optimization and compliance
+
+### 7.2 Performance Metrics and ROI
+- Infrastructure utilization monitoring
+- Cost per service and application metrics
+- Energy efficiency and sustainability measures
+- Service quality and availability improvements`,
+    requiredFields: ["organization_name", "budget_owner", "budget_period"]
+  },
+
+  "Backup And Recovery Plan Document": {
+    description: "Comprehensive backup and disaster recovery strategy and procedures",
+    sections: ["Recovery Strategy", "Backup Procedures", "Recovery Testing", "Roles & Responsibilities", "Monitoring"],
+    template: `# Backup And Recovery Plan Document
+
+## 1. Executive Summary
+This Backup and Recovery Plan establishes comprehensive data protection and disaster recovery procedures for [Organization Name]'s critical systems and information assets.
+
+## 2. Recovery Objectives and Requirements
+### 2.1 Business Requirements
+- **Recovery Time Objective (RTO)**: Maximum [Time] for critical systems
+- **Recovery Point Objective (RPO)**: Maximum [Time] of acceptable data loss
+- **Service Level Agreements**: [Percentage]% availability for critical systems
+- **Regulatory Compliance**: [Compliance Requirements]
+
+### 2.2 System Classification
+- **Critical Systems**: [List critical systems] - RTO: [Time], RPO: [Time]
+- **Important Systems**: [List important systems] - RTO: [Time], RPO: [Time]
+- **Standard Systems**: [List standard systems] - RTO: [Time], RPO: [Time]
+
+## 3. Backup Strategy and Architecture
+### 3.1 Backup Types and Schedules
+- **Full Backups**: Weekly on [Day] at [Time]
+- **Incremental Backups**: Daily at [Time]
+- **Differential Backups**: [Schedule as needed]
+- **Continuous Data Protection**: For critical databases and applications
+
+### 3.2 Backup Storage Strategy
+- **Primary Backup Storage**: On-site backup appliances and disk arrays
+- **Secondary Storage**: Off-site tape storage and cloud backup services
+- **Archive Storage**: Long-term retention using cloud archive services
+- **3-2-1 Rule Implementation**: 3 copies, 2 different media, 1 off-site
+
+## 4. Backup Procedures by System Type
+### 4.1 Database Backups
+- **Database Systems**: [List databases]
+- **Backup Methods**: Native database backup tools and agents
+- **Consistency Checks**: Database integrity verification
+- **Transaction Log Backups**: [Frequency] for point-in-time recovery
+
+### 4.2 File System and Application Backups
+- **File Servers**: [List file systems and shares]
+- **Application Data**: [List applications and data paths]
+- **Configuration Backups**: System and application configurations
+- **Virtual Machine Backups**: VM-level backups with snapshots
+
+### 4.3 Cloud and SaaS Data Protection
+- **Cloud Services**: [List cloud services]
+- **SaaS Applications**: [List SaaS platforms]
+- **Data Export Procedures**: Regular data exports and downloads
+- **Third-Party Backup Solutions**: Cloud-to-cloud backup services
+
+## 5. Recovery Procedures
+### 5.1 Disaster Recovery Activation
+- **Incident Assessment**: Damage evaluation and impact analysis
+- **Recovery Team Activation**: Emergency response team mobilization
+- **Communication Plan**: Stakeholder notification procedures
+- **Recovery Site Activation**: Alternate site preparation and setup
+
+### 5.2 System Recovery Procedures
+- **Priority Order**: Critical systems recovery sequence
+- **Recovery Steps**: Detailed step-by-step recovery procedures
+- **Data Restoration**: Backup restoration and validation procedures
+- **Service Verification**: System testing and validation before production
+
+## 6. Recovery Testing and Validation
+### 6.1 Testing Schedule
+- **Monthly Tests**: Critical system backup verification
+- **Quarterly Tests**: Partial disaster recovery simulation
+- **Annual Tests**: Full disaster recovery exercise
+- **Ad-hoc Tests**: After major system changes
+
+### 6.2 Test Procedures
+- **Test Planning**: Test scenarios and success criteria
+- **Test Execution**: Controlled recovery environment testing
+- **Results Documentation**: Test results and lessons learned
+- **Plan Updates**: Recovery plan improvements and updates
+
+## 7. Roles and Responsibilities
+### 7.1 Recovery Team Structure
+- **Recovery Manager**: [Role] - Overall recovery coordination
+- **System Administrators**: System-specific recovery tasks
+- **Database Administrators**: Database recovery and validation
+- **Network Team**: Network connectivity and infrastructure
+
+### 7.2 Contact Information
+- **Emergency Contacts**: [24/7 contact information]
+- **Vendor Contacts**: Hardware and software vendor support
+- **Service Providers**: Cloud and managed service providers
+- **Management Team**: Executive and business stakeholder contacts
+
+## 8. Monitoring and Maintenance
+### 8.1 Backup Monitoring
+- **Automated Monitoring**: Backup job success/failure alerts
+- **Performance Metrics**: Backup completion times and data volumes
+- **Storage Utilization**: Backup storage capacity monitoring
+- **Compliance Reporting**: Backup schedule adherence reporting
+
+### 8.2 Plan Maintenance
+- **Regular Reviews**: Monthly plan review and updates
+- **Change Management**: Plan updates for system changes
+- **Training Programs**: Staff training on recovery procedures
+- **Documentation Updates**: Procedure and contact information maintenance`,
+    requiredFields: ["organization_name", "recovery_manager", "rto_requirement"]
+  },
+
+  "System Configuration Document": {
+    description: "Detailed system configuration documentation and standards",
+    sections: ["System Overview", "Configuration Details", "Security Settings", "Performance Tuning", "Change Control"],
+    template: `# System Configuration Document
+
+## 1. System Overview
+This System Configuration Document provides comprehensive configuration details for [System Name] at [Organization Name].
+
+## 2. System Information
+### 2.1 Basic System Details
+- **System Name**: [System Name]
+- **Environment**: [Production/Staging/Development]
+- **Operating System**: [OS and Version]
+- **Hardware Platform**: [Physical/Virtual/Cloud]
+- **System Owner**: [Owner Name and Contact]
+
+### 2.2 Hardware Configuration
+- **CPU**: [Processor specifications]
+- **Memory**: [RAM configuration and allocation]
+- **Storage**: [Disk configuration and capacity]
+- **Network**: [Network interface configuration]
+
+## 3. Operating System Configuration
+### 3.1 Base OS Settings
+- **Hostname**: [System hostname]
+- **Domain**: [Domain membership]
+- **Time Zone**: [Time zone configuration]
+- **NTP Servers**: [Time synchronization sources]
+
+### 3.2 User Accounts and Groups
+- **Administrative Accounts**: [List admin accounts]
+- **Service Accounts**: [Application and service accounts]
+- **Group Memberships**: [Security group assignments]
+- **Password Policies**: [Password complexity requirements]
+
+### 3.3 File System Configuration
+- **Mount Points**: [File system mount configuration]
+- **Disk Partitioning**: [Partition layout and sizes]
+- **File Permissions**: [Critical file and directory permissions]
+- **Backup Exclusions**: [Files and directories excluded from backup]
+
+## 4. Network Configuration
+### 4.1 Network Interfaces
+- **Primary Interface**: [IP address, subnet, gateway]
+- **Secondary Interfaces**: [Additional network configurations]
+- **VLAN Configuration**: [VLAN assignments and tagging]
+- **Bonding/Teaming**: [Network interface aggregation]
+
+### 4.2 Network Services
+- **DNS Configuration**: [DNS servers and search domains]
+- **DHCP Settings**: [DHCP reservations and configuration]
+- **Firewall Rules**: [Local firewall configuration]
+- **Routing Tables**: [Static routes and gateways]
+
+## 5. Security Configuration
+### 5.1 Access Control
+- **SSH Configuration**: [SSH daemon settings and key management]
+- **Remote Access**: [RDP, VNC, or other remote access settings]
+- **Multi-Factor Authentication**: [MFA implementation and settings]
+- **Account Lockout Policies**: [Failed login attempt handling]
+
+### 5.2 Security Hardening
+- **Service Hardening**: [Disabled services and security configurations]
+- **Audit Logging**: [Security event logging configuration]
+- **Anti-Malware**: [Antivirus and endpoint protection settings]
+- **Encryption**: [Data-at-rest and in-transit encryption]
+
+## 6. Application Configuration
+### 6.1 Installed Software
+- **System Software**: [List of installed system software]
+- **Application Software**: [Business applications and versions]
+- **Development Tools**: [Development and administrative tools]
+- **Monitoring Agents**: [System monitoring and management agents]
+
+### 6.2 Service Configuration
+- **System Services**: [Critical system services and startup configuration]
+- **Application Services**: [Application-specific services and dependencies]
+- **Database Services**: [Database configuration and connection settings]
+- **Web Services**: [Web server and application server configuration]
+
+## 7. Performance and Monitoring
+### 7.1 Performance Tuning
+- **Kernel Parameters**: [System kernel tuning parameters]
+- **Memory Management**: [Memory allocation and swap configuration]
+- **I/O Optimization**: [Disk I/O and file system tuning]
+- **Network Tuning**: [Network performance optimization]
+
+### 7.2 Monitoring Configuration
+- **System Monitoring**: [Performance monitoring tools and agents]
+- **Log Management**: [Log collection and retention settings]
+- **Alerting**: [Monitoring thresholds and notification configuration]
+- **Capacity Planning**: [Resource utilization monitoring and trending]
+
+## 8. Backup and Recovery
+### 8.1 Backup Configuration
+- **Backup Agent**: [Backup software configuration]
+- **Backup Schedule**: [Backup frequency and retention policies]
+- **Backup Exclusions**: [Files and directories excluded from backup]
+- **Recovery Testing**: [Backup verification and recovery testing schedule]
+
+## 9. Change Control and Documentation
+### 9.1 Configuration Management
+- **Change Approval**: [Configuration change approval process]
+- **Version Control**: [Configuration version tracking]
+- **Documentation Updates**: [Configuration documentation maintenance]
+- **Rollback Procedures**: [Configuration rollback and recovery procedures]
+
+### 9.2 Compliance and Audit
+- **Configuration Baselines**: [Security and compliance baselines]
+- **Audit Requirements**: [Regulatory compliance configuration requirements]
+- **Vulnerability Management**: [Security patching and vulnerability remediation]
+- **Configuration Drift Detection**: [Automated configuration monitoring]`,
+    requiredFields: ["organization_name", "system_name", "system_administrator"]
+  },
+
+  "Server Maintenance Plan": {
+    description: "Comprehensive server maintenance schedule and procedures",
+    sections: ["Maintenance Schedule", "Preventive Maintenance", "Update Procedures", "Monitoring", "Emergency Response"],
+    template: `# Server Maintenance Plan
+
+## 1. Executive Summary
+This Server Maintenance Plan establishes comprehensive maintenance procedures and schedules for [Organization Name]'s server infrastructure to ensure optimal performance, security, and reliability.
+
+## 2. Server Inventory and Classification
+### 2.1 Critical Servers
+- **Production Database Servers**: [List servers]
+- **Web/Application Servers**: [List servers]
+- **Email Servers**: [List servers]
+- **Domain Controllers**: [List servers]
+
+### 2.2 Maintenance Windows
+- **Critical Systems**: [Day] [Time] - [Duration]
+- **Important Systems**: [Day] [Time] - [Duration]
+- **Development/Test**: [Day] [Time] - [Duration]
+- **Emergency Maintenance**: As needed with approval
+
+## 3. Preventive Maintenance Schedule
+### 3.1 Daily Maintenance Tasks
+- **System Health Checks**: Automated monitoring review
+- **Backup Verification**: Backup job completion verification
+- **Log Review**: Critical system and security log analysis
+- **Performance Monitoring**: Resource utilization assessment
+
+### 3.2 Weekly Maintenance Tasks
+- **Security Updates**: Critical security patch installation
+- **Disk Space Management**: Storage capacity monitoring and cleanup
+- **Service Verification**: Critical service status verification
+- **Event Log Analysis**: Detailed system event log review
+
+### 3.3 Monthly Maintenance Tasks
+- **Operating System Updates**: Non-critical OS update installation
+- **Application Updates**: Application and middleware updates
+- **Hardware Health Check**: Server hardware diagnostic testing
+- **Performance Optimization**: System performance tuning and optimization
+
+### 3.4 Quarterly Maintenance Tasks
+- **Comprehensive Security Audit**: Security configuration review
+- **Disaster Recovery Testing**: Backup and recovery procedure testing
+- **Capacity Planning Review**: Resource utilization and growth analysis
+- **Documentation Updates**: Maintenance procedure and configuration updates
+
+## 4. Patch Management Procedures
+### 4.1 Security Patch Management
+- **Critical Patches**: Install within [Timeframe] of release
+- **Important Patches**: Install within [Timeframe] of release
+- **Testing Requirements**: Patch testing in development environment
+- **Rollback Procedures**: Patch removal and system restoration procedures
+
+### 4.2 Application Updates
+- **Vendor Notifications**: Software update notification monitoring
+- **Update Testing**: Application update testing procedures
+- **Change Approval**: Update approval and scheduling process
+- **User Communication**: End-user notification and training
+
+## 5. Hardware Maintenance
+### 5.1 Physical Server Maintenance
+- **Hardware Diagnostics**: Monthly hardware health assessments
+- **Component Replacement**: Proactive component replacement schedule
+- **Cleaning and Environment**: Physical cleaning and environment checks
+- **Firmware Updates**: Server firmware and driver updates
+
+### 5.2 Storage System Maintenance
+- **Disk Health Monitoring**: Storage device health and performance monitoring
+- **RAID Array Management**: RAID configuration and redundancy verification
+- **Storage Optimization**: Storage performance tuning and optimization
+- **Capacity Expansion**: Storage expansion planning and implementation
+
+## 6. Performance Monitoring and Optimization
+### 6.1 Performance Metrics
+- **CPU Utilization**: Processor performance monitoring and alerting
+- **Memory Usage**: Memory utilization and optimization
+- **Disk I/O**: Storage performance and bottleneck identification
+- **Network Performance**: Network utilization and optimization
+
+### 6.2 Optimization Procedures
+- **Resource Allocation**: Virtual machine and container resource optimization
+- **Service Tuning**: Application and service performance tuning
+- **Database Optimization**: Database performance monitoring and optimization
+- **Network Optimization**: Network configuration and traffic optimization
+
+## 7. Emergency Response and Troubleshooting
+### 7.1 Incident Response
+- **Escalation Procedures**: Problem escalation and notification procedures
+- **Emergency Contacts**: 24/7 support contact information
+- **Vendor Support**: Hardware and software vendor support procedures
+- **Service Restoration**: Critical service recovery procedures
+
+### 7.2 Troubleshooting Procedures
+- **Problem Identification**: System problem identification and analysis
+- **Root Cause Analysis**: Issue investigation and root cause determination
+- **Resolution Documentation**: Problem resolution and lesson learned documentation
+- **Preventive Measures**: Proactive measures to prevent recurring issues
+
+## 8. Documentation and Reporting
+### 8.1 Maintenance Documentation
+- **Maintenance Logs**: Detailed maintenance activity logging
+- **Change Documentation**: Configuration and update change documentation
+- **Procedure Updates**: Maintenance procedure updates and improvements
+- **Knowledge Base**: Troubleshooting and solution knowledge base
+
+### 8.2 Reporting and Communication
+- **Maintenance Reports**: Monthly maintenance summary reports
+- **Performance Reports**: System performance and utilization reports
+- **Incident Reports**: Problem and resolution summary reports
+- **Stakeholder Communication**: Regular communication with business stakeholders
+
+## 9. Compliance and Quality Assurance
+### 9.1 Maintenance Standards
+- **Industry Best Practices**: Adherence to industry maintenance standards
+- **Vendor Recommendations**: Following vendor maintenance guidelines
+- **Regulatory Compliance**: Compliance with regulatory requirements
+- **Quality Metrics**: Maintenance quality and effectiveness metrics
+
+### 9.2 Continuous Improvement
+- **Process Review**: Regular maintenance process review and improvement
+- **Training Programs**: Staff training on new procedures and technologies
+- **Technology Updates**: Evaluation and adoption of new maintenance technologies
+- **Feedback Integration**: User and stakeholder feedback incorporation`,
+    requiredFields: ["organization_name", "maintenance_manager", "maintenance_window"]
+  },
+
+  "Hardware Inventory Document": {
+    description: "Comprehensive hardware asset inventory and management documentation",
+    sections: ["Asset Overview", "Hardware Categories", "Tracking Procedures", "Lifecycle Management", "Reporting"],
+    template: `# Hardware Inventory Document
+
+## 1. Executive Summary
+This Hardware Inventory Document provides comprehensive tracking and management of [Organization Name]'s hardware assets to ensure accurate asset accounting, lifecycle management, and compliance requirements.
+
+## 2. Asset Management Overview
+### 2.1 Inventory Scope
+- **Desktop and Laptop Computers**: [Count] units
+- **Servers and Infrastructure**: [Count] units
+- **Network Equipment**: [Count] units
+- **Mobile Devices**: [Count] units
+- **Peripherals and Accessories**: [Count] units
+
+### 2.2 Asset Valuation
+- **Total Hardware Value**: $[Amount]
+- **Annual Depreciation**: $[Amount]
+- **Replacement Budget**: $[Amount]
+- **Maintenance Costs**: $[Amount]
+
+## 3. Hardware Categories and Details
+### 3.1 Computing Equipment
+**Desktop Computers**
+- Asset Tag: [Tag Number]
+- Make/Model: [Manufacturer and Model]
+- Serial Number: [Serial Number]
+- Specifications: [CPU, RAM, Storage, OS]
+- Purchase Date: [Date]
+- Warranty Expiration: [Date]
+- Location: [Physical Location]
+- Assigned User: [User Name]
+- Status: [Active/Retired/Under Repair]
+
+**Laptop Computers**
+- Asset Tag: [Tag Number]
+- Make/Model: [Manufacturer and Model]
+- Serial Number: [Serial Number]
+- Specifications: [CPU, RAM, Storage, OS]
+- Purchase Date: [Date]
+- Warranty Expiration: [Date]
+- Location: [Physical Location]
+- Assigned User: [User Name]
+- Status: [Active/Retired/Under Repair]
+
+### 3.2 Server Infrastructure
+**Physical Servers**
+- Asset Tag: [Tag Number]
+- Make/Model: [Manufacturer and Model]
+- Serial Number: [Serial Number]
+- Specifications: [CPU, RAM, Storage, Network]
+- Purchase Date: [Date]
+- Warranty Expiration: [Date]
+- Data Center Location: [Location and Rack Position]
+- Purpose: [Server Role and Applications]
+- Status: [Active/Standby/Maintenance]
+
+**Storage Systems**
+- Asset Tag: [Tag Number]
+- Make/Model: [Storage System Details]
+- Serial Number: [Serial Number]
+- Capacity: [Total and Available Storage]
+- RAID Configuration: [RAID Level and Configuration]
+- Purchase Date: [Date]
+- Warranty Expiration: [Date]
+- Location: [Physical Location]
+- Connected Systems: [Attached Servers and Applications]
+
+### 3.3 Network Infrastructure
+**Network Switches**
+- Asset Tag: [Tag Number]
+- Make/Model: [Switch Details]
+- Serial Number: [Serial Number]
+- Port Count: [Number of Ports]
+- Management IP: [IP Address]
+- Purchase Date: [Date]
+- Warranty Expiration: [Date]
+- Location: [Network Closet/Rack Location]
+- VLAN Configuration: [VLAN Details]
+
+**Routers and Firewalls**
+- Asset Tag: [Tag Number]
+- Make/Model: [Device Details]
+- Serial Number: [Serial Number]
+- Specifications: [Performance and Features]
+- Management IP: [IP Address]
+- Purchase Date: [Date]
+- Warranty Expiration: [Date]
+- Location: [Physical Location]
+- Configuration: [Network and Security Configuration]
+
+### 3.4 Mobile Devices
+**Smartphones and Tablets**
+- Asset Tag: [Tag Number]
+- Make/Model: [Device Details]
+- Serial Number/IMEI: [Device Identifiers]
+- Phone Number: [Assigned Phone Number]
+- Carrier: [Mobile Service Provider]
+- Purchase Date: [Date]
+- Warranty Expiration: [Date]
+- Assigned User: [User Name]
+- MDM Status: [Mobile Device Management Status]
+
+## 4. Asset Tracking Procedures
+### 4.1 Asset Registration
+- **New Asset Processing**: Asset tag assignment and initial registration
+- **Asset Documentation**: Recording of specifications, purchase details, and location
+- **User Assignment**: Asset assignment to users with acknowledgment
+- **Database Entry**: Asset management system data entry and verification
+
+### 4.2 Asset Movements and Changes
+- **Location Changes**: Asset relocation tracking and documentation
+- **User Transfers**: Asset reassignment between users
+- **Configuration Changes**: Hardware upgrade and modification tracking
+- **Status Updates**: Asset status changes and condition updates
+
+### 4.3 Periodic Audits
+- **Monthly Audits**: High-value asset verification and location confirmation
+- **Quarterly Audits**: Comprehensive inventory audit and reconciliation
+- **Annual Audits**: Complete physical inventory and financial reconciliation
+- **Ad-hoc Audits**: Targeted audits for specific asset categories or locations
+
+## 5. Lifecycle Management
+### 5.1 Procurement and Deployment
+- **Purchase Planning**: Asset requirement analysis and procurement planning
+- **Vendor Management**: Supplier evaluation and contract management
+- **Receiving and Setup**: Asset receiving, configuration, and deployment
+- **Documentation**: Asset registration and documentation completion
+
+### 5.2 Maintenance and Support
+- **Warranty Tracking**: Warranty expiration monitoring and renewal
+- **Maintenance Scheduling**: Preventive maintenance and service scheduling
+- **Repair Management**: Hardware repair and replacement coordination
+- **Support Contracts**: Vendor support contract management and utilization
+
+### 5.3 Disposal and Retirement
+- **End-of-Life Planning**: Asset retirement planning and scheduling
+- **Data Sanitization**: Secure data destruction and device sanitization
+- **Environmental Disposal**: Responsible hardware disposal and recycling
+- **Asset Write-off**: Financial asset disposal and accounting procedures
+
+## 6. Reporting and Analytics
+### 6.1 Inventory Reports
+- **Asset Summary Reports**: High-level inventory summary and statistics
+- **Detailed Asset Reports**: Comprehensive asset listings by category
+- **Location Reports**: Asset distribution by location and department
+- **User Assignment Reports**: Asset assignments by user and department
+
+### 6.2 Financial Reports
+- **Asset Valuation Reports**: Current asset values and depreciation
+- **Warranty Reports**: Warranty status and expiration tracking
+- **Maintenance Cost Reports**: Maintenance and support cost analysis
+- **Replacement Planning Reports**: Asset refresh and replacement planning
+
+## 7. Compliance and Security
+### 7.1 Regulatory Compliance
+- **Financial Compliance**: Asset accounting and depreciation compliance
+- **Audit Requirements**: External audit support and documentation
+- **Insurance Requirements**: Asset valuation for insurance purposes
+- **Tax Compliance**: Asset reporting for tax and regulatory purposes
+
+### 7.2 Security Management
+- **Asset Security**: Physical security and theft prevention
+- **Data Protection**: Data security on disposed and retired assets
+- **Access Control**: Asset access and assignment controls
+- **Incident Response**: Asset-related security incident procedures`,
+    requiredFields: ["organization_name", "asset_manager", "inventory_date"]
   }
 };
 
@@ -1165,7 +1778,21 @@ export default function PolicyCreationForm({
         "IT Change Management Plan": "IT Management & Operations",
         "Data Privacy Policy": "Data Protection",
         "IT Compliance And Audit Plan": "Governance & Compliance",
-        "CTO Security Policy": "Security Operations"
+        "CTO Security Policy": "Security Operations",
+        "IT Infrastructure Budget Document": "Infrastructure & Operations",
+        "Backup And Recovery Plan Document": "System Administration & Maintenance",
+        "Network Performance Report": "Infrastructure & Operations",
+        "System Monitoring Report": "System Administration & Maintenance",
+        "IT Project Plan": "Project & Change Management",
+        "System Configuration Document": "System Administration & Maintenance",
+        "Vendor Management Policy": "Third-Party Management",
+        "Change Management Policy Document": "Project & Change Management",
+        "Software Inventory Document": "Asset & Inventory Management",
+        "System Upgrade Plan": "System Administration & Maintenance",
+        "User Access Control Policy Document": "Security & Access Management",
+        "Network Diagram": "Infrastructure & Operations",
+        "Server Maintenance Plan": "System Administration & Maintenance",
+        "Hardware Inventory Document": "Asset & Inventory Management"
       };
       
       const category = categoryMapping[policyType] || "Governance & Compliance";

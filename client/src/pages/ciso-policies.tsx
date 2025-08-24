@@ -190,6 +190,70 @@ const mockPolicies = [
     aiGenerated: false,
     createdAt: "2024-07-01T14:15:00Z",
     updatedAt: "2024-08-24T09:30:00Z"
+  },
+  {
+    id: 11,
+    policyType: "IT Infrastructure Budget Document",
+    category: "Infrastructure & Operations",
+    title: "Annual IT Infrastructure Budget Plan 2024",
+    description: "Comprehensive infrastructure budget planning and capital expenditure allocation for enterprise systems",
+    status: "active",
+    priority: "critical",
+    owner: "System Administrator",
+    version: "3.2",
+    reviewDate: "2024-12-01",
+    expiryDate: "2025-12-01",
+    aiGenerated: false,
+    createdAt: "2024-02-01T07:00:00Z",
+    updatedAt: "2024-08-24T14:00:00Z"
+  },
+  {
+    id: 12,
+    policyType: "Backup And Recovery Plan Document",
+    category: "System Administration & Maintenance",
+    title: "Enterprise Backup and Disaster Recovery Plan",
+    description: "Comprehensive data protection and disaster recovery procedures for critical business systems",
+    status: "approved",
+    priority: "critical",
+    owner: "Backup Administrator",
+    version: "4.1",
+    reviewDate: "2024-10-01",
+    expiryDate: "2025-10-01",
+    aiGenerated: true,
+    createdAt: "2024-03-15T12:00:00Z",
+    updatedAt: "2024-08-24T16:30:00Z"
+  },
+  {
+    id: 13,
+    policyType: "Server Maintenance Plan",
+    category: "System Administration & Maintenance",
+    title: "Production Server Maintenance Schedule",
+    description: "Preventive maintenance procedures and schedules for enterprise server infrastructure",
+    status: "active",
+    priority: "high",
+    owner: "Infrastructure Team",
+    version: "2.0",
+    reviewDate: "2024-09-15",
+    expiryDate: "2025-09-15",
+    aiGenerated: false,
+    createdAt: "2024-06-01T10:00:00Z",
+    updatedAt: "2024-08-24T11:45:00Z"
+  },
+  {
+    id: 14,
+    policyType: "Hardware Inventory Document",
+    category: "Asset & Inventory Management",
+    title: "Enterprise Hardware Asset Inventory",
+    description: "Comprehensive tracking and management of all organizational hardware assets and equipment",
+    status: "review",
+    priority: "medium",
+    owner: "Asset Manager",
+    version: "1.5",
+    reviewDate: "2024-11-15",
+    expiryDate: "2025-11-15",
+    aiGenerated: true,
+    createdAt: "2024-08-01T09:00:00Z",
+    updatedAt: "2024-08-24T13:20:00Z"
   }
 ];
 
@@ -334,8 +398,8 @@ export default function CisoPolicies() {
         <div className="flex items-center gap-3">
           <Shield className="w-8 h-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold">CISO, IT Manager & CTO Policies</h1>
-            <p className="text-muted-foreground">Comprehensive cybersecurity, IT operations, and technology strategy policy management</p>
+            <h1 className="text-3xl font-bold">Multi-Role Policy Management Platform</h1>
+            <p className="text-muted-foreground">Comprehensive policy management for CISO, IT Manager, CTO, and System Administrator roles</p>
           </div>
         </div>
         <div className="flex items-center gap-2">

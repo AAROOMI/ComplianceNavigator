@@ -228,7 +228,12 @@ export const cisoPolicyCategories = [
   "Software Development & Engineering",
   "Technology Operations & Performance",
   "Digital Transformation",
-  "Technology Governance"
+  "Technology Governance",
+  "Infrastructure & Operations",
+  "System Administration & Maintenance",
+  "Security & Access Management", 
+  "Asset & Inventory Management",
+  "Project & Change Management"
 ] as const;
 
 export const cisoPolicyTypes = [
@@ -285,7 +290,21 @@ export const cisoPolicyTypes = [
   "IT Change Management Plan",
   "Data Privacy Policy",
   "IT Compliance And Audit Plan",
-  "CTO Security Policy"
+  "CTO Security Policy",
+  "IT Infrastructure Budget Document",
+  "Backup And Recovery Plan Document",
+  "Network Performance Report",
+  "System Monitoring Report",
+  "IT Project Plan",
+  "System Configuration Document",
+  "Vendor Management Policy",
+  "Change Management Policy Document",
+  "Software Inventory Document",
+  "System Upgrade Plan", 
+  "User Access Control Policy Document",
+  "Network Diagram",
+  "Server Maintenance Plan",
+  "Hardware Inventory Document"
 ] as const;
 
 export const cisoPolicies = pgTable("ciso_policies", {
