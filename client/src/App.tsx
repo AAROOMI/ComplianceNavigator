@@ -14,6 +14,7 @@ import NcaEcc from "@/pages/nca-ecc";
 import Assistant from "@/pages/assistant";
 import MetaworksCompliance from "@/pages/metaworks-compliance";
 import NFRMRiskManagement from "@/pages/nfrm-risk-management";
+import CisoPolicies from "@/pages/ciso-policies";
 import NotFound from "@/pages/not-found";
 
 export default function App() {
@@ -55,6 +56,11 @@ export default function App() {
           <Route path="/nfrm">
             <Layout>
               <NFRMRiskManagement />
+            </Layout>
+          </Route>
+          <Route path="/ciso-policies">
+            <Layout>
+              <CisoPolicies />
             </Layout>
           </Route>
           <Route>

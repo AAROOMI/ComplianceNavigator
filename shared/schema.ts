@@ -207,6 +207,88 @@ export const riskManagementPlans = pgTable("risk_management_plans", {
   updatedAt: text("updated_at").notNull(),
 });
 
+// CISO Policies and Procedures Management
+export const cisoPolicyCategories = [
+  "Strategic Planning",
+  "Governance & Compliance", 
+  "Risk Management",
+  "Security Operations",
+  "Incident & Crisis Management",
+  "Business Continuity",
+  "Access & Identity Management",
+  "Data Protection",
+  "Network & Infrastructure",
+  "Third-Party Management",
+  "Training & Awareness"
+] as const;
+
+export const cisoPolicyTypes = [
+  "Security Budget Proposal",
+  "Business Continuity Plan", 
+  "Data Classification Policy",
+  "Compliance Audit Report",
+  "Data Breach Notification Plan",
+  "Network Security Policy",
+  "Patch Management Policy",
+  "Security Architecture Document",
+  "Security Awareness Training Material",
+  "Security Metrics Report",
+  "Security Program Roadmap",
+  "Third-Party Security Agreement",
+  "Vendor Security Assessment Document",
+  "Vulnerability Management Plan",
+  "Access Control Policy",
+  "Encryption Policy",
+  "Information Security Policy",
+  "Disaster Recovery Plan",
+  "Incident Response Plan"
+] as const;
+
+export const cisoPolicies = pgTable("ciso_policies", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  policyType: text("policy_type").notNull(), // from cisoPolicyTypes
+  category: text("category").notNull(), // from cisoPolicyCategories
+  title: text("title").notNull(),
+  description: text("description"),
+  content: text("content").notNull(),
+  version: text("version").notNull(),
+  status: text("status").notNull(), // "draft", "review", "approved", "active", "archived"
+  priority: text("priority").notNull(), // "low", "medium", "high", "critical"
+  owner: text("owner").notNull(), // responsible person/department
+  approvedBy: text("approved_by"),
+  reviewDate: text("review_date"),
+  expiryDate: text("expiry_date"),
+  tags: text("tags").array(), // for searchability
+  aiGenerated: boolean("ai_generated").notNull().default(false),
+  templateUsed: text("template_used"),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
+export const cisoPolicyTemplates = pgTable("ciso_policy_templates", {
+  id: serial("id").primaryKey(),
+  policyType: text("policy_type").notNull(), // from cisoPolicyTypes
+  category: text("category").notNull(), // from cisoPolicyCategories
+  name: text("name").notNull(),
+  description: text("description"),
+  template: text("template").notNull(), // template content with placeholders
+  sections: text("sections").array(), // ordered list of sections
+  requiredFields: text("required_fields").array(), // fields that must be filled
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
+export const cisoPolicyReviews = pgTable("ciso_policy_reviews", {
+  id: serial("id").primaryKey(),
+  policyId: integer("policy_id").notNull(),
+  reviewerId: integer("reviewer_id").notNull(),
+  status: text("status").notNull(), // "pending", "approved", "rejected", "changes-requested"
+  comments: text("comments"),
+  reviewedAt: text("reviewed_at").notNull(),
+});
+
 // Keep existing schemas
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
@@ -260,6 +342,48 @@ export const insertRiskManagementPlanSchema = createInsertSchema(riskManagementP
   updatedAt: true,
 });
 
+export const insertCisoPolicySchema = createInsertSchema(cisoPolicies).pick({
+  userId: true,
+  policyType: true,
+  category: true,
+  title: true,
+  description: true,
+  content: true,
+  version: true,
+  status: true,
+  priority: true,
+  owner: true,
+  approvedBy: true,
+  reviewDate: true,
+  expiryDate: true,
+  tags: true,
+  aiGenerated: true,
+  templateUsed: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertCisoPolicyTemplateSchema = createInsertSchema(cisoPolicyTemplates).pick({
+  policyType: true,
+  category: true,
+  name: true,
+  description: true,
+  template: true,
+  sections: true,
+  requiredFields: true,
+  isActive: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertCisoPolicyReviewSchema = createInsertSchema(cisoPolicyReviews).pick({
+  policyId: true,
+  reviewerId: true,
+  status: true,
+  comments: true,
+  reviewedAt: true,
+});
+
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 
@@ -274,3 +398,12 @@ export type InsertVulnerability = z.infer<typeof insertVulnerabilitySchema>;
 
 export type RiskManagementPlan = typeof riskManagementPlans.$inferSelect;
 export type InsertRiskManagementPlan = z.infer<typeof insertRiskManagementPlanSchema>;
+
+export type CisoPolicy = typeof cisoPolicies.$inferSelect;
+export type InsertCisoPolicy = z.infer<typeof insertCisoPolicySchema>;
+
+export type CisoPolicyTemplate = typeof cisoPolicyTemplates.$inferSelect;
+export type InsertCisoPolicyTemplate = z.infer<typeof insertCisoPolicyTemplateSchema>;
+
+export type CisoPolicyReview = typeof cisoPolicyReviews.$inferSelect;
+export type InsertCisoPolicyReview = z.infer<typeof insertCisoPolicyReviewSchema>;
