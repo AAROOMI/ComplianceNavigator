@@ -28,9 +28,9 @@ export default function VirtualAssistant() {
 
   // Avatar expressions based on interaction context
   const avatarExpressions = {
-    neutral: "/ai-avatar-neutral.png",
-    happy: "/ai-avatar-happy.png",
-    thinking: "/ai-avatar-thinking.png"
+    neutral: "/metaworks-ai-consultant.png",
+    happy: "/metaworks-ai-consultant.png",
+    thinking: "/metaworks-ai-consultant.png"
   };
 
   // Scroll to bottom of messages on new message
@@ -120,7 +120,7 @@ export default function VirtualAssistant() {
                 alt="AI Assistant" 
                 className="w-8 h-8 rounded-full border border-white/30" 
               />
-              <h3 className="font-semibold">Cybersecurity AI Consultant</h3>
+              <h3 className="font-semibold">Metaworks AI Cybersecurity Consultant</h3>
             </div>
             <button 
               onClick={() => setExpanded(false)} 
@@ -145,7 +145,7 @@ export default function VirtualAssistant() {
                   {message.content}
                 </div>
                 <span className="text-xs text-muted-foreground mt-1 mx-1">
-                  {formatTime(message.timestamp)}
+                  {formatTime(message.timestamp || Date.now())}
                 </span>
               </div>
             ))}

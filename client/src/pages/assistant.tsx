@@ -7,7 +7,13 @@ export default function Assistant() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Compliance Assistant</h1>
+        <div className="flex items-center gap-3">
+          <img src="/metaworks-ai-consultant.png" alt="AI Consultant" className="w-12 h-12 rounded-full border-2 border-primary/20" />
+          <div>
+            <h1 className="text-3xl font-bold">Metaworks AI Cybersecurity Consultant</h1>
+            <p className="text-muted-foreground">Advanced AI-powered compliance guidance</p>
+          </div>
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">

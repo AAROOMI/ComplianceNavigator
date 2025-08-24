@@ -18,7 +18,7 @@ export default function ComplianceChat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hello! I'm your compliance assistant. How can I help you with NCA ECC compliance today?",
+      content: "Hello! I'm your Metaworks AI Cybersecurity Consultant. How can I help you with NCA ECC compliance today?",
       timestamp: new Date().toISOString(),
     },
   ]);
@@ -87,8 +87,8 @@ export default function ComplianceChat() {
     <Card className="w-full h-[500px] flex flex-col">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Bot className="w-5 h-5" />
-          Compliance Assistant
+          <img src="/metaworks-ai-consultant.png" alt="AI Consultant" className="w-5 h-5 rounded-full" />
+          Metaworks AI Cybersecurity Consultant
         </CardTitle>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col">
@@ -108,7 +108,7 @@ export default function ComplianceChat() {
                 >
                   <Avatar className="h-8 w-8">
                     {msg.role === "assistant" ? (
-                      <AvatarImage src="/bot-avatar.png" />
+                      <AvatarImage src="/metaworks-ai-consultant.png" />
                     ) : (
                       <AvatarImage src="/user-avatar.png" />
                     )}
@@ -135,7 +135,7 @@ export default function ComplianceChat() {
               <div className="flex justify-start">
                 <div className="flex gap-3 max-w-[80%]">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src="/bot-avatar.png" />
+                    <AvatarImage src="/metaworks-ai-consultant.png" />
                     <AvatarFallback>AI</AvatarFallback>
                   </Avatar>
                   <div className="rounded-lg p-4 bg-muted flex items-center">
