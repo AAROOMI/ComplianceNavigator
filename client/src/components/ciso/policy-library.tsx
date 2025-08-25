@@ -22,6 +22,7 @@ import {
   Archive,
   Share2
 } from "lucide-react";
+import { PolicyDocumentViewer } from "@/components/common/policy-document-viewer";
 
 interface PolicyDocument {
   id: string;
@@ -386,13 +387,31 @@ export default function PolicyLibrary() {
                         >
                           <Star className={`w-4 h-4 ${policy.starred ? 'text-yellow-400 fill-current' : ''}`} />
                         </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          data-testid={`button-view-${policy.id}`}
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Button>
+                        <PolicyDocumentViewer
+                          content={`# ${policy.title}\n\n${policy.description}\n\nThis is a sample policy document for demonstration purposes.`}
+                          metadata={{
+                            id: policy.id,
+                            title: policy.title,
+                            type: 'Security Policy',
+                            description: policy.description,
+                            author: policy.author,
+                            company: 'Your Organization',
+                            createdDate: policy.lastModified.toLocaleDateString(),
+                            status: policy.status,
+                            priority: 'medium',
+                            category: policy.category,
+                            version: policy.version
+                          }}
+                          triggerButton={
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              data-testid={`button-view-${policy.id}`}
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                          }
+                        />
                         <Button
                           size="sm"
                           variant="outline"

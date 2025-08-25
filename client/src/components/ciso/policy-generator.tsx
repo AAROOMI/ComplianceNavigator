@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import DocumentViewer from "@/components/common/document-viewer";
+import { PolicyDocumentViewer } from "@/components/common/policy-document-viewer";
 import { Loader2, Download, FileText, Wand2, Settings, Users, Shield, Eye } from "lucide-react";
 
 interface PolicyGeneratorProps {}
@@ -371,9 +371,10 @@ This policy will be reviewed annually or as needed to address changing threats a
                       <Download className="w-4 h-4 mr-2" />
                       Download
                     </Button>
-                    <DocumentViewer
+                    <PolicyDocumentViewer
                       content={generatedPolicy}
                       metadata={{
+                        id: formData.policyType,
                         title: `${POLICY_TYPES.find(p => p.id === formData.policyType)?.name || 'Policy Document'}`,
                         type: 'Security Policy',
                         description: `AI-generated security policy for ${formData.companyName}`,
@@ -382,7 +383,8 @@ This policy will be reviewed annually or as needed to address changing threats a
                         createdDate: new Date().toLocaleDateString(),
                         status: 'draft',
                         priority: 'medium',
-                        category: POLICY_TYPES.find(p => p.id === formData.policyType)?.category || 'Security'
+                        category: POLICY_TYPES.find(p => p.id === formData.policyType)?.category || 'Security',
+                        version: "1.0"
                       }}
                       triggerButton={
                         <Button size="sm" variant="outline">
