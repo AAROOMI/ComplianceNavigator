@@ -285,6 +285,7 @@ export const riskManagementPlans = pgTable("risk_management_plans", {
   updatedAt: text("updated_at").notNull(),
 });
 
+
 // Built-in Risk Register - Pre-defined common cybersecurity risks
 export const riskRegister = pgTable("risk_register", {
   id: serial("id").primaryKey(),
@@ -505,6 +506,7 @@ export const insertRiskManagementPlanSchema = createInsertSchema(riskManagementP
   updatedAt: true,
 });
 
+
 export const insertRiskRegisterSchema = createInsertSchema(riskRegister).pick({
   category: true,
   subcategory: true,
@@ -579,6 +581,8 @@ export type InsertVulnerability = z.infer<typeof insertVulnerabilitySchema>;
 
 export type RiskManagementPlan = typeof riskManagementPlans.$inferSelect;
 export type InsertRiskManagementPlan = z.infer<typeof insertRiskManagementPlanSchema>;
+
+
 
 export type CisoPolicy = typeof cisoPolicies.$inferSelect;
 export type InsertCisoPolicy = z.infer<typeof insertCisoPolicySchema>;
@@ -964,8 +968,7 @@ export const insertEccUserTrainingSchema = createInsertSchema(eccUserTraining).p
 });
 
 // ECC Navigator Types
-export type EccProject = typeof eccProjects.$inferSelect;
-export type InsertEccProject = z.infer<typeof insertEccProjectSchema>;
+
 
 export type EccGapAssessment = typeof eccGapAssessments.$inferSelect;
 export type InsertEccGapAssessment = z.infer<typeof insertEccGapAssessmentSchema>;
