@@ -36,20 +36,62 @@ interface PolicyMetadata {
 }
 
 interface PolicyDocumentViewerProps {
-  content: string;
-  metadata: PolicyMetadata;
+  content?: string;
+  metadata?: PolicyMetadata;
   triggerButton?: React.ReactNode;
+  // Alternative interface for DocumentLifecycleManager
+  isOpen?: boolean;
+  onClose?: () => void;
+  document?: {
+    id: string;
+    title: string;
+    content: string;
+    version: string;
+    lastModified: string;
+    author: string;
+    status: string;
+    category: string;
+  };
 }
 
-export function PolicyDocumentViewer({ content, metadata, triggerButton }: PolicyDocumentViewerProps) {
+export function PolicyDocumentViewer({ content, metadata, triggerButton, isOpen, onClose, document }: PolicyDocumentViewerProps) {
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
   const [barcodeDataUrl, setBarcodeDataUrl] = useState<string>("");
   const barcodeCanvasRef = useRef<HTMLCanvasElement>(null);
   const { toast } = useToast();
 
+  // Use document or metadata depending on which props are provided
+  const actualContent = content || document?.content || '';
+  const actualMetadata = metadata || (document ? {
+    id: document.id,
+    title: document.title,
+    type: 'Security Policy',
+    description: `Document: ${document.title}`,
+    author: document.author,
+    company: 'Organization',
+    createdDate: new Date(document.lastModified).toLocaleDateString(),
+    status: document.status,
+    priority: 'medium',
+    category: document.category,
+    version: document.version,
+    lastModified: document.lastModified
+  } : {
+    id: 'unknown',
+    title: 'Unknown Document',
+    type: 'Document',
+    description: 'No metadata available',
+    author: 'Unknown',
+    company: 'Organization',
+    createdDate: new Date().toLocaleDateString(),
+    status: 'draft',
+    priority: 'medium',
+    category: 'General',
+    version: '1.0'
+  });
+
   // Generate unique document ID based on metadata
-  const documentId = `DOC-${metadata.id}-${Date.now().toString().slice(-6)}`;
-  const documentUrl = `${window.location.origin}/policy/${metadata.id}`;
+  const documentId = `DOC-${actualMetadata.id}-${Date.now().toString().slice(-6)}`;
+  const documentUrl = `${window.location.origin}/policy/${actualMetadata.id}`;
 
   useEffect(() => {
     // Generate QR Code
@@ -57,11 +99,11 @@ export function PolicyDocumentViewer({ content, metadata, triggerButton }: Polic
       try {
         const qrData = JSON.stringify({
           id: documentId,
-          title: metadata.title,
-          company: metadata.company,
+          title: actualMetadata.title,
+          company: actualMetadata.company,
           url: documentUrl,
-          created: metadata.createdDate,
-          version: metadata.version || "1.0"
+          created: actualMetadata.createdDate,
+          version: actualMetadata.version || "1.0"
         });
         
         const qrCodeUrl = await QRCode.toDataURL(qrData, {
@@ -101,23 +143,23 @@ export function PolicyDocumentViewer({ content, metadata, triggerButton }: Polic
 
     generateQRCode();
     generateBarcode();
-  }, [documentId, metadata, documentUrl]);
+  }, [documentId, actualMetadata, documentUrl]);
 
   const handleDownload = () => {
     const fullDocument = `
-${content}
+${actualContent}
 
 ---
 
 ## Document Information
 
 **Document ID:** ${documentId}
-**Company:** ${metadata.company}
-**Author:** ${metadata.author}
-**Created:** ${metadata.createdDate}
-**Status:** ${metadata.status}
-**Category:** ${metadata.category}
-**Version:** ${metadata.version || "1.0"}
+**Company:** ${actualMetadata.company}
+**Author:** ${actualMetadata.author}
+**Created:** ${actualMetadata.createdDate}
+**Status:** ${actualMetadata.status}
+**Category:** ${actualMetadata.category}
+**Version:** ${actualMetadata.version || "1.0"}
 
 **QR Code:** ${documentUrl}
 **Barcode ID:** ${documentId}
@@ -129,17 +171,17 @@ ${content}
 
     const blob = new Blob([fullDocument], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = window.document.createElement('a');
     a.href = url;
-    a.download = `${metadata.title.replace(/\s+/g, '-')}-${documentId}.md`;
-    document.body.appendChild(a);
+    a.download = `${actualMetadata.title.replace(/\s+/g, '-')}-${actualMetadata.version || 'v1.0'}.md`;
+    window.document.body.appendChild(a);
     a.click();
-    document.body.removeChild(a);
+    window.document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
     toast({
       title: "Document Downloaded",
-      description: `${metadata.title} has been downloaded with QR code and barcode.`,
+      description: `${actualMetadata.title} has been downloaded with QR code and barcode.`,
     });
   };
 
@@ -154,8 +196,8 @@ ${content}
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: metadata.title,
-        text: metadata.description,
+        title: actualMetadata.title,
+        text: actualMetadata.description,
         url: documentUrl
       });
     } else {
@@ -187,23 +229,25 @@ ${content}
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        {triggerButton || (
-          <Button variant="outline" size="sm">
-            <Eye className="h-4 w-4 mr-2" />
-            View Document
-          </Button>
-        )}
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      {triggerButton && (
+        <DialogTrigger asChild>
+          {triggerButton || (
+            <Button variant="outline" size="sm">
+              <Eye className="h-4 w-4 mr-2" />
+              View Document
+            </Button>
+          )}
+        </DialogTrigger>
+      )}
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5" />
-            {metadata.title}
+            {actualMetadata.title}
           </DialogTitle>
           <DialogDescription>
-            {metadata.description}
+            {actualMetadata.description}
           </DialogDescription>
         </DialogHeader>
 
@@ -215,14 +259,14 @@ ${content}
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Badge className={getStatusColor(metadata.status)}>
-                      {metadata.status}
+                    <Badge className={getStatusColor(actualMetadata.status)}>
+                      {actualMetadata.status}
                     </Badge>
-                    <Badge className={getPriorityColor(metadata.priority)}>
-                      {metadata.priority} Priority
+                    <Badge className={getPriorityColor(actualMetadata.priority)}>
+                      {actualMetadata.priority} Priority
                     </Badge>
                     <Badge variant="outline">
-                      v{metadata.version || "1.0"}
+                      v{actualMetadata.version || "1.0"}
                     </Badge>
                   </div>
                   <div className="flex items-center gap-2">
@@ -243,7 +287,7 @@ ${content}
               <CardContent className="p-6 h-full overflow-y-auto">
                 <div className="prose prose-sm max-w-none">
                   <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">
-                    {content}
+                    {actualContent}
                   </pre>
                 </div>
               </CardContent>
@@ -280,7 +324,7 @@ ${content}
                   <Building className="h-4 w-4 text-muted-foreground" />
                   <div>
                     <p className="font-medium">Company</p>
-                    <p className="text-muted-foreground">{metadata.company}</p>
+                    <p className="text-muted-foreground">{actualMetadata.company}</p>
                   </div>
                 </div>
 
@@ -288,7 +332,7 @@ ${content}
                   <User className="h-4 w-4 text-muted-foreground" />
                   <div>
                     <p className="font-medium">Author</p>
-                    <p className="text-muted-foreground">{metadata.author}</p>
+                    <p className="text-muted-foreground">{actualMetadata.author}</p>
                   </div>
                 </div>
 
@@ -296,14 +340,14 @@ ${content}
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   <div>
                     <p className="font-medium">Created</p>
-                    <p className="text-muted-foreground">{metadata.createdDate}</p>
+                    <p className="text-muted-foreground">{actualMetadata.createdDate}</p>
                   </div>
                 </div>
 
                 <div>
                   <p className="font-medium">Category</p>
                   <Badge variant="outline" className="mt-1">
-                    {metadata.category}
+                    {actualMetadata.category}
                   </Badge>
                 </div>
               </CardContent>

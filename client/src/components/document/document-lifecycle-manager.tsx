@@ -39,6 +39,7 @@ import QRCode from "qrcode";
 import JsBarcode from "jsbarcode";
 import { v4 as uuidv4 } from "uuid";
 import CryptoJS from "crypto-js";
+import { PolicyDocumentViewer } from "@/components/common/policy-document-viewer";
 
 interface DocumentMetadata {
   id: string;
@@ -109,6 +110,7 @@ export default function DocumentLifecycleManager() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showApprovalDialog, setShowApprovalDialog] = useState(false);
   const [showQRDialog, setShowQRDialog] = useState(false);
+  const [showViewDialog, setShowViewDialog] = useState(false);
   const [qrCodeImage, setQRCodeImage] = useState<string>('');
   const [barcodeImage, setBarcodeImage] = useState<string>('');
   const [scannedCode, setScannedCode] = useState<string>('');
@@ -382,6 +384,11 @@ export default function DocumentLifecycleManager() {
     setShowQRDialog(true);
   };
 
+  const viewDocument = (document: DocumentMetadata) => {
+    setSelectedDocument(document);
+    setShowViewDialog(true);
+  };
+
   const downloadDocument = (doc: DocumentMetadata) => {
     const documentData = {
       ...doc,
@@ -554,6 +561,15 @@ export default function DocumentLifecycleManager() {
                           )}
                         </div>
                         <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => viewDocument(document)}
+                            title="View Document"
+                            data-testid={`button-view-${document.id}`}
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
                           <Button
                             size="sm"
                             variant="outline"
@@ -845,6 +861,25 @@ export default function DocumentLifecycleManager() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Document Viewer Dialog */}
+      {selectedDocument && (
+        <PolicyDocumentViewer
+          isOpen={showViewDialog}
+          onClose={() => setShowViewDialog(false)}
+          document={{
+            id: selectedDocument.id,
+            title: selectedDocument.title,
+            content: selectedDocument.content,
+            version: selectedDocument.version,
+            lastModified: selectedDocument.lastModified,
+            author: selectedDocument.creator,
+            status: selectedDocument.status,
+            category: selectedDocument.category
+          }}
+          triggerButton={null}
+        />
+      )}
     </div>
   );
 }
