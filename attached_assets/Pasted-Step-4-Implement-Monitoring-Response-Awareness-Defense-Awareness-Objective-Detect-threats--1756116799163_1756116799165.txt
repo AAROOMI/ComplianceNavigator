@@ -1,0 +1,17 @@
+Step 4: Implement Monitoring, Response & Awareness (Defense & Awareness)
+Objective: Detect threats, respond to incidents, and empower employees.
+Key Activities:
+Enable Logging and Monitoring: Activate event logs on all critical systems and privileged accounts. Implement a SIEM (Security Information and Event Management) system for centralized monitoring (Controls 2-12-3-1, 2-12-3-3). Ensure logs are retained for at least 12 months (Control 2-12-3-5).
+Implement Vulnerability Management: Conduct regular vulnerability scans and penetration tests (Controls 2-10-3-1, 2-11-3-2). Establish a process to remediate findings based on risk.
+Launch the Awareness Program: As per Control 1-10, develop and deliver engaging training. Focus on real-world threats like phishing, secure browsing, and mobile device security (Controls 1-10-3-1 to 1-10-3-4). Conduct regular phishing simulations.
+Activate the Incident Response Plan: Ensure the IRP is communicated and that a response team is ready. Practice tabletop exercises.
+Deliverables: Active SIEM dashboard, Vulnerability scan reports with remediation plans, Ongoing security awareness training program, Conducted phishing simulations, Tested Incident Response Plan.
+Why Next? You can't protect what you can't see. This step ensures you can detect attacks and that your people are your first line of defense.
+Step 5: Address Specialized Areas (Third-Party & ICS)
+Objective: Extend security to external partners and specialized systems.
+Key Activities:
+Review Third-Party Contracts: Ensure all contracts with vendors and cloud providers include the required cybersecurity clauses (Control 4-1-2). Conduct risk assessments before signing (Control 4-1-3-1).
+Ensure Cloud Compliance: Verify that any cloud-hosted data is stored within the Kingdom of Saudi Arabia and that environments are properly isolated (Control 4-2-3-3, 4-2-3-2).
+Secure Industrial Control Systems (ICS): If applicable, implement strict network segmentation between ICS and corporate networks, limit the use of external media, and conduct specialized patch management (Controls 5-1-3-1, 5-1-3-5, 5-1-3-9).
+Deliverables: Updated third-party contracts with security clauses, Cloud compliance assessment report, ICS security plan (if applicable).
+Why Last? These areas are often more complex and require coordination with external parties or specialized expertise. They are built upon the strong foundation established in the previous steps.

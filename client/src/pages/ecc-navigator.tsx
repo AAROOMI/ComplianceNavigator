@@ -50,16 +50,16 @@ interface EccProject {
 }
 
 const workflowSteps = [
-  { id: 1, title: "Project Setup", description: "Define organization details and project scope", icon: Settings },
-  { id: 2, title: "Gap Assessment", description: "Interactive questionnaire for all 114 controls", icon: CheckCircle },
-  { id: 3, title: "Risk Assessment", description: "Risk analysis for identified gaps", icon: AlertTriangle },
-  { id: 4, title: "Roadmap Generation", description: "Auto-generated prioritized task list", icon: Target },
-  { id: 5, title: "Policy Development", description: "Create policies from templates", icon: FileText },
-  { id: 6, title: "Task Management", description: "Kanban-style task management", icon: Users },
-  { id: 7, title: "Document Repository", description: "Evidence and document storage", icon: BookOpen },
-  { id: 8, title: "Training & Awareness", description: "Interactive training modules", icon: Brain },
-  { id: 9, title: "Continuous Monitoring", description: "Live progress dashboard", icon: BarChart3 },
-  { id: 10, title: "Audit & Reporting", description: "Generate NCA compliance reports", icon: Download }
+  { id: 1, title: "Foundation & Governance", description: "AO engagement, cybersecurity function, steering committee", icon: Shield },
+  { id: 2, title: "Gap Assessment", description: "Interactive questionnaire for all 114 ECC controls", icon: CheckCircle },
+  { id: 3, title: "Risk Assessment", description: "Risk analysis with likelihood × impact matrix", icon: AlertTriangle },
+  { id: 4, title: "Core Policies & Roles", description: "Cybersecurity strategy, core policies, role definitions", icon: FileText },
+  { id: 5, title: "Technical Defense", description: "IAM, system hardening, data protection, network security", icon: Settings },
+  { id: 6, title: "Monitoring & Response", description: "SIEM implementation, vulnerability management, incident response", icon: BarChart3 },
+  { id: 7, title: "Awareness Training", description: "Interactive phishing simulations and security education", icon: Brain },
+  { id: 8, title: "Third-Party & ICS", description: "Vendor contracts, cloud compliance, industrial control systems", icon: Users },
+  { id: 9, title: "Continuous Review", description: "Annual reviews, steering committee oversight, improvements", icon: TrendingUp },
+  { id: 10, title: "Independent Audit", description: "External auditor engagement and NCA compliance validation", icon: Download }
 ];
 
 const organizationSizes = [
@@ -412,39 +412,71 @@ export default function EccNavigator() {
             </Card>
           </div>
 
-          {/* Quick Start Guide */}
+          {/* 7-Step Framework Guide */}
           <Card>
             <CardHeader>
-              <CardTitle>Quick Start Guide</CardTitle>
-              <CardDescription>Get started with your ECC implementation in minutes</CardDescription>
+              <CardTitle>7-Step ECC Implementation Framework</CardTitle>
+              <CardDescription>Aligned with the comprehensive ECC-1:2018 implementation methodology for Saudi organizations</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-start gap-4 p-4 border rounded-lg">
-                  <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">1</div>
+                <div className="flex items-start gap-4 p-4 border rounded-lg border-green-200 bg-green-50">
+                  <div className="w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center text-sm font-bold">1</div>
                   <div>
-                    <h4 className="font-semibold mb-1">Create Your Project</h4>
-                    <p className="text-sm text-muted-foreground mb-2">Define your organization details and implementation scope</p>
+                    <h4 className="font-semibold mb-1">Foundation & Governance</h4>
+                    <p className="text-sm text-muted-foreground mb-2">Secure Authorizing Official buy-in, establish cybersecurity function, form steering committee</p>
                     <Button size="sm" onClick={() => setShowCreateProject(true)}>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Create Project
+                      <Shield className="h-4 w-4 mr-2" />
+                      Start Foundation
                     </Button>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4 p-4 border rounded-lg">
-                  <div className="w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center text-sm font-bold">2</div>
+                  <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">2</div>
                   <div>
-                    <h4 className="font-semibold mb-1">Complete Gap Assessment</h4>
-                    <p className="text-sm text-muted-foreground">Interactive questionnaire for all 114 controls to identify gaps</p>
+                    <h4 className="font-semibold mb-1">Core Policies & Roles</h4>
+                    <p className="text-sm text-muted-foreground">Develop cybersecurity strategy, core policies (AUP, IRP, BC/DR), define roles</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4 p-4 border rounded-lg">
-                  <div className="w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center text-sm font-bold">3</div>
+                  <div className="w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center text-sm font-bold">3</div>
                   <div>
-                    <h4 className="font-semibold mb-1">Generate Implementation Roadmap</h4>
-                    <p className="text-sm text-muted-foreground">AI-powered roadmap with prioritized tasks and timelines</p>
+                    <h4 className="font-semibold mb-1">Technical Defense</h4>
+                    <p className="text-sm text-muted-foreground">Asset management, IAM with MFA, system hardening, data encryption</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-4 border rounded-lg">
+                  <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center text-sm font-bold">4</div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Monitoring & Response</h4>
+                    <p className="text-sm text-muted-foreground">SIEM deployment, vulnerability management, incident response activation</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-4 border rounded-lg">
+                  <div className="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center text-sm font-bold">5</div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Third-Party & ICS</h4>
+                    <p className="text-sm text-muted-foreground">Vendor contracts, cloud compliance (KSA data residency), ICS security</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-4 border rounded-lg">
+                  <div className="w-8 h-8 rounded-full bg-teal-600 text-white flex items-center justify-center text-sm font-bold">6</div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Continuous Review</h4>
+                    <p className="text-sm text-muted-foreground">Annual reviews, steering committee meetings, continuous improvement</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-4 border rounded-lg">
+                  <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm font-bold">7</div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Independent Audit</h4>
+                    <p className="text-sm text-muted-foreground">External auditor engagement, compliance validation, NCA submission</p>
                   </div>
                 </div>
               </div>

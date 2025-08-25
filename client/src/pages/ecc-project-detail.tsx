@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { InteractiveTrainingModule } from "@/components/ecc/interactive-training";
+import { GovernanceSetup } from "@/components/ecc/governance-setup";
 import { 
   Shield, 
   ShieldCheck, 
@@ -90,16 +91,16 @@ interface RoadmapTask {
 }
 
 const workflowSteps = [
-  { id: 1, title: "Project Setup", description: "Organization details defined" },
-  { id: 2, title: "Gap Assessment", description: "114 controls evaluated" },
+  { id: 1, title: "Foundation & Governance", description: "AO engagement, cybersecurity function, steering committee" },
+  { id: 2, title: "Gap Assessment", description: "114 ECC controls evaluated" },
   { id: 3, title: "Risk Assessment", description: "Risks identified and analyzed" },
-  { id: 4, title: "Roadmap Generation", description: "Implementation plan created" },
-  { id: 5, title: "Policy Development", description: "Policies from templates" },
-  { id: 6, title: "Task Management", description: "Team coordination active" },
-  { id: 7, title: "Document Repository", description: "Evidence collection" },
-  { id: 8, title: "Training & Awareness", description: "Staff training ongoing" },
-  { id: 9, title: "Continuous Monitoring", description: "Live progress tracking" },
-  { id: 10, title: "Audit & Reporting", description: "Ready for NCA submission" }
+  { id: 4, title: "Core Policies & Roles", description: "Cybersecurity strategy and core policies developed" },
+  { id: 5, title: "Technical Defense", description: "IAM, system hardening, data protection implemented" },
+  { id: 6, title: "Monitoring & Response", description: "SIEM, vulnerability management, incident response active" },
+  { id: 7, title: "Awareness Training", description: "Interactive security education deployed" },
+  { id: 8, title: "Third-Party & ICS", description: "Vendor contracts, cloud compliance, ICS security" },
+  { id: 9, title: "Continuous Review", description: "Annual reviews and steering committee oversight" },
+  { id: 10, title: "Independent Audit", description: "External audit and NCA compliance validation" }
 ];
 
 const mockGapAssessments: GapAssessment[] = [
@@ -204,6 +205,7 @@ export default function EccProjectDetail() {
   const [gapAssessments, setGapAssessments] = useState<GapAssessment[]>(mockGapAssessments);
   const [riskAssessments, setRiskAssessments] = useState<RiskAssessment[]>(mockRiskAssessments);
   const [roadmapTasks, setRoadmapTasks] = useState<RoadmapTask[]>(mockRoadmapTasks);
+  const [showGovernanceSetup, setShowGovernanceSetup] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -273,8 +275,23 @@ export default function EccProjectDetail() {
     });
   };
 
+  const handleGovernanceComplete = (data: any) => {
+    console.log("Governance setup completed:", data);
+    setShowGovernanceSetup(false);
+    if (project.currentStep === 1) {
+      const nextStep = 2;
+      setProject({ ...project, currentStep: nextStep });
+      toast({
+        title: "Foundation Complete!",
+        description: "Governance foundation established. Proceeding to gap assessment."
+      });
+    }
+  };
+
   const handleNextStep = () => {
-    if (project.currentStep < 10) {
+    if (project.currentStep === 1) {
+      setShowGovernanceSetup(true);
+    } else if (project.currentStep < 10) {
       const nextStep = project.currentStep + 1;
       setProject({ ...project, currentStep: nextStep });
       toast({
@@ -420,6 +437,27 @@ export default function EccProjectDetail() {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
+          {/* Governance Setup Dialog */}
+          {showGovernanceSetup && (
+            <Card className="border-2 border-primary">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-5 w-5" />
+                  Foundation & Governance Setup Required
+                </CardTitle>
+                <CardDescription>
+                  Complete the foundational governance setup to establish proper authority and oversight for your ECC implementation.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <GovernanceSetup 
+                  projectId={project.id} 
+                  onComplete={handleGovernanceComplete} 
+                />
+              </CardContent>
+            </Card>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
