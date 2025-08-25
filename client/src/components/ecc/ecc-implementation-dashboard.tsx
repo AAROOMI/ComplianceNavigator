@@ -24,6 +24,12 @@ import {
   XCircle
 } from "lucide-react";
 
+interface DetailedActivity {
+  name: string;
+  description: string;
+  completed: boolean;
+}
+
 interface ImplementationStep {
   id: number;
   title: string;
@@ -37,6 +43,9 @@ interface ImplementationStep {
   deliverables: string[];
   dependencies: number[];
   assignedTeam?: string;
+  keyActivities?: string[];
+  eccControlReferences?: string[];
+  detailedActivities?: DetailedActivity[];
 }
 
 interface ProjectProgress {
@@ -60,33 +69,61 @@ export default function EccImplementationDashboard({ projectId, organizationName
   const [selectedStep, setSelectedStep] = useState<ImplementationStep | null>(null);
   const [projectProgress, setProjectProgress] = useState<ProjectProgress>({
     totalControls: 114,
-    completed: 0,
-    inProgress: 0,
-    notStarted: 114,
-    nonCompliant: 0,
+    completed: 18,
+    inProgress: 25, 
+    notStarted: 71,
+    nonCompliant: 33,
     identified: 114,
-    overallProgress: 0
+    overallProgress: 15
   });
 
-  // NCA ECC Implementation Workflow Steps (7-step process as shown in image)
+  // NCA ECC Implementation Workflow Steps with detailed activities and deliverables
   const implementationSteps: ImplementationStep[] = [
     {
       id: 1,
       title: "Establish the Foundation",
-      description: "Establish leadership & governance to create the organizational structure to lead the effort.",
+      description: "Secure leadership buy-in and create the organizational structure to lead the effort.",
       icon: Shield,
-      status: "not-started",
-      progress: 0,
+      status: "completed",
+      progress: 100,
       estimatedDuration: "4-6 weeks",
       deliverables: [
-        "Cybersecurity Strategy Document",
-        "Governance Framework",
-        "Executive Sponsorship Charter",
-        "Project Team Formation",
-        "Communication Plan"
+        "Appointment project charter",
+        "Organizational chart for cybersecurity function",
+        "Cybersecurity Steering Committee",
+        "Initial Gap Analysis Report"
       ],
       dependencies: [],
-      assignedTeam: "Executive Leadership & CISO"
+      assignedTeam: "Executive Leadership & CISO",
+      keyActivities: [
+        "Engage the Authorizing Official",
+        "Establish the Cybersecurity Function", 
+        "Form the Cybersecurity Steering Committee",
+        "Conduct a Gap Analysis"
+      ],
+      eccControlReferences: ["1.2.1", "1.2.3"],
+      detailedActivities: [
+        {
+          name: "Engage the Authorizing Official",
+          description: "Identify the AO (Authorizing Official) and Royal Decree (1231) so the CO of the organization is aware of cybersecurity responsibility for their org",
+          completed: true
+        },
+        {
+          name: "Establish the Cybersecurity Function",
+          description: "Create a dedicated cybersecurity team (CISO office) independent from IT department",
+          completed: true
+        },
+        {
+          name: "Form the Cybersecurity Steering Committee",
+          description: "Establish a committee with senior stakeholders to steer the ECC, Legal, and Operations",
+          completed: true
+        },
+        {
+          name: "Conduct a Gap Analysis",
+          description: "Perform high-level risk analysis against the 114 ECC controls",
+          completed: true
+        }
+      ]
     },
     {
       id: 2,
@@ -104,7 +141,36 @@ export default function EccImplementationDashboard({ projectId, organizationName
         "Risk Management Methodology"
       ],
       dependencies: [1],
-      assignedTeam: "Policy Development Team"
+      assignedTeam: "Policy Development Team",
+      keyActivities: [
+        "Develop Cybersecurity Strategy",
+        "Create Core Security Policies",
+        "Define Organizational Roles",
+        "Establish Asset Management Framework"
+      ],
+      eccControlReferences: ["1.1.1", "1.1.2", "1.3.1", "1.4.1"],
+      detailedActivities: [
+        {
+          name: "Develop Cybersecurity Strategy",
+          description: "Create comprehensive cybersecurity strategy aligned with business objectives and NCA ECC requirements",
+          completed: false
+        },
+        {
+          name: "Create Core Security Policies",
+          description: "Develop essential policies including AUP, IRP, Business Continuity, and Data Protection",
+          completed: false
+        },
+        {
+          name: "Define Organizational Roles",
+          description: "Establish clear cybersecurity roles, responsibilities, and accountability matrices",
+          completed: false
+        },
+        {
+          name: "Establish Asset Management Framework",
+          description: "Create asset inventory, classification, and lifecycle management procedures",
+          completed: false
+        }
+      ]
     },
     {
       id: 3,
@@ -231,6 +297,159 @@ export default function EccImplementationDashboard({ projectId, organizationName
     } else if (direction === "next" && currentStepIndex < implementationSteps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     }
+  };
+
+  // Document generation function
+  const generateDocument = (stepId: number, deliverable: string) => {
+    const step = implementationSteps.find(s => s.id === stepId);
+    if (!step) return;
+
+    // Create document content based on deliverable type
+    let content = "";
+    const orgName = organizationName || "Your Organization";
+    
+    switch (deliverable) {
+      case "Appointment project charter":
+        content = `# ECC Implementation Project Charter
+
+## Organization: ${orgName}
+
+### Project Overview
+This charter formally establishes the Essential Cybersecurity Controls (ECC-1:2018) implementation project for ${orgName}, in accordance with National Cybersecurity Authority (NCA) requirements.
+
+### Executive Sponsor Authorization
+**Authorizing Official (AO):** [Name and Title]
+**Date:** ${new Date().toLocaleDateString()}
+
+### Project Scope
+- Implementation of all 114 ECC controls across 5 domains
+- Establishment of cybersecurity governance framework
+- Development of policies and procedures aligned with NCA requirements
+- Risk assessment and mitigation planning
+
+### Success Criteria
+- 100% compliance with applicable ECC controls
+- Successful NCA audit and certification
+- Established cybersecurity program with continuous monitoring
+
+**Authorized by:** [Executive Signature]
+**Date:** ${new Date().toLocaleDateString()}`;
+        break;
+
+      case "Organizational chart for cybersecurity function":
+        content = `# Cybersecurity Organizational Structure
+
+## ${orgName} - Cybersecurity Function
+
+### Reporting Structure
+
+#### Executive Level
+- **Chief Executive Officer (CEO)**
+  - Executive oversight and accountability
+  - Final decision authority on cybersecurity investments
+
+#### Management Level  
+- **Chief Information Security Officer (CISO)**
+  - Direct report to CEO/CTO
+  - Overall cybersecurity program leadership
+  - NCA ECC compliance oversight
+
+#### Operational Level
+- **Cybersecurity Manager**
+  - Day-to-day cybersecurity operations
+  - Team management and coordination
+  
+- **Security Analyst**
+  - Monitoring and incident response
+  - Vulnerability assessments
+
+- **Compliance Specialist**
+  - ECC compliance tracking
+  - Documentation and reporting
+
+### Cybersecurity Steering Committee
+- **Chair:** CEO/Senior Executive
+- **Members:** CISO, Legal Counsel, HR Director, IT Director, Business Unit Heads
+
+**Document Version:** 1.0
+**Last Updated:** ${new Date().toLocaleDateString()}`;
+        break;
+
+      case "Initial Gap Analysis Report":
+        content = `# Initial Gap Analysis Report
+## NCA ECC-1:2018 Compliance Assessment
+
+### Executive Summary
+This report presents the initial gap analysis for ${orgName}'s compliance with Essential Cybersecurity Controls (ECC-1:2018).
+
+### Assessment Methodology
+- Reviewed current cybersecurity controls against 114 ECC requirements
+- Assessed implementation status across 5 domains
+- Identified compliance gaps and priority areas
+
+### Domain Assessment Results
+
+#### 1. Cybersecurity Governance
+- **Current Status:** Partially Compliant (40%)
+- **Key Gaps:** Formal governance structure, policy framework
+- **Priority:** High
+
+#### 2. Cybersecurity Defense  
+- **Current Status:** Non-Compliant (15%)
+- **Key Gaps:** IAM, network security, data protection
+- **Priority:** Critical
+
+#### 3. Cybersecurity Resilience
+- **Current Status:** Partially Compliant (25%)
+- **Key Gaps:** Incident response, business continuity
+- **Priority:** High
+
+#### 4. Third-Party and Cloud Computing Cybersecurity
+- **Current Status:** Non-Compliant (10%)
+- **Key Gaps:** Vendor management, cloud controls
+- **Priority:** Medium
+
+#### 5. Industrial Control Systems Cybersecurity
+- **Current Status:** Not Applicable (0%)
+- **Key Gaps:** N/A - No ICS systems identified
+- **Priority:** N/A
+
+### Recommendations
+1. Immediate establishment of cybersecurity governance structure
+2. Development of comprehensive policy framework
+3. Implementation of technical security controls
+4. Deployment of monitoring and response capabilities
+
+**Assessment Date:** ${new Date().toLocaleDateString()}
+**Next Review:** ${new Date(Date.now() + 90*24*60*60*1000).toLocaleDateString()}`;
+        break;
+
+      default:
+        content = `# ${deliverable}
+
+## ${orgName}
+
+### Document Purpose
+This document supports the implementation of NCA ECC-1:2018 requirements for ${orgName}.
+
+### Content
+[Document content to be developed based on specific organizational requirements]
+
+**Created:** ${new Date().toLocaleDateString()}
+**Version:** 1.0
+**Status:** Draft`;
+    }
+
+    // Create and download the document
+    const blob = new Blob([content], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${deliverable.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -399,7 +618,7 @@ export default function EccImplementationDashboard({ projectId, organizationName
                             View Details
                           </Button>
                         </DialogTrigger>
-                        <DialogContent className="max-w-2xl">
+                        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
                           <DialogHeader>
                             <DialogTitle className="flex items-center space-x-2">
                               <step.icon className="w-5 h-5" />
@@ -407,37 +626,114 @@ export default function EccImplementationDashboard({ projectId, organizationName
                             </DialogTitle>
                             <DialogDescription>{step.description}</DialogDescription>
                           </DialogHeader>
-                          <div className="space-y-4">
-                            <div>
-                              <h4 className="font-medium mb-2">Key Deliverables:</h4>
-                              <ul className="space-y-1">
-                                {step.deliverables.map((deliverable, idx) => (
-                                  <li key={idx} className="flex items-center space-x-2 text-sm">
-                                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                                    <span>{deliverable}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                            {step.dependencies.length > 0 && (
+                          
+                          <div className="grid md:grid-cols-2 gap-6">
+                            {/* Left Column - Activities */}
+                            <div className="space-y-4">
                               <div>
-                                <h4 className="font-medium mb-2">Dependencies:</h4>
-                                <div className="flex flex-wrap gap-2">
-                                  {step.dependencies.map((depId) => (
-                                    <Badge key={depId} variant="secondary" className="text-xs">
-                                      Step {depId}
-                                    </Badge>
+                                <h4 className="font-semibold mb-3 flex items-center">
+                                  <Target className="w-4 h-4 mr-2" />
+                                  Key Activities
+                                </h4>
+                                {step.keyActivities && (
+                                  <ul className="space-y-2">
+                                    {step.keyActivities.map((activity, idx) => (
+                                      <li key={idx} className="flex items-center space-x-2 text-sm">
+                                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                        <span>{activity}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
+
+                              {step.detailedActivities && (
+                                <div>
+                                  <h4 className="font-semibold mb-3">Detailed Activities</h4>
+                                  <div className="space-y-3">
+                                    {step.detailedActivities.map((activity, idx) => (
+                                      <div key={idx} className="border rounded-lg p-3 bg-slate-50 dark:bg-slate-700">
+                                        <div className="flex items-center justify-between mb-2">
+                                          <span className="font-medium text-sm">{activity.name}</span>
+                                          {activity.completed ? (
+                                            <CheckCircle className="w-4 h-4 text-green-500" />
+                                          ) : (
+                                            <Clock className="w-4 h-4 text-orange-500" />
+                                          )}
+                                        </div>
+                                        <p className="text-xs text-slate-600 dark:text-slate-300">
+                                          {activity.description}
+                                        </p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {step.eccControlReferences && (
+                                <div>
+                                  <h4 className="font-semibold mb-2">ECC Control References</h4>
+                                  <div className="flex flex-wrap gap-2">
+                                    {step.eccControlReferences.map((control) => (
+                                      <Badge key={control} variant="outline" className="text-xs">
+                                        {control}
+                                      </Badge>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Right Column - Deliverables */}
+                            <div className="space-y-4">
+                              <div>
+                                <h4 className="font-semibold mb-3 flex items-center">
+                                  <FileText className="w-4 h-4 mr-2" />
+                                  Deliverables
+                                </h4>
+                                <div className="space-y-3">
+                                  {step.deliverables.map((deliverable, idx) => (
+                                    <div key={idx} className="flex items-center justify-between p-3 border rounded-lg bg-white dark:bg-slate-800">
+                                      <div className="flex items-center space-x-2">
+                                        <CheckCircle className="w-4 h-4 text-green-500" />
+                                        <span className="text-sm">{deliverable}</span>
+                                      </div>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => generateDocument(step.id, deliverable)}
+                                        data-testid={`button-generate-${deliverable.replace(/\s+/g, '-').toLowerCase()}`}
+                                      >
+                                        <FileText className="w-3 h-3 mr-1" />
+                                        Generate
+                                      </Button>
+                                    </div>
                                   ))}
                                 </div>
                               </div>
-                            )}
-                            <div className="pt-4">
-                              <Button 
-                                className="w-full"
-                                onClick={() => onStepSelect && onStepSelect(step.id)}
-                              >
-                                Start Working on This Step
-                              </Button>
+
+                              {step.dependencies.length > 0 && (
+                                <div>
+                                  <h4 className="font-semibold mb-2">Dependencies</h4>
+                                  <div className="flex flex-wrap gap-2">
+                                    {step.dependencies.map((depId) => (
+                                      <Badge key={depId} variant="secondary" className="text-xs">
+                                        Step {depId}
+                                      </Badge>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              <div className="pt-4">
+                                <Button 
+                                  className="w-full"
+                                  onClick={() => onStepSelect && onStepSelect(step.id)}
+                                  data-testid={`button-start-step-${step.id}`}
+                                >
+                                  Start Working on This Step
+                                </Button>
+                              </div>
                             </div>
                           </div>
                         </DialogContent>
