@@ -404,7 +404,7 @@ export default function MetaworksCompliance() {
               <p className="text-gray-300">
                 {isArabic 
                   ? 'متوافق مع تقييم السيراميك السعودي ومبادئ NCA التوجيهية'
-                  : 'Aligned with Saudi Ceramics Assessment & NCA Guidelines'
+                  : 'Aligned with NCA ECC-1:2018 Official Framework'
                 }
               </p>
             </CardHeader>
@@ -461,7 +461,7 @@ export default function MetaworksCompliance() {
           <p>
             {isArabic
               ? 'متوافق مع دليل تنفيذ NCA ECC وتقييم السيراميك السعودي'
-              : 'Aligned with NCA ECC Implementation Guide & Saudi Ceramics Assessment'
+              : 'Aligned with NCA ECC-1:2018 Implementation Guide (GECC-1:2023)'
             }
           </p>
         </footer>

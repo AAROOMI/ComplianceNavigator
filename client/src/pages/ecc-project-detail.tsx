@@ -213,11 +213,11 @@ export default function EccProjectDetail() {
       // Mock project data - in real app, fetch from API
       const mockProject: EccProject = {
         id: parseInt(params.id),
-        organizationName: "Saudi Tech Solutions",
-        organizationSize: "medium",
-        organizationScope: "advanced",
-        projectName: "ECC Compliance 2024",
-        description: "Complete implementation of Essential Cybersecurity Controls for our organization",
+        organizationName: "National Organization",
+        organizationSize: "large",
+        organizationScope: "comprehensive",
+        projectName: "NCA ECC Compliance Implementation",
+        description: "Complete implementation of NCA Essential Cybersecurity Controls (ECC-1:2018)",
         status: "gap-assessment",
         currentStep: 2,
         overallComplianceScore: 34,

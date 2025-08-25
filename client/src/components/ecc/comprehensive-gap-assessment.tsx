@@ -126,11 +126,11 @@ export default function ComprehensiveGapAssessment({ projectId, userId, onComple
     };
 
     const domainWeights = {
-      "Governance": 1.2,
-      "Cybersecurity Defence": 1.0,
+      "Cybersecurity Governance": 1.3,
+      "Cybersecurity Defense": 1.2,
       "Cybersecurity Resilience": 1.1,
-      "Third Party Cloud Computing Cybersecurity": 0.9,
-      "Industrial Control System (ICS)": 1.3
+      "Third-Party and Cloud Computing Cybersecurity": 1.0,
+      "Industrial Control Systems Cybersecurity": 1.4
     };
 
     const statusMultiplier = statusMultipliers[status as keyof typeof statusMultipliers] || 0.8;

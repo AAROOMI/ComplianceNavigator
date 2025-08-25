@@ -56,42 +56,67 @@ interface EccProject {
   updatedAt: string;
 }
 
+// Official NCA ECC-1:2018 Implementation Workflow (based on GECC-1:2023)
 const workflowSteps = [
   { 
     id: 1, 
-    title: "Project Setup", 
-    description: "Organization profiling, project scoping, governance framework establishment", 
+    title: "ECC Governance and Organization Setup", 
+    description: "Establish cybersecurity governance structure per NCA ECC-1:2018 requirements", 
     icon: Shield,
     component: "governance-setup",
-    estimatedDuration: "2-3 weeks",
-    deliverables: ["Project charter", "Governance framework", "Stakeholder matrix"]
+    estimatedDuration: "4-6 weeks",
+    deliverables: [
+      "Cybersecurity Strategy Document",
+      "Cybersecurity Policy Framework", 
+      "Roles and Responsibilities Matrix (RACI)",
+      "Asset Inventory and Classification",
+      "Risk Management Framework"
+    ]
   },
   { 
     id: 2, 
-    title: "Comprehensive Gap Assessment", 
-    description: "Systematic evaluation of all 114 NCA ECC controls across 5 domains", 
+    title: "NCA ECC Compliance Assessment", 
+    description: "Systematic evaluation of all 114 NCA ECC controls across 5 domains using official methodology", 
     icon: Target,
     component: "gap-assessment",
-    estimatedDuration: "4-6 weeks",
-    deliverables: ["Gap assessment report", "Control compliance matrix", "Priority risk register"]
+    estimatedDuration: "6-8 weeks",
+    deliverables: [
+      "ECC Compliance Assessment Report",
+      "Control Implementation Status Matrix",
+      "Risk Assessment and Treatment Plans",
+      "Non-Compliance Findings Register",
+      "Remediation Action Plan"
+    ]
   },
   { 
     id: 3, 
-    title: "Risk Assessment & Analysis", 
-    description: "Detailed risk analysis with likelihood × impact methodology", 
+    title: "Cybersecurity Risk Management Implementation", 
+    description: "NCA ECC-1:2018 risk assessment methodology and treatment planning", 
     icon: AlertTriangle,
     component: "risk-assessment",
-    estimatedDuration: "2-3 weeks",
-    deliverables: ["Risk assessment report", "Risk treatment plans", "Mitigation roadmap"]
+    estimatedDuration: "4-5 weeks",
+    deliverables: [
+      "Cybersecurity Risk Assessment Report",
+      "Risk Treatment and Mitigation Plans", 
+      "Risk Register and Monitoring Framework",
+      "Risk Appetite and Tolerance Statements",
+      "Residual Risk Analysis"
+    ]
   },
   { 
     id: 4, 
-    title: "Strategic Planning", 
-    description: "Cybersecurity strategy, policies, and role definitions", 
+    title: "Policy Framework and Procedures Development", 
+    description: "Comprehensive cybersecurity policies aligned with NCA ECC requirements", 
     icon: FileText,
-    component: "strategic-planning",
-    estimatedDuration: "3-4 weeks",
-    deliverables: ["Cybersecurity strategy", "Core policies", "RACI matrix"]
+    component: "policy-development",
+    estimatedDuration: "5-7 weeks",
+    deliverables: [
+      "Cybersecurity Policy Framework",
+      "Standard Operating Procedures (SOPs)",
+      "Incident Response Procedures",
+      "Security Awareness Program Materials",
+      "Compliance Monitoring Procedures"
+    ]
   },
   { 
     id: 5, 
@@ -140,12 +165,18 @@ const workflowSteps = [
   },
   { 
     id: 10, 
-    title: "Audit & Certification", 
-    description: "Independent audit preparation and NCA ECC compliance validation", 
+    title: "NCA ECC Compliance Validation and Certification", 
+    description: "Independent audit preparation and official NCA ECC compliance validation", 
     icon: Award,
     component: "audit-certification",
-    estimatedDuration: "4-6 weeks",
-    deliverables: ["Audit readiness", "Compliance evidence", "Certification support"]
+    estimatedDuration: "6-8 weeks",
+    deliverables: [
+      "Self-Assessment Report for NCA",
+      "Compliance Evidence Portfolio", 
+      "Internal Audit Findings Report",
+      "Readiness Assessment for NCA Review",
+      "ECC Compliance Certificate (upon approval)"
+    ]
   }
 ];
 
@@ -623,7 +654,7 @@ export default function EccNavigator() {
           <Card>
             <CardHeader>
               <CardTitle>7-Step ECC Implementation Framework</CardTitle>
-              <CardDescription>Aligned with the comprehensive ECC-1:2018 implementation methodology for Saudi organizations</CardDescription>
+              <CardDescription>Aligned with the comprehensive NCA ECC-1:2018 implementation methodology</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">

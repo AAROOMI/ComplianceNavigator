@@ -3,17 +3,19 @@ import { sql } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Official NCA ECC-1:2018 Main Domains (5 domains, 29 subdomains, 114 controls)
 export const ncaEccDomains = [
-  "Governance",
-  "Cybersecurity Defence",
+  "Cybersecurity Governance",
+  "Cybersecurity Defense",
   "Cybersecurity Resilience",
-  "Third Party Cloud Computing Cybersecurity",
-  "Industrial Control System (ICS)"
+  "Third-Party and Cloud Computing Cybersecurity",
+  "Industrial Control Systems Cybersecurity"
 ] as const;
 
-// Complete NCA ECC detailed structure with all 114 Essential Cybersecurity Controls
+// Official NCA ECC-1:2018 detailed structure with all 114 Essential Cybersecurity Controls
+// Based on official NCA ECC framework: 5 domains, 29 subdomains, 114 controls
 export const ncaEccStructure = {
-  "Governance": {
+  "Cybersecurity Governance": {
     "Cybersecurity Strategy": [
       "ECC-1-1-1: Establish comprehensive cybersecurity strategy aligned with business objectives",
       "ECC-1-1-2: Define cybersecurity vision, mission, and strategic objectives",
@@ -57,7 +59,7 @@ export const ncaEccStructure = {
       "ECC-1-6-5: Maintain training records and compliance tracking"
     ]
   },
-  "Cybersecurity Defence": {
+  "Cybersecurity Defense": {
     "Identity and Access Management": [
       "ECC-2-1-1: Implement identity lifecycle management",
       "ECC-2-1-2: Establish strong authentication mechanisms",
@@ -149,7 +151,7 @@ export const ncaEccStructure = {
       "ECC-3-5-6: Establish security metrics and reporting"
     ]
   },
-  "Third Party Cloud Computing Cybersecurity": {
+  "Third-Party and Cloud Computing Cybersecurity": {
     "Cloud Service Provider Management": [
       "ECC-4-1-1: Establish cloud service provider assessment criteria",
       "ECC-4-1-2: Implement cloud security due diligence processes",
@@ -186,7 +188,7 @@ export const ncaEccStructure = {
       "ECC-4-5-5: Deploy cloud security orchestration and automation"
     ]
   },
-  "Industrial Control System (ICS)": {
+  "Industrial Control Systems Cybersecurity": {
     "ICS Security Governance": [
       "ECC-5-1-1: Establish ICS-specific cybersecurity policies",
       "ECC-5-1-2: Develop ICS security procedures and standards",
