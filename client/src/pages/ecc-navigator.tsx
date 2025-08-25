@@ -446,7 +446,7 @@ export default function EccNavigator() {
     };
 
     return (
-      <Dialog open={showCreateProject} onOpenChange={setShowCreateProject}>
+      <Dialog open={showNewProjectDialog} onOpenChange={setShowNewProjectDialog}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Create New ECC Implementation Project</DialogTitle>
@@ -520,7 +520,7 @@ export default function EccNavigator() {
             </div>
 
             <div className="flex justify-end gap-2 pt-4">
-              <Button type="button" variant="outline" onClick={() => setShowCreateProject(false)}>
+              <Button type="button" variant="outline" onClick={() => setShowNewProjectDialog(false)}>
                 Cancel
               </Button>
               <Button type="submit" disabled={!formData.organizationName || !formData.projectName || !formData.organizationSize || !formData.organizationScope}>
@@ -543,7 +543,7 @@ export default function EccNavigator() {
             Complete implementation platform for Essential Cybersecurity Controls (ECC-1:2018)
           </p>
         </div>
-        <Button onClick={() => setShowCreateProject(true)} data-testid="button-create-project">
+        <Button onClick={() => setShowNewProjectDialog(true)} data-testid="button-create-project">
           <Plus className="h-4 w-4 mr-2" />
           New Project
         </Button>
@@ -749,7 +749,7 @@ export default function EccNavigator() {
                   <div>
                     <h4 className="font-semibold mb-1">Foundation & Governance</h4>
                     <p className="text-sm text-muted-foreground mb-2">Secure Authorizing Official buy-in, establish cybersecurity function, form steering committee</p>
-                    <Button size="sm" onClick={() => setShowCreateProject(true)}>
+                    <Button size="sm" onClick={() => setShowNewProjectDialog(true)}>
                       <Shield className="h-4 w-4 mr-2" />
                       Start Foundation
                     </Button>
@@ -809,7 +809,7 @@ export default function EccNavigator() {
         </TabsContent>
 
         <TabsContent value="projects" className="space-y-4">
-          {projects.length === 0 ? (
+          {eccProjects.length === 0 ? (
             <Card>
               <CardContent className="p-12 text-center">
                 <Shield className="w-16 h-16 mx-auto mb-4 text-muted-foreground/50" />
@@ -817,7 +817,7 @@ export default function EccNavigator() {
                 <p className="text-muted-foreground mb-4">
                   Create your first ECC implementation project to get started
                 </p>
-                <Button onClick={() => setShowCreateProject(true)}>
+                <Button onClick={() => setShowNewProjectDialog(true)}>
                   <Plus className="w-4 h-4 mr-2" />
                   Create First Project
                 </Button>
@@ -825,7 +825,7 @@ export default function EccNavigator() {
             </Card>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {projects.map((project) => (
+              {eccProjects.map((project: any) => (
                 <Card key={project.id} className="hover:shadow-md transition-shadow">
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -949,7 +949,7 @@ export default function EccNavigator() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Active Projects</p>
-                    <h3 className="text-2xl font-bold">{projects.length}</h3>
+                    <h3 className="text-2xl font-bold">{eccProjects.length}</h3>
                   </div>
                 </div>
               </CardContent>
@@ -964,8 +964,8 @@ export default function EccNavigator() {
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Avg Compliance</p>
                     <h3 className="text-2xl font-bold">
-                      {projects.length > 0 
-                        ? Math.round(projects.reduce((acc, p) => acc + p.overallComplianceScore, 0) / projects.length)
+                      {eccProjects.length > 0 
+                        ? Math.round(eccProjects.reduce((acc: number, p: any) => acc + p.overallComplianceScore, 0) / eccProjects.length)
                         : 0}%
                     </h3>
                   </div>
@@ -982,7 +982,7 @@ export default function EccNavigator() {
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">In Progress</p>
                     <h3 className="text-2xl font-bold">
-                      {projects.filter(p => !["completed", "setup"].includes(p.status)).length}
+                      {eccProjects.filter((p: any) => !["completed", "setup"].includes(p.status)).length}
                     </h3>
                   </div>
                 </div>
@@ -998,7 +998,7 @@ export default function EccNavigator() {
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Completed</p>
                     <h3 className="text-2xl font-bold">
-                      {projects.filter(p => p.status === "completed").length}
+                      {eccProjects.filter((p: any) => p.status === "completed").length}
                     </h3>
                   </div>
                 </div>
