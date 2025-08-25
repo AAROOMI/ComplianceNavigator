@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ShieldCheck, FileText, ClipboardCheck, Bot, LayoutDashboard, AlertTriangle, Shield, Database, Settings, Rocket, Monitor, Users, GraduationCap, Book, Award, Brain, Upload } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { LanguageToggle } from '@/components/ui/language-toggle';
-import ceoImage from '@assets/ceo-removebg-preview_1756122016972.png';
+import ceoImage from '../../assets/ceo-removebg-preview_1756122016972.png';
 
 export default function Sidebar() {
   const [location] = useLocation();
