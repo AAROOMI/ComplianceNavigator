@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { useTranslation } from "react-i18next";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Shield, 
   FileText, 
@@ -28,12 +29,15 @@ import {
   Key,
   Server,
   Heart,
-  Play
+  Play,
+  GitCompare,
+  Archive
 } from "lucide-react";
 import PolicyGenerator from "@/components/ciso/policy-generator";
 import CISOExpertConsultant from "@/components/ciso/expert-consultant";
 import PolicyLibrary from "@/components/ciso/policy-library";
 import { PolicyDocumentViewer } from "@/components/common/policy-document-viewer";
+import { PolicyComparisonViewer } from "@/components/common/policy-comparison-viewer";
 
 const CISO_DOCUMENTS = [
   {
@@ -488,11 +492,15 @@ This document establishes comprehensive guidelines for implementing and maintain
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Document Library</TabsTrigger>
           <TabsTrigger value="generator">Policy Generator</TabsTrigger>
           <TabsTrigger value="consultant">Expert Consultant</TabsTrigger>
           <TabsTrigger value="library">Manage Library</TabsTrigger>
+          <TabsTrigger value="comparison" className="flex items-center gap-2">
+            <GitCompare className="w-4 h-4" />
+            Compare Documents
+          </TabsTrigger>
         </TabsList>
 
         {/* Document Library Tab */}
@@ -621,6 +629,163 @@ This document establishes comprehensive guidelines for implementing and maintain
         {/* Library Management Tab */}
         <TabsContent value="library">
           <PolicyLibrary />
+        </TabsContent>
+
+        {/* Document Comparison Tab */}
+        <TabsContent value="comparison">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <GitCompare className="w-5 h-5" />
+                Document Comparison Tool
+              </CardTitle>
+              <CardDescription>
+                Compare policy documents side-by-side to identify differences, track changes, and ensure consistency across your security documentation
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <PolicyComparisonViewer 
+                documents={[
+                  {
+                    id: 'info-sec-v2.1',
+                    title: 'Information Security Policy v2.1',
+                    content: generatedDocuments['security-budget-proposal'] || `# Information Security Policy v2.1
+
+## 1. Purpose and Scope
+This Information Security Policy establishes the framework for protecting information assets and ensuring compliance with regulatory requirements.
+
+## 2. Objectives
+- Protect confidentiality, integrity, and availability of information
+- Ensure compliance with applicable laws and regulations
+- Establish clear security responsibilities
+- Minimize security risks to the organization
+
+## 3. Policy Statement
+The organization is committed to protecting its information assets through comprehensive security controls and procedures.
+
+## 4. Roles and Responsibilities
+- CISO: Overall security strategy and governance
+- IT Team: Technical implementation and monitoring
+- All Employees: Following security procedures
+
+## 5. Implementation
+Security controls will be implemented across all information systems and processes.`,
+                    version: '2.1',
+                    lastModified: '2024-01-15',
+                    author: 'John Smith (CISO)',
+                    status: 'approved',
+                    category: 'Governance'
+                  },
+                  {
+                    id: 'info-sec-v2.0',
+                    title: 'Information Security Policy v2.0',
+                    content: `# Information Security Policy v2.0
+
+## 1. Purpose and Scope
+This Information Security Policy provides guidelines for protecting organizational information assets.
+
+## 2. Objectives
+- Protect information confidentiality and integrity
+- Ensure regulatory compliance
+- Define security responsibilities
+- Reduce organizational risks
+
+## 3. Policy Statement
+The organization commits to protecting information through security measures and controls.
+
+## 4. Roles and Responsibilities
+- CISO: Security oversight and strategy
+- IT Team: Technical controls implementation
+- Staff: Security procedure adherence
+
+## 5. Implementation
+Security measures will be deployed across organizational systems.`,
+                    version: '2.0',
+                    lastModified: '2024-01-01',
+                    author: 'John Smith (CISO)',
+                    status: 'archived',
+                    category: 'Governance'
+                  },
+                  {
+                    id: 'incident-response-v1.8',
+                    title: 'Incident Response Plan v1.8',
+                    content: generatedDocuments['business-continuity-plan'] || `# Incident Response Plan v1.8
+
+## 1. Overview
+This plan provides comprehensive procedures for detecting, responding to, and recovering from cybersecurity incidents.
+
+## 2. Incident Classification
+- Level 1: Low impact incidents
+- Level 2: Medium impact incidents
+- Level 3: High impact incidents
+- Level 4: Critical incidents
+
+## 3. Response Team
+- Incident Commander: Leads response efforts
+- Technical Team: Handles technical response
+- Communications Team: Manages internal/external communications
+- Legal Team: Provides legal guidance
+
+## 4. Response Procedures
+1. Detection and Analysis
+2. Containment, Eradication, and Recovery
+3. Post-Incident Activity
+
+## 5. Communication Protocols
+Clear escalation and notification procedures for all incident types.`,
+                    version: '1.8',
+                    lastModified: '2024-01-12',
+                    author: 'Sarah Johnson',
+                    status: 'approved',
+                    category: 'Incident Response'
+                  },
+                  {
+                    id: 'data-classification-v1.2',
+                    title: 'Data Classification Policy v1.2',
+                    content: `# Data Classification Policy v1.2
+
+## 1. Purpose
+This policy establishes a framework for classifying data based on sensitivity and business value.
+
+## 2. Data Classification Levels
+- Public: Information that can be freely shared
+- Internal: Information for internal use only
+- Confidential: Sensitive information requiring protection
+- Restricted: Highly sensitive information with strict access controls
+
+## 3. Classification Criteria
+Data classification is based on:
+- Sensitivity level
+- Regulatory requirements
+- Business impact if compromised
+- Legal obligations
+
+## 4. Handling Requirements
+Each classification level has specific handling, storage, and transmission requirements.
+
+## 5. Responsibilities
+Data owners are responsible for classifying data and ensuring appropriate protection measures.`,
+                    version: '1.2',
+                    lastModified: '2024-01-10',
+                    author: 'Mike Chen',
+                    status: 'review',
+                    category: 'Data Protection'
+                  }
+                ].concat(Object.entries(generatedDocuments).map(([id, content]) => ({
+                  id: id,
+                  title: CISO_DOCUMENTS.find(doc => doc.id === id)?.title || id,
+                  content: content,
+                  version: '1.0',
+                  lastModified: new Date().toLocaleDateString(),
+                  author: 'AI Policy Generator',
+                  status: 'draft',
+                  category: CISO_DOCUMENTS.find(doc => doc.id === id)?.category || 'Generated'
+                })))}
+                defaultLeftDoc="info-sec-v2.1"
+                defaultRightDoc="info-sec-v2.0"
+              />
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

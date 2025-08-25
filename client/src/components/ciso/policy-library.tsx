@@ -20,9 +20,11 @@ import {
   Tag,
   Filter,
   Archive,
-  Share2
+  Share2,
+  GitCompare
 } from "lucide-react";
 import { PolicyDocumentViewer } from "@/components/common/policy-document-viewer";
+import { PolicyComparisonViewer } from "@/components/common/policy-comparison-viewer";
 
 interface PolicyDocument {
   id: string;
@@ -36,6 +38,7 @@ interface PolicyDocument {
   tags: string[];
   starred: boolean;
   description: string;
+  content: string;
 }
 
 const MOCK_POLICIES: PolicyDocument[] = [
@@ -50,7 +53,28 @@ const MOCK_POLICIES: PolicyDocument[] = [
     size: '245 KB',
     tags: ['iso27001', 'governance', 'baseline'],
     starred: true,
-    description: 'Comprehensive information security governance framework'
+    description: 'Comprehensive information security governance framework',
+    content: `# Information Security Policy
+
+## 1. Purpose and Scope
+This Information Security Policy establishes the framework for protecting information assets and ensuring compliance with regulatory requirements.
+
+## 2. Objectives
+- Protect confidentiality, integrity, and availability of information
+- Ensure compliance with applicable laws and regulations
+- Establish clear security responsibilities
+- Minimize security risks to the organization
+
+## 3. Policy Statement
+The organization is committed to protecting its information assets through comprehensive security controls and procedures.
+
+## 4. Roles and Responsibilities
+- CISO: Overall security strategy and governance
+- IT Team: Technical implementation and monitoring
+- All Employees: Following security procedures
+
+## 5. Implementation
+Security controls will be implemented across all information systems and processes.`
   },
   {
     id: '2',
@@ -63,7 +87,31 @@ const MOCK_POLICIES: PolicyDocument[] = [
     size: '189 KB',
     tags: ['incident', 'emergency', 'response'],
     starred: false,
-    description: 'Detailed procedures for cybersecurity incident handling'
+    description: 'Detailed procedures for cybersecurity incident handling',
+    content: `# Incident Response Plan
+
+## 1. Overview
+This plan provides comprehensive procedures for detecting, responding to, and recovering from cybersecurity incidents.
+
+## 2. Incident Classification
+- Level 1: Low impact incidents
+- Level 2: Medium impact incidents  
+- Level 3: High impact incidents
+- Level 4: Critical incidents
+
+## 3. Response Team
+- Incident Commander: Leads response efforts
+- Technical Team: Handles technical response
+- Communications Team: Manages internal/external communications
+- Legal Team: Provides legal guidance
+
+## 4. Response Procedures
+1. Detection and Analysis
+2. Containment, Eradication, and Recovery
+3. Post-Incident Activity
+
+## 5. Communication Protocols
+Clear escalation and notification procedures for all incident types.`
   },
   {
     id: '3',
@@ -76,7 +124,30 @@ const MOCK_POLICIES: PolicyDocument[] = [
     size: '156 KB',
     tags: ['data', 'classification', 'privacy'],
     starred: false,
-    description: 'Framework for data categorization and handling requirements'
+    description: 'Framework for data categorization and handling requirements',
+    content: `# Data Classification Policy
+
+## 1. Purpose
+This policy establishes a framework for classifying data based on sensitivity and business value.
+
+## 2. Data Classification Levels
+- Public: Information that can be freely shared
+- Internal: Information for internal use only
+- Confidential: Sensitive information requiring protection
+- Restricted: Highly sensitive information with strict access controls
+
+## 3. Classification Criteria
+Data classification is based on:
+- Sensitivity level
+- Regulatory requirements
+- Business impact if compromised
+- Legal obligations
+
+## 4. Handling Requirements
+Each classification level has specific handling, storage, and transmission requirements.
+
+## 5. Responsibilities
+Data owners are responsible for classifying data and ensuring appropriate protection measures.`
   },
   {
     id: '4',
@@ -89,7 +160,29 @@ const MOCK_POLICIES: PolicyDocument[] = [
     size: '198 KB',
     tags: ['access', 'authentication', 'authorization'],
     starred: true,
-    description: 'User access management and authentication requirements'
+    description: 'User access management and authentication requirements',
+    content: `# Access Control Policy
+
+## 1. Overview
+This policy defines requirements for managing user access to information systems and resources.
+
+## 2. Access Control Principles
+- Principle of least privilege
+- Need-to-know basis
+- Regular access reviews
+- Strong authentication requirements
+
+## 3. User Account Management
+- Account provisioning procedures
+- Password requirements and policies
+- Multi-factor authentication requirements
+- Account deprovisioning procedures
+
+## 4. Access Reviews
+Regular reviews of user access rights to ensure appropriateness and compliance.
+
+## 5. Technical Controls
+Implementation of technical controls to enforce access policies and monitor compliance.`
   },
   {
     id: '5',
@@ -102,7 +195,29 @@ const MOCK_POLICIES: PolicyDocument[] = [
     size: '342 KB',
     tags: ['continuity', 'disaster', 'recovery'],
     starred: false,
-    description: 'Comprehensive business continuity and disaster recovery procedures'
+    description: 'Comprehensive business continuity and disaster recovery procedures',
+    content: `# Business Continuity Plan
+
+## 1. Purpose
+This plan ensures the organization can continue critical operations during and after a disruptive event.
+
+## 2. Business Impact Analysis
+Identification of critical business processes and their recovery requirements:
+- Recovery Time Objectives (RTO)
+- Recovery Point Objectives (RPO)
+- Maximum Tolerable Downtime (MTD)
+
+## 3. Continuity Strategies
+- Alternative work arrangements
+- Backup systems and data recovery
+- Vendor and supplier alternatives
+- Communication systems
+
+## 4. Recovery Procedures
+Step-by-step procedures for restoring operations after a disruption.
+
+## 5. Testing and Maintenance
+Regular testing and updates to ensure plan effectiveness and currency.`
   }
 ];
 
@@ -263,10 +378,30 @@ export default function PolicyLibrary() {
                   <CardTitle>Policy Library Management</CardTitle>
                   <CardDescription>Manage, organize, and track your security policies</CardDescription>
                 </div>
-                <Button onClick={uploadPolicy} data-testid="button-upload-policy">
-                  <Upload className="w-4 h-4 mr-2" />
-                  Upload Policy
-                </Button>
+                <div className="flex gap-2">
+                  <PolicyComparisonViewer 
+                    documents={policies.map(p => ({
+                      id: p.id,
+                      title: p.title,
+                      content: p.content,
+                      version: p.version,
+                      lastModified: p.lastModified.toLocaleDateString(),
+                      author: p.author,
+                      status: p.status,
+                      category: p.category
+                    }))}
+                    triggerButton={
+                      <Button variant="outline" data-testid="button-compare-policies">
+                        <GitCompare className="w-4 h-4 mr-2" />
+                        Compare Documents
+                      </Button>
+                    }
+                  />
+                  <Button onClick={uploadPolicy} data-testid="button-upload-policy">
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload Policy
+                  </Button>
+                </div>
               </div>
             </CardHeader>
             <CardContent>
@@ -388,7 +523,7 @@ export default function PolicyLibrary() {
                           <Star className={`w-4 h-4 ${policy.starred ? 'text-yellow-400 fill-current' : ''}`} />
                         </Button>
                         <PolicyDocumentViewer
-                          content={`# ${policy.title}\n\n${policy.description}\n\nThis is a sample policy document for demonstration purposes.`}
+                          content={policy.content}
                           metadata={{
                             id: policy.id,
                             title: policy.title,
