@@ -1,6 +1,7 @@
 import { 
   users, assessments, policies, vulnerabilities, riskManagementPlans, riskRegister,
   usersManagement, achievementBadges, userAchievements, policyFeedback, policyCollaboration,
+  eccProjects, eccGapAssessments, eccRiskAssessments, eccRoadmapTasks, eccTrainingModules, eccUserTraining,
   type User, type InsertUser, 
   type Assessment, type InsertAssessment, 
   type Policy, type InsertPolicy, 
@@ -11,7 +12,13 @@ import {
   type AchievementBadge, type InsertAchievementBadge,
   type UserAchievement, type InsertUserAchievement,
   type PolicyFeedback, type InsertPolicyFeedback,
-  type PolicyCollaboration, type InsertPolicyCollaboration
+  type PolicyCollaboration, type InsertPolicyCollaboration,
+  type EccProject, type InsertEccProject,
+  type EccGapAssessment, type InsertEccGapAssessment,
+  type EccRiskAssessment, type InsertEccRiskAssessment,
+  type EccRoadmapTask, type InsertEccRoadmapTask,
+  type EccTrainingModule, type InsertEccTrainingModule,
+  type EccUserTraining, type InsertEccUserTraining
 } from "@shared/schema";
 import { eq, and } from "drizzle-orm";
 
@@ -56,6 +63,36 @@ export interface IStorage {
   createPolicyFeedback(feedback: InsertPolicyFeedback): Promise<PolicyFeedback>;
   getPolicyCollaboration(policyId: number): Promise<PolicyCollaboration[]>;
   createPolicyCollaboration(collaboration: InsertPolicyCollaboration): Promise<PolicyCollaboration>;
+
+  // ECC Project Management
+  getEccProjects(cisoUserId: number): Promise<EccProject[]>;
+  getEccProject(id: number): Promise<EccProject | undefined>;
+  createEccProject(project: InsertEccProject): Promise<EccProject>;
+  updateEccProject(id: number, project: Partial<InsertEccProject>): Promise<EccProject | undefined>;
+  deleteEccProject(id: number): Promise<boolean>;
+
+  // ECC Gap Assessment
+  getEccGapAssessments(projectId: number): Promise<EccGapAssessment[]>;
+  createEccGapAssessment(assessment: InsertEccGapAssessment): Promise<EccGapAssessment>;
+  updateEccGapAssessment(id: number, assessment: Partial<InsertEccGapAssessment>): Promise<EccGapAssessment | undefined>;
+
+  // ECC Risk Assessment
+  getEccRiskAssessments(projectId: number, gapAssessmentId?: number): Promise<EccRiskAssessment[]>;
+  createEccRiskAssessment(assessment: InsertEccRiskAssessment): Promise<EccRiskAssessment>;
+  updateEccRiskAssessment(id: number, assessment: Partial<InsertEccRiskAssessment>): Promise<EccRiskAssessment | undefined>;
+
+  // ECC Roadmap Tasks
+  getEccRoadmapTasks(projectId: number, status?: string): Promise<EccRoadmapTask[]>;
+  createEccRoadmapTask(task: InsertEccRoadmapTask): Promise<EccRoadmapTask>;
+  updateEccRoadmapTask(id: number, task: Partial<InsertEccRoadmapTask>): Promise<EccRoadmapTask | undefined>;
+  deleteEccRoadmapTask(id: number): Promise<boolean>;
+
+  // ECC Training
+  getEccTrainingModules(isActive?: boolean): Promise<EccTrainingModule[]>;
+  createEccTrainingModule(module: InsertEccTrainingModule): Promise<EccTrainingModule>;
+  getEccUserTraining(projectId: number, userId: number): Promise<EccUserTraining[]>;
+  createEccUserTraining(training: InsertEccUserTraining): Promise<EccUserTraining>;
+  updateEccUserTraining(id: number, training: Partial<InsertEccUserTraining>): Promise<EccUserTraining | undefined>;
 }
 
 class DatabaseStorage implements IStorage {
@@ -319,6 +356,170 @@ class DatabaseStorage implements IStorage {
     const [created] = await db.insert(policyCollaboration).values(collaboration).returning();
     return created;
   }
+
+  // ECC Project Management - Database implementation
+  async getEccProjects(cisoUserId: number): Promise<EccProject[]> {
+    const db = await this.getDb();
+    return await db.select().from(eccProjects).where(eq(eccProjects.cisoUserId, cisoUserId));
+  }
+
+  async getEccProject(id: number): Promise<EccProject | undefined> {
+    const db = await this.getDb();
+    const [project] = await db.select().from(eccProjects).where(eq(eccProjects.id, id));
+    return project;
+  }
+
+  async createEccProject(project: InsertEccProject): Promise<EccProject> {
+    const db = await this.getDb();
+    const [created] = await db.insert(eccProjects).values(project).returning();
+    return created;
+  }
+
+  async updateEccProject(id: number, project: Partial<InsertEccProject>): Promise<EccProject | undefined> {
+    const db = await this.getDb();
+    const [updated] = await db.update(eccProjects)
+      .set({ ...project, updatedAt: new Date() })
+      .where(eq(eccProjects.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteEccProject(id: number): Promise<boolean> {
+    const db = await this.getDb();
+    await db.delete(eccProjects).where(eq(eccProjects.id, id));
+    return true;
+  }
+
+  // ECC Gap Assessment - Database implementation
+  async getEccGapAssessments(projectId: number): Promise<EccGapAssessment[]> {
+    const db = await this.getDb();
+    return await db.select().from(eccGapAssessments).where(eq(eccGapAssessments.projectId, projectId));
+  }
+
+  async createEccGapAssessment(assessment: InsertEccGapAssessment): Promise<EccGapAssessment> {
+    const db = await this.getDb();
+    const [created] = await db.insert(eccGapAssessments).values(assessment).returning();
+    return created;
+  }
+
+  async updateEccGapAssessment(id: number, assessment: Partial<InsertEccGapAssessment>): Promise<EccGapAssessment | undefined> {
+    const db = await this.getDb();
+    const [updated] = await db.update(eccGapAssessments)
+      .set(assessment)
+      .where(eq(eccGapAssessments.id, id))
+      .returning();
+    return updated;
+  }
+
+  // ECC Risk Assessment - Database implementation
+  async getEccRiskAssessments(projectId: number, gapAssessmentId?: number): Promise<EccRiskAssessment[]> {
+    const db = await this.getDb();
+    if (gapAssessmentId) {
+      return await db.select()
+        .from(eccRiskAssessments)
+        .where(
+          and(
+            eq(eccRiskAssessments.projectId, projectId),
+            eq(eccRiskAssessments.gapAssessmentId, gapAssessmentId)
+          )
+        );
+    }
+    return await db.select().from(eccRiskAssessments).where(eq(eccRiskAssessments.projectId, projectId));
+  }
+
+  async createEccRiskAssessment(assessment: InsertEccRiskAssessment): Promise<EccRiskAssessment> {
+    const db = await this.getDb();
+    const [created] = await db.insert(eccRiskAssessments).values(assessment).returning();
+    return created;
+  }
+
+  async updateEccRiskAssessment(id: number, assessment: Partial<InsertEccRiskAssessment>): Promise<EccRiskAssessment | undefined> {
+    const db = await this.getDb();
+    const [updated] = await db.update(eccRiskAssessments)
+      .set(assessment)
+      .where(eq(eccRiskAssessments.id, id))
+      .returning();
+    return updated;
+  }
+
+  // ECC Roadmap Tasks - Database implementation
+  async getEccRoadmapTasks(projectId: number, status?: string): Promise<EccRoadmapTask[]> {
+    const db = await this.getDb();
+    if (status) {
+      return await db.select()
+        .from(eccRoadmapTasks)
+        .where(
+          and(
+            eq(eccRoadmapTasks.projectId, projectId),
+            eq(eccRoadmapTasks.status, status)
+          )
+        );
+    }
+    return await db.select().from(eccRoadmapTasks).where(eq(eccRoadmapTasks.projectId, projectId));
+  }
+
+  async createEccRoadmapTask(task: InsertEccRoadmapTask): Promise<EccRoadmapTask> {
+    const db = await this.getDb();
+    const [created] = await db.insert(eccRoadmapTasks).values(task).returning();
+    return created;
+  }
+
+  async updateEccRoadmapTask(id: number, task: Partial<InsertEccRoadmapTask>): Promise<EccRoadmapTask | undefined> {
+    const db = await this.getDb();
+    const [updated] = await db.update(eccRoadmapTasks)
+      .set({ ...task, updatedAt: new Date() })
+      .where(eq(eccRoadmapTasks.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteEccRoadmapTask(id: number): Promise<boolean> {
+    const db = await this.getDb();
+    await db.delete(eccRoadmapTasks).where(eq(eccRoadmapTasks.id, id));
+    return true;
+  }
+
+  // ECC Training - Database implementation
+  async getEccTrainingModules(isActive?: boolean): Promise<EccTrainingModule[]> {
+    const db = await this.getDb();
+    if (isActive !== undefined) {
+      return await db.select().from(eccTrainingModules).where(eq(eccTrainingModules.isActive, isActive));
+    }
+    return await db.select().from(eccTrainingModules);
+  }
+
+  async createEccTrainingModule(module: InsertEccTrainingModule): Promise<EccTrainingModule> {
+    const db = await this.getDb();
+    const [created] = await db.insert(eccTrainingModules).values(module).returning();
+    return created;
+  }
+
+  async getEccUserTraining(projectId: number, userId: number): Promise<EccUserTraining[]> {
+    const db = await this.getDb();
+    return await db.select()
+      .from(eccUserTraining)
+      .where(
+        and(
+          eq(eccUserTraining.projectId, projectId),
+          eq(eccUserTraining.userId, userId)
+        )
+      );
+  }
+
+  async createEccUserTraining(training: InsertEccUserTraining): Promise<EccUserTraining> {
+    const db = await this.getDb();
+    const [created] = await db.insert(eccUserTraining).values(training).returning();
+    return created;
+  }
+
+  async updateEccUserTraining(id: number, training: Partial<InsertEccUserTraining>): Promise<EccUserTraining | undefined> {
+    const db = await this.getDb();
+    const [updated] = await db.update(eccUserTraining)
+      .set(training)
+      .where(eq(eccUserTraining.id, id))
+      .returning();
+    return updated;
+  }
 }
 
 class InMemoryStorage implements IStorage {
@@ -473,6 +674,7 @@ class InMemoryStorage implements IStorage {
       isActive: true,
       phoneNumber: "+1-555-0123",
       preferences: { theme: "dark", notifications: true },
+      profileImageUrl: null,
       createdAt: new Date('2024-01-15'),
       updatedAt: new Date('2024-01-15'),
       lastLogin: new Date('2025-01-24T10:30:00')
@@ -488,6 +690,7 @@ class InMemoryStorage implements IStorage {
       isActive: true,
       phoneNumber: "+1-555-0124",
       preferences: { theme: "light", notifications: false },
+      profileImageUrl: null,
       createdAt: new Date('2024-02-01'),
       updatedAt: new Date('2024-02-01'),
       lastLogin: new Date('2025-01-24T09:15:00')
@@ -503,6 +706,7 @@ class InMemoryStorage implements IStorage {
       isActive: true,
       phoneNumber: "+1-555-0125",
       preferences: { theme: "dark", notifications: true },
+      profileImageUrl: null,
       createdAt: new Date('2023-11-10'),
       updatedAt: new Date('2023-11-10'),
       lastLogin: new Date('2025-01-24T11:45:00')
@@ -518,6 +722,7 @@ class InMemoryStorage implements IStorage {
       isActive: true,
       phoneNumber: "+1-555-0126",
       preferences: { theme: "light", notifications: true },
+      profileImageUrl: null,
       createdAt: new Date('2024-03-05'),
       updatedAt: new Date('2024-03-05'),
       lastLogin: new Date('2025-01-24T08:20:00')
@@ -533,6 +738,7 @@ class InMemoryStorage implements IStorage {
       isActive: false,
       phoneNumber: "+1-555-0127",
       preferences: { theme: "dark", notifications: false },
+      profileImageUrl: null,
       createdAt: new Date('2024-04-12'),
       updatedAt: new Date('2024-04-12'),
       lastLogin: new Date('2025-01-20T16:30:00')
@@ -645,6 +851,210 @@ class InMemoryStorage implements IStorage {
     } as PolicyCollaboration;
     this.policyCollaborationList.push(created);
     return created;
+  }
+
+  // ECC Project Management - InMemory implementation
+  private eccProjectsList: EccProject[] = [
+    {
+      id: 1,
+      organizationName: "Saudi Tech Solutions",
+      organizationSize: "medium",
+      organizationScope: "advanced",
+      projectName: "ECC Compliance 2024",
+      description: "Complete implementation of Essential Cybersecurity Controls for our organization",
+      cisoUserId: 1, // Sarah Chen
+      status: "gap-assessment",
+      currentStep: 2,
+      overallComplianceScore: 34,
+      createdAt: new Date("2024-01-15T10:00:00Z"),
+      updatedAt: new Date("2024-01-20T14:30:00Z")
+    }
+  ];
+  private eccGapAssessmentsList: EccGapAssessment[] = [];
+  private eccRiskAssessmentsList: EccRiskAssessment[] = [];
+  private eccRoadmapTasksList: EccRoadmapTask[] = [];
+  private eccTrainingModulesList: EccTrainingModule[] = [];
+  private eccUserTrainingList: EccUserTraining[] = [];
+  
+  private eccProjectIdSeq = 2;
+  private eccGapAssessmentIdSeq = 1;
+  private eccRiskAssessmentIdSeq = 1;
+  private eccRoadmapTaskIdSeq = 1;
+  private eccTrainingModuleIdSeq = 1;
+  private eccUserTrainingIdSeq = 1;
+
+  async getEccProjects(cisoUserId: number): Promise<EccProject[]> {
+    return this.eccProjectsList.filter(p => p.cisoUserId === cisoUserId);
+  }
+
+  async getEccProject(id: number): Promise<EccProject | undefined> {
+    return this.eccProjectsList.find(p => p.id === id);
+  }
+
+  async createEccProject(project: InsertEccProject): Promise<EccProject> {
+    const created: EccProject = {
+      id: this.eccProjectIdSeq++,
+      ...project,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    } as EccProject;
+    this.eccProjectsList.push(created);
+    return created;
+  }
+
+  async updateEccProject(id: number, project: Partial<InsertEccProject>): Promise<EccProject | undefined> {
+    const index = this.eccProjectsList.findIndex(p => p.id === id);
+    if (index === -1) return undefined;
+    const updated = {
+      ...this.eccProjectsList[index],
+      ...project,
+      updatedAt: new Date()
+    };
+    this.eccProjectsList[index] = updated;
+    return updated;
+  }
+
+  async deleteEccProject(id: number): Promise<boolean> {
+    const before = this.eccProjectsList.length;
+    this.eccProjectsList = this.eccProjectsList.filter(p => p.id !== id);
+    return this.eccProjectsList.length < before;
+  }
+
+  // ECC Gap Assessment - InMemory implementation
+  async getEccGapAssessments(projectId: number): Promise<EccGapAssessment[]> {
+    return this.eccGapAssessmentsList.filter(a => a.projectId === projectId);
+  }
+
+  async createEccGapAssessment(assessment: InsertEccGapAssessment): Promise<EccGapAssessment> {
+    const created: EccGapAssessment = {
+      id: this.eccGapAssessmentIdSeq++,
+      ...assessment,
+      assessedAt: new Date()
+    } as EccGapAssessment;
+    this.eccGapAssessmentsList.push(created);
+    return created;
+  }
+
+  async updateEccGapAssessment(id: number, assessment: Partial<InsertEccGapAssessment>): Promise<EccGapAssessment | undefined> {
+    const index = this.eccGapAssessmentsList.findIndex(a => a.id === id);
+    if (index === -1) return undefined;
+    const updated = { ...this.eccGapAssessmentsList[index], ...assessment };
+    this.eccGapAssessmentsList[index] = updated;
+    return updated;
+  }
+
+  // ECC Risk Assessment - InMemory implementation
+  async getEccRiskAssessments(projectId: number, gapAssessmentId?: number): Promise<EccRiskAssessment[]> {
+    let filtered = this.eccRiskAssessmentsList.filter(a => a.projectId === projectId);
+    if (gapAssessmentId) {
+      filtered = filtered.filter(a => a.gapAssessmentId === gapAssessmentId);
+    }
+    return filtered;
+  }
+
+  async createEccRiskAssessment(assessment: InsertEccRiskAssessment): Promise<EccRiskAssessment> {
+    const created: EccRiskAssessment = {
+      id: this.eccRiskAssessmentIdSeq++,
+      ...assessment,
+      assessedAt: new Date()
+    } as EccRiskAssessment;
+    this.eccRiskAssessmentsList.push(created);
+    return created;
+  }
+
+  async updateEccRiskAssessment(id: number, assessment: Partial<InsertEccRiskAssessment>): Promise<EccRiskAssessment | undefined> {
+    const index = this.eccRiskAssessmentsList.findIndex(a => a.id === id);
+    if (index === -1) return undefined;
+    const updated = { ...this.eccRiskAssessmentsList[index], ...assessment };
+    this.eccRiskAssessmentsList[index] = updated;
+    return updated;
+  }
+
+  // ECC Roadmap Tasks - InMemory implementation
+  async getEccRoadmapTasks(projectId: number, status?: string): Promise<EccRoadmapTask[]> {
+    let filtered = this.eccRoadmapTasksList.filter(t => t.projectId === projectId);
+    if (status) {
+      filtered = filtered.filter(t => t.status === status);
+    }
+    return filtered;
+  }
+
+  async createEccRoadmapTask(task: InsertEccRoadmapTask): Promise<EccRoadmapTask> {
+    const created: EccRoadmapTask = {
+      id: this.eccRoadmapTaskIdSeq++,
+      ...task,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    } as EccRoadmapTask;
+    this.eccRoadmapTasksList.push(created);
+    return created;
+  }
+
+  async updateEccRoadmapTask(id: number, task: Partial<InsertEccRoadmapTask>): Promise<EccRoadmapTask | undefined> {
+    const index = this.eccRoadmapTasksList.findIndex(t => t.id === id);
+    if (index === -1) return undefined;
+    const updated = {
+      ...this.eccRoadmapTasksList[index],
+      ...task,
+      updatedAt: new Date()
+    };
+    this.eccRoadmapTasksList[index] = updated;
+    return updated;
+  }
+
+  async deleteEccRoadmapTask(id: number): Promise<boolean> {
+    const before = this.eccRoadmapTasksList.length;
+    this.eccRoadmapTasksList = this.eccRoadmapTasksList.filter(t => t.id !== id);
+    return this.eccRoadmapTasksList.length < before;
+  }
+
+  // ECC Training - InMemory implementation
+  async getEccTrainingModules(isActive?: boolean): Promise<EccTrainingModule[]> {
+    if (isActive !== undefined) {
+      return this.eccTrainingModulesList.filter(m => m.isActive === isActive);
+    }
+    return this.eccTrainingModulesList;
+  }
+
+  async createEccTrainingModule(module: InsertEccTrainingModule): Promise<EccTrainingModule> {
+    const created: EccTrainingModule = {
+      id: this.eccTrainingModuleIdSeq++,
+      ...module,
+      createdAt: new Date()
+    } as EccTrainingModule;
+    this.eccTrainingModulesList.push(created);
+    return created;
+  }
+
+  async getEccUserTraining(projectId: number, userId: number): Promise<EccUserTraining[]> {
+    return this.eccUserTrainingList.filter(t => t.projectId === projectId && t.userId === userId);
+  }
+
+  async createEccUserTraining(training: InsertEccUserTraining): Promise<EccUserTraining> {
+    const created: EccUserTraining = {
+      id: this.eccUserTrainingIdSeq++,
+      ...training,
+      startedAt: training.status !== 'not-started' ? new Date() : null,
+      completedAt: training.status === 'completed' ? new Date() : null,
+      lastAccessedAt: new Date()
+    } as EccUserTraining;
+    this.eccUserTrainingList.push(created);
+    return created;
+  }
+
+  async updateEccUserTraining(id: number, training: Partial<InsertEccUserTraining>): Promise<EccUserTraining | undefined> {
+    const index = this.eccUserTrainingList.findIndex(t => t.id === id);
+    if (index === -1) return undefined;
+    const updated = {
+      ...this.eccUserTrainingList[index],
+      ...training,
+      lastAccessedAt: new Date()
+    };
+    if (training.status === 'completed' && !updated.completedAt) {
+      updated.completedAt = new Date();
+    }
+    this.eccUserTrainingList[index] = updated;
+    return updated;
   }
 }
 

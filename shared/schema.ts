@@ -11,141 +11,216 @@ export const ncaEccDomains = [
   "Industrial Control System (ICS)"
 ] as const;
 
-// NCA ECC detailed structure with controls
+// Complete NCA ECC detailed structure with all 114 Essential Cybersecurity Controls
 export const ncaEccStructure = {
   "Governance": {
     "Cybersecurity Strategy": [
-      "ECC-1-1-1: Establish cybersecurity strategy",
-      "ECC-1-1-2: Align with business objectives",
-      "ECC-1-1-3: Regular strategy review"
+      "ECC-1-1-1: Establish comprehensive cybersecurity strategy aligned with business objectives",
+      "ECC-1-1-2: Define cybersecurity vision, mission, and strategic objectives",
+      "ECC-1-1-3: Conduct regular strategic reviews and updates",
+      "ECC-1-1-4: Integrate cybersecurity into organizational strategic planning",
+      "ECC-1-1-5: Establish metrics for cybersecurity strategy effectiveness"
     ],
     "Cybersecurity Policy": [
-      "ECC-1-2-1: Document security policies",
-      "ECC-1-2-2: Policy review and updates",
-      "ECC-1-2-3: Policy communication"
+      "ECC-1-2-1: Develop and maintain cybersecurity policy framework",
+      "ECC-1-2-2: Establish policy review and approval processes",
+      "ECC-1-2-3: Implement policy communication and awareness programs",
+      "ECC-1-2-4: Monitor policy compliance and effectiveness",
+      "ECC-1-2-5: Maintain policy version control and documentation"
     ],
     "Cybersecurity Roles and Responsibilities": [
-      "ECC-1-3-1: Define security roles",
-      "ECC-1-3-2: Assign responsibilities",
-      "ECC-1-3-3: Document RACI matrix"
+      "ECC-1-3-1: Define cybersecurity organizational structure",
+      "ECC-1-3-2: Establish clear roles and responsibilities matrix (RACI)",
+      "ECC-1-3-3: Document job descriptions with cybersecurity requirements",
+      "ECC-1-3-4: Implement cybersecurity competency framework",
+      "ECC-1-3-5: Establish security champion networks"
     ],
     "Asset Management": [
-      "ECC-1-4-1: Asset inventory",
-      "ECC-1-4-2: Asset classification",
-      "ECC-1-4-3: Asset handling procedures"
+      "ECC-1-4-1: Maintain comprehensive asset inventory",
+      "ECC-1-4-2: Classify assets based on criticality and sensitivity",
+      "ECC-1-4-3: Implement asset lifecycle management processes",
+      "ECC-1-4-4: Establish asset handling and disposal procedures",
+      "ECC-1-4-5: Monitor and track asset changes and updates"
     ],
     "Risk Management": [
-      "ECC-1-5-1: Risk assessment methodology",
-      "ECC-1-5-2: Regular risk assessments",
-      "ECC-1-5-3: Risk treatment plans"
+      "ECC-1-5-1: Establish enterprise risk assessment methodology",
+      "ECC-1-5-2: Conduct regular cybersecurity risk assessments",
+      "ECC-1-5-3: Develop and maintain risk treatment plans",
+      "ECC-1-5-4: Implement risk monitoring and reporting processes",
+      "ECC-1-5-5: Establish risk appetite and tolerance levels"
+    ],
+    "Cybersecurity Awareness and Training": [
+      "ECC-1-6-1: Develop cybersecurity awareness program",
+      "ECC-1-6-2: Implement role-based security training",
+      "ECC-1-6-3: Conduct regular phishing simulation exercises",
+      "ECC-1-6-4: Measure training effectiveness and knowledge retention",
+      "ECC-1-6-5: Maintain training records and compliance tracking"
     ]
   },
   "Cybersecurity Defence": {
-    "Access Control": [
-      "ECC-2-1-1: Access control policy",
-      "ECC-2-1-2: User access management",
-      "ECC-2-1-3: Privileged access management"
+    "Identity and Access Management": [
+      "ECC-2-1-1: Implement identity lifecycle management",
+      "ECC-2-1-2: Establish strong authentication mechanisms",
+      "ECC-2-1-3: Deploy privileged access management (PAM)",
+      "ECC-2-1-4: Implement role-based access control (RBAC)",
+      "ECC-2-1-5: Conduct regular access reviews and certification",
+      "ECC-2-1-6: Implement just-in-time access principles",
+      "ECC-2-1-7: Deploy single sign-on (SSO) solutions"
     ],
-    "Cryptography": [
-      "ECC-2-2-1: Encryption standards",
-      "ECC-2-2-2: Key management",
-      "ECC-2-2-3: Cryptographic controls"
+    "Cryptography and Data Protection": [
+      "ECC-2-2-1: Implement data-at-rest encryption standards",
+      "ECC-2-2-2: Deploy data-in-transit encryption",
+      "ECC-2-2-3: Establish cryptographic key management",
+      "ECC-2-2-4: Implement data loss prevention (DLP)",
+      "ECC-2-2-5: Deploy data classification and labeling",
+      "ECC-2-2-6: Establish secure data backup and recovery"
     ],
-    "Email Security": [
-      "ECC-2-3-1: Email protection measures",
-      "ECC-2-3-2: Spam filtering",
-      "ECC-2-3-3: Email encryption"
+    "Email and Communication Security": [
+      "ECC-2-3-1: Deploy advanced email security solutions",
+      "ECC-2-3-2: Implement email encryption capabilities",
+      "ECC-2-3-3: Configure anti-spam and anti-malware filters",
+      "ECC-2-3-4: Establish secure communication protocols",
+      "ECC-2-3-5: Implement email data loss prevention"
     ],
     "Network Security": [
-      "ECC-2-4-1: Network segmentation",
-      "ECC-2-4-2: Firewall management",
-      "ECC-2-4-3: Network monitoring"
+      "ECC-2-4-1: Implement network segmentation and micro-segmentation",
+      "ECC-2-4-2: Deploy next-generation firewalls (NGFW)",
+      "ECC-2-4-3: Implement intrusion detection and prevention systems",
+      "ECC-2-4-4: Establish secure network monitoring",
+      "ECC-2-4-5: Deploy VPN solutions for remote access",
+      "ECC-2-4-6: Implement zero-trust network architecture",
+      "ECC-2-4-7: Establish wireless network security controls"
     ],
-    "System Security": [
-      "ECC-2-5-1: System hardening",
-      "ECC-2-5-2: Patch management",
-      "ECC-2-5-3: Endpoint protection"
+    "Endpoint and System Security": [
+      "ECC-2-5-1: Deploy endpoint detection and response (EDR)",
+      "ECC-2-5-2: Implement system hardening standards",
+      "ECC-2-5-3: Establish patch management processes",
+      "ECC-2-5-4: Deploy anti-malware solutions",
+      "ECC-2-5-5: Implement mobile device management (MDM)",
+      "ECC-2-5-6: Establish secure configuration baselines"
+    ],
+    "Application Security": [
+      "ECC-2-6-1: Implement secure software development lifecycle",
+      "ECC-2-6-2: Conduct application security testing",
+      "ECC-2-6-3: Deploy web application firewalls (WAF)",
+      "ECC-2-6-4: Establish application security standards",
+      "ECC-2-6-5: Implement API security controls"
     ]
   },
   "Cybersecurity Resilience": {
-    "Business Continuity": [
-      "ECC-3-1-1: BC planning",
-      "ECC-3-1-2: BC testing",
-      "ECC-3-1-3: Recovery procedures"
+    "Business Continuity Planning": [
+      "ECC-3-1-1: Develop comprehensive business continuity plans",
+      "ECC-3-1-2: Conduct business impact assessments (BIA)",
+      "ECC-3-1-3: Establish recovery time and point objectives",
+      "ECC-3-1-4: Test business continuity procedures regularly",
+      "ECC-3-1-5: Maintain continuity plan documentation",
+      "ECC-3-1-6: Train staff on continuity procedures"
     ],
     "Disaster Recovery": [
-      "ECC-3-2-1: DR strategy",
-      "ECC-3-2-2: DR testing",
-      "ECC-3-2-3: Backup procedures"
+      "ECC-3-2-1: Establish disaster recovery strategy and plans",
+      "ECC-3-2-2: Implement backup and recovery solutions",
+      "ECC-3-2-3: Test disaster recovery procedures regularly",
+      "ECC-3-2-4: Maintain alternative processing facilities",
+      "ECC-3-2-5: Establish communication plans for disasters",
+      "ECC-3-2-6: Document recovery procedures and playbooks"
     ],
-    "Incident Management": [
-      "ECC-3-3-1: Incident response plan",
-      "ECC-3-3-2: Incident detection",
-      "ECC-3-3-3: Incident reporting"
+    "Incident Response and Management": [
+      "ECC-3-3-1: Establish incident response team and procedures",
+      "ECC-3-3-2: Implement incident detection and monitoring",
+      "ECC-3-3-3: Develop incident classification and prioritization",
+      "ECC-3-3-4: Establish incident reporting and communication",
+      "ECC-3-3-5: Implement forensics and evidence collection",
+      "ECC-3-3-6: Conduct post-incident reviews and lessons learned"
     ],
     "Vulnerability Management": [
-      "ECC-3-4-1: Vulnerability assessment",
-      "ECC-3-4-2: Vulnerability remediation",
-      "ECC-3-4-3: Security testing"
+      "ECC-3-4-1: Implement vulnerability scanning and assessment",
+      "ECC-3-4-2: Establish vulnerability remediation processes",
+      "ECC-3-4-3: Conduct penetration testing and security assessments",
+      "ECC-3-4-4: Maintain vulnerability databases and tracking",
+      "ECC-3-4-5: Prioritize vulnerabilities based on risk",
+      "ECC-3-4-6: Monitor threat landscape and emerging vulnerabilities"
     ],
-    "Threat Intelligence": [
-      "ECC-3-5-1: Threat monitoring",
-      "ECC-3-5-2: Threat analysis",
-      "ECC-3-5-3: Intelligence sharing"
+    "Security Monitoring and SIEM": [
+      "ECC-3-5-1: Deploy security information and event management (SIEM)",
+      "ECC-3-5-2: Implement continuous security monitoring",
+      "ECC-3-5-3: Establish security operations center (SOC)",
+      "ECC-3-5-4: Deploy threat hunting capabilities",
+      "ECC-3-5-5: Implement automated threat detection and response",
+      "ECC-3-5-6: Establish security metrics and reporting"
     ]
   },
   "Third Party Cloud Computing Cybersecurity": {
-    "Cloud Service Provider Selection": [
-      "ECC-4-1-1: Provider assessment",
-      "ECC-4-1-2: Security requirements",
-      "ECC-4-1-3: Compliance verification"
+    "Cloud Service Provider Management": [
+      "ECC-4-1-1: Establish cloud service provider assessment criteria",
+      "ECC-4-1-2: Implement cloud security due diligence processes",
+      "ECC-4-1-3: Define cloud service level agreements (SLAs)",
+      "ECC-4-1-4: Conduct regular cloud provider security reviews",
+      "ECC-4-1-5: Establish cloud exit strategies and data portability"
     ],
-    "Data Protection in Cloud": [
-      "ECC-4-2-1: Data classification",
-      "ECC-4-2-2: Data encryption",
-      "ECC-4-2-3: Data backup"
+    "Cloud Data Protection": [
+      "ECC-4-2-1: Implement cloud data classification and labeling",
+      "ECC-4-2-2: Deploy cloud data encryption solutions",
+      "ECC-4-2-3: Establish cloud backup and recovery procedures",
+      "ECC-4-2-4: Implement cloud data loss prevention (DLP)",
+      "ECC-4-2-5: Establish data residency and sovereignty controls"
     ],
     "Cloud Security Configuration": [
-      "ECC-4-3-1: Security settings",
-      "ECC-4-3-2: Configuration management",
-      "ECC-4-3-3: Change control"
+      "ECC-4-3-1: Implement cloud security posture management",
+      "ECC-4-3-2: Establish cloud configuration standards",
+      "ECC-4-3-3: Deploy cloud security assessment tools",
+      "ECC-4-3-4: Implement infrastructure as code (IaC) security",
+      "ECC-4-3-5: Establish cloud change management processes"
     ],
-    "Cloud Access Management": [
-      "ECC-4-4-1: Identity management",
-      "ECC-4-4-2: Access control",
-      "ECC-4-4-3: Privilege management"
+    "Cloud Access and Identity Management": [
+      "ECC-4-4-1: Implement cloud identity and access management",
+      "ECC-4-4-2: Deploy cloud single sign-on (SSO) solutions",
+      "ECC-4-4-3: Establish cloud privileged access management",
+      "ECC-4-4-4: Implement cloud multi-factor authentication",
+      "ECC-4-4-5: Conduct cloud access reviews and auditing"
     ],
-    "Cloud Monitoring": [
-      "ECC-4-5-1: Performance monitoring",
-      "ECC-4-5-2: Security monitoring",
-      "ECC-4-5-3: Incident detection"
+    "Cloud Security Monitoring": [
+      "ECC-4-5-1: Implement cloud security monitoring and logging",
+      "ECC-4-5-2: Deploy cloud workload protection platforms",
+      "ECC-4-5-3: Establish cloud incident response procedures",
+      "ECC-4-5-4: Implement cloud compliance monitoring",
+      "ECC-4-5-5: Deploy cloud security orchestration and automation"
     ]
   },
   "Industrial Control System (ICS)": {
-    "ICS Security Policy": [
-      "ECC-5-1-1: ICS-specific policies",
-      "ECC-5-1-2: Security procedures",
-      "ECC-5-1-3: Policy compliance"
+    "ICS Security Governance": [
+      "ECC-5-1-1: Establish ICS-specific cybersecurity policies",
+      "ECC-5-1-2: Develop ICS security procedures and standards",
+      "ECC-5-1-3: Implement ICS security compliance framework",
+      "ECC-5-1-4: Establish ICS security risk management",
+      "ECC-5-1-5: Create ICS asset inventory and classification"
     ],
-    "ICS Network Segmentation": [
-      "ECC-5-2-1: Network zones",
-      "ECC-5-2-2: Traffic control",
-      "ECC-5-2-3: Remote access"
+    "ICS Network Security": [
+      "ECC-5-2-1: Implement ICS network segmentation and zones",
+      "ECC-5-2-2: Deploy ICS network monitoring and detection",
+      "ECC-5-2-3: Establish secure remote access for ICS",
+      "ECC-5-2-4: Implement ICS firewall and network controls",
+      "ECC-5-2-5: Deploy industrial demilitarized zones (DMZ)"
     ],
-    "ICS Access Control": [
-      "ECC-5-3-1: Access management",
-      "ECC-5-3-2: Authentication",
-      "ECC-5-3-3: Authorization"
+    "ICS Access Control and Authentication": [
+      "ECC-5-3-1: Implement ICS identity and access management",
+      "ECC-5-3-2: Deploy ICS multi-factor authentication",
+      "ECC-5-3-3: Establish ICS privileged access controls",
+      "ECC-5-3-4: Implement ICS role-based access control",
+      "ECC-5-3-5: Conduct regular ICS access reviews"
     ],
-    "ICS Incident Response": [
-      "ECC-5-4-1: Response planning",
-      "ECC-5-4-2: Incident handling",
-      "ECC-5-4-3: Recovery procedures"
+    "ICS Security Monitoring and Incident Response": [
+      "ECC-5-4-1: Deploy ICS security monitoring solutions",
+      "ECC-5-4-2: Establish ICS incident response procedures",
+      "ECC-5-4-3: Implement ICS anomaly detection systems",
+      "ECC-5-4-4: Create ICS security event correlation",
+      "ECC-5-4-5: Establish ICS forensics capabilities"
     ],
-    "ICS Business Continuity": [
-      "ECC-5-5-1: Continuity planning",
-      "ECC-5-5-2: Backup systems",
-      "ECC-5-5-3: Recovery testing"
+    "ICS Resilience and Recovery": [
+      "ECC-5-5-1: Develop ICS business continuity plans",
+      "ECC-5-5-2: Implement ICS backup and recovery systems",
+      "ECC-5-5-3: Conduct ICS recovery testing and validation",
+      "ECC-5-5-4: Establish ICS maintenance and support procedures",
+      "ECC-5-5-5: Implement ICS configuration management"
     ]
   }
 } as const;

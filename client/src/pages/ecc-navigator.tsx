@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +10,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useQuery } from "@tanstack/react-query";
+import ComprehensiveGapAssessment from "@/components/ecc/comprehensive-gap-assessment";
 import { 
   Shield, 
   ShieldCheck, 
@@ -32,7 +36,10 @@ import {
   Settings,
   Eye,
   Edit,
-  Trash2
+  Trash2,
+  ArrowRight,
+  Info,
+  Lightbulb
 } from "lucide-react";
 
 interface EccProject {
@@ -50,16 +57,96 @@ interface EccProject {
 }
 
 const workflowSteps = [
-  { id: 1, title: "Foundation & Governance", description: "AO engagement, cybersecurity function, steering committee", icon: Shield },
-  { id: 2, title: "Gap Assessment", description: "Interactive questionnaire for all 114 ECC controls", icon: CheckCircle },
-  { id: 3, title: "Risk Assessment", description: "Risk analysis with likelihood × impact matrix", icon: AlertTriangle },
-  { id: 4, title: "Core Policies & Roles", description: "Cybersecurity strategy, core policies, role definitions", icon: FileText },
-  { id: 5, title: "Technical Defense", description: "IAM, system hardening, data protection, network security", icon: Settings },
-  { id: 6, title: "Monitoring & Response", description: "SIEM implementation, vulnerability management, incident response", icon: BarChart3 },
-  { id: 7, title: "Awareness Training", description: "Interactive phishing simulations and security education", icon: Brain },
-  { id: 8, title: "Third-Party & ICS", description: "Vendor contracts, cloud compliance, industrial control systems", icon: Users },
-  { id: 9, title: "Continuous Review", description: "Annual reviews, steering committee oversight, improvements", icon: TrendingUp },
-  { id: 10, title: "Independent Audit", description: "External auditor engagement and NCA compliance validation", icon: Download }
+  { 
+    id: 1, 
+    title: "Project Setup", 
+    description: "Organization profiling, project scoping, governance framework establishment", 
+    icon: Shield,
+    component: "governance-setup",
+    estimatedDuration: "2-3 weeks",
+    deliverables: ["Project charter", "Governance framework", "Stakeholder matrix"]
+  },
+  { 
+    id: 2, 
+    title: "Comprehensive Gap Assessment", 
+    description: "Systematic evaluation of all 114 NCA ECC controls across 5 domains", 
+    icon: Target,
+    component: "gap-assessment",
+    estimatedDuration: "4-6 weeks",
+    deliverables: ["Gap assessment report", "Control compliance matrix", "Priority risk register"]
+  },
+  { 
+    id: 3, 
+    title: "Risk Assessment & Analysis", 
+    description: "Detailed risk analysis with likelihood × impact methodology", 
+    icon: AlertTriangle,
+    component: "risk-assessment",
+    estimatedDuration: "2-3 weeks",
+    deliverables: ["Risk assessment report", "Risk treatment plans", "Mitigation roadmap"]
+  },
+  { 
+    id: 4, 
+    title: "Strategic Planning", 
+    description: "Cybersecurity strategy, policies, and role definitions", 
+    icon: FileText,
+    component: "strategic-planning",
+    estimatedDuration: "3-4 weeks",
+    deliverables: ["Cybersecurity strategy", "Core policies", "RACI matrix"]
+  },
+  { 
+    id: 5, 
+    title: "Technical Implementation", 
+    description: "Technical controls: IAM, encryption, network security, system hardening", 
+    icon: Settings,
+    component: "technical-controls",
+    estimatedDuration: "8-12 weeks",
+    deliverables: ["Technical architecture", "Security controls", "Configuration standards"]
+  },
+  { 
+    id: 6, 
+    title: "Monitoring & Response", 
+    description: "SIEM deployment, SOC establishment, incident response capabilities", 
+    icon: BarChart3,
+    component: "monitoring-response",
+    estimatedDuration: "6-8 weeks",
+    deliverables: ["SIEM platform", "SOC procedures", "Incident response plan"]
+  },
+  { 
+    id: 7, 
+    title: "Security Awareness Training", 
+    description: "Interactive training programs, phishing simulations, awareness campaigns", 
+    icon: Brain,
+    component: "awareness-training",
+    estimatedDuration: "4-5 weeks",
+    deliverables: ["Training programs", "Awareness materials", "Simulation platforms"]
+  },
+  { 
+    id: 8, 
+    title: "Third-Party & Cloud Security", 
+    description: "Vendor management, cloud security, industrial control system protection", 
+    icon: Users,
+    component: "third-party-cloud",
+    estimatedDuration: "6-8 weeks",
+    deliverables: ["Vendor assessments", "Cloud security controls", "ICS protection"]
+  },
+  { 
+    id: 9, 
+    title: "Continuous Improvement", 
+    description: "Ongoing monitoring, regular reviews, maturity enhancement", 
+    icon: TrendingUp,
+    component: "continuous-improvement",
+    estimatedDuration: "Ongoing",
+    deliverables: ["Metrics dashboard", "Review procedures", "Improvement plans"]
+  },
+  { 
+    id: 10, 
+    title: "Audit & Certification", 
+    description: "Independent audit preparation and NCA ECC compliance validation", 
+    icon: Award,
+    component: "audit-certification",
+    estimatedDuration: "4-6 weeks",
+    deliverables: ["Audit readiness", "Compliance evidence", "Certification support"]
+  }
 ];
 
 const organizationSizes = [
@@ -123,30 +210,150 @@ const trainingModules = [
 ];
 
 export default function EccNavigator() {
-  const [projects, setProjects] = useState<EccProject[]>([]);
-  const [showCreateProject, setShowCreateProject] = useState(false);
-  const [activeTab, setActiveTab] = useState("overview");
+  const [location, setLocation] = useLocation();
   const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState("overview");
+  const [selectedProject, setSelectedProject] = useState<EccProject | null>(null);
+  const [isCreatingProject, setIsCreatingProject] = useState(false);
+  const [showNewProjectDialog, setShowNewProjectDialog] = useState(false);
+  const [currentWorkflowStep, setCurrentWorkflowStep] = useState<string>("");
 
-  // Mock projects data
+  // Mock user ID - in real app this would come from authentication
+  const userId = 1; // CISO user ID
+
+  // Fetch ECC projects for the current user
+  const { data: eccProjects = [], isLoading, refetch } = useQuery({
+    queryKey: ["/api/ecc-projects", userId],
+    queryFn: () => apiRequest<EccProject[]>("GET", `/api/ecc-projects/${userId}`),
+  });
+
+  // Get the active project or first project
   useEffect(() => {
-    const mockProjects: EccProject[] = [
-      {
-        id: 1,
-        organizationName: "Saudi Tech Solutions",
-        organizationSize: "medium",
-        organizationScope: "advanced",
-        projectName: "ECC Compliance 2024",
-        description: "Complete implementation of Essential Cybersecurity Controls for our organization",
-        status: "gap-assessment",
-        currentStep: 2,
-        overallComplianceScore: 34,
-        createdAt: "2024-01-15T10:00:00Z",
-        updatedAt: "2024-01-20T14:30:00Z"
-      }
-    ];
-    setProjects(mockProjects);
-  }, []);
+    if (eccProjects.length > 0 && !selectedProject) {
+      setSelectedProject(eccProjects[0]);
+      setActiveTab("workflow");
+    }
+  }, [eccProjects, selectedProject]);
+
+  // Create new ECC project
+  async function createProject(projectData: {
+    organizationName: string;
+    organizationSize: string;
+    organizationScope: string;
+    projectName: string;
+    description: string;
+  }) {
+    setIsCreatingProject(true);
+    try {
+      const newProject = await apiRequest("POST", "/api/ecc-projects", {
+        ...projectData,
+        cisoUserId: userId,
+        status: "project-setup",
+        currentStep: 1,
+        overallComplianceScore: 0
+      });
+
+      await refetch();
+      setSelectedProject(newProject);
+      setShowNewProjectDialog(false);
+      setActiveTab("workflow");
+      
+      toast({
+        title: "Project Created",
+        description: `${projectData.projectName} has been created successfully.`,
+      });
+    } catch (error) {
+      console.error("Error creating project:", error);
+      toast({
+        title: "Error",
+        description: "Failed to create project. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsCreatingProject(false);
+    }
+  }
+
+  // Update project workflow step
+  async function updateProjectStep(projectId: number, step: number, status: string) {
+    try {
+      const updatedProject = await apiRequest("PUT", `/api/ecc-projects/${projectId}`, {
+        currentStep: step,
+        status,
+        updatedAt: new Date().toISOString()
+      });
+
+      setSelectedProject(updatedProject);
+      await refetch();
+      
+      toast({
+        title: "Progress Updated",
+        description: `Moved to step ${step}: ${workflowSteps[step - 1].title}`,
+      });
+    } catch (error) {
+      console.error("Error updating project step:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update project progress.",
+        variant: "destructive",
+      });
+    }
+  }
+
+  // Calculate overall project progress
+  function calculateProjectProgress(project: EccProject): number {
+    const stepProgress = (project.currentStep / workflowSteps.length) * 100;
+    return Math.min(stepProgress, 100);
+  }
+
+  // Get step completion status
+  function getStepStatus(stepId: number, currentStep: number): "completed" | "current" | "pending" {
+    if (stepId < currentStep) return "completed";
+    if (stepId === currentStep) return "current";
+    return "pending";
+  }
+
+  // Render component based on current workflow step
+  function renderWorkflowComponent() {
+    if (!selectedProject) return null;
+
+    switch (currentWorkflowStep) {
+      case "gap-assessment":
+        return (
+          <ComprehensiveGapAssessment
+            projectId={selectedProject.id}
+            userId={userId}
+            onComplete={(result) => {
+              updateProjectStep(selectedProject.id, 3, "risk-assessment");
+              toast({
+                title: "Gap Assessment Complete",
+                description: `Overall compliance score: ${result.overallScore}%`,
+              });
+            }}
+          />
+        );
+      default:
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Workflow Step: {workflowSteps.find(s => s.component === currentWorkflowStep)?.title}</CardTitle>
+              <CardDescription>
+                This step is under development. Please continue with the next available step.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Alert>
+                <Info className="h-4 w-4" />
+                <AlertTitle>Development Note</AlertTitle>
+                <AlertDescription>
+                  This workflow step will be available in future updates. You can continue to the next step or work on other components.
+                </AlertDescription>
+              </Alert>
+            </CardContent>
+          </Card>
+        );
+    }
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -191,8 +398,8 @@ export default function EccNavigator() {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
-      setProjects([...projects, newProject]);
-      setShowCreateProject(false);
+      createProject(formData);
+      setShowNewProjectDialog(false);
       setFormData({
         organizationName: "",
         organizationSize: "",

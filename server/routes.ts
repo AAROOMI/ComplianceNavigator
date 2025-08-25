@@ -11,7 +11,13 @@ import {
   insertUsersManagementSchema,
   insertAchievementBadgeSchema,
   insertPolicyFeedbackSchema,
-  insertPolicyCollaborationSchema
+  insertPolicyCollaborationSchema,
+  insertEccProjectSchema,
+  insertEccGapAssessmentSchema,
+  insertEccRiskAssessmentSchema,
+  insertEccRoadmapTaskSchema,
+  insertEccTrainingModuleSchema,
+  insertEccUserTrainingSchema
 } from "@shared/schema";
 import { generateSecurityPolicy, generateComplianceResponse } from "./services/ai";
 import { seedRiskRegister } from "./risk-register-seed";
@@ -401,6 +407,274 @@ export async function registerRoutes(app: Express) {
     } catch (error) {
       console.error("Error awarding badge:", error);
       res.status(500).json({ message: "Failed to award badge" });
+    }
+  });
+
+  // ECC Project Management API endpoints
+  app.get("/api/ecc-projects/:cisoUserId", async (req, res) => {
+    try {
+      const cisoUserId = parseInt(req.params.cisoUserId);
+      const projects = await storage.getEccProjects(cisoUserId);
+      res.json(projects);
+    } catch (error) {
+      console.error("Error fetching ECC projects:", error);
+      res.status(500).json({ message: "Failed to fetch ECC projects" });
+    }
+  });
+
+  app.get("/api/ecc-projects/project/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const project = await storage.getEccProject(id);
+      
+      if (!project) {
+        return res.status(404).json({ message: "ECC project not found" });
+      }
+      
+      res.json(project);
+    } catch (error) {
+      console.error("Error fetching ECC project:", error);
+      res.status(500).json({ message: "Failed to fetch ECC project" });
+    }
+  });
+
+  app.post("/api/ecc-projects", async (req, res) => {
+    try {
+      const project = insertEccProjectSchema.parse(req.body);
+      const created = await storage.createEccProject(project);
+      res.json(created);
+    } catch (error) {
+      console.error("Error creating ECC project:", error);
+      res.status(500).json({ message: "Failed to create ECC project" });
+    }
+  });
+
+  app.put("/api/ecc-projects/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updated = await storage.updateEccProject(id, req.body);
+      
+      if (!updated) {
+        return res.status(404).json({ message: "ECC project not found" });
+      }
+      
+      res.json(updated);
+    } catch (error) {
+      console.error("Error updating ECC project:", error);
+      res.status(500).json({ message: "Failed to update ECC project" });
+    }
+  });
+
+  app.delete("/api/ecc-projects/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const result = await storage.deleteEccProject(id);
+      
+      if (!result) {
+        return res.status(404).json({ message: "ECC project not found" });
+      }
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting ECC project:", error);
+      res.status(500).json({ message: "Failed to delete ECC project" });
+    }
+  });
+
+  // ECC Gap Assessment API endpoints
+  app.get("/api/ecc-gap-assessments/:projectId", async (req, res) => {
+    try {
+      const projectId = parseInt(req.params.projectId);
+      const assessments = await storage.getEccGapAssessments(projectId);
+      res.json(assessments);
+    } catch (error) {
+      console.error("Error fetching ECC gap assessments:", error);
+      res.status(500).json({ message: "Failed to fetch ECC gap assessments" });
+    }
+  });
+
+  app.post("/api/ecc-gap-assessments", async (req, res) => {
+    try {
+      const assessment = insertEccGapAssessmentSchema.parse(req.body);
+      const created = await storage.createEccGapAssessment(assessment);
+      res.json(created);
+    } catch (error) {
+      console.error("Error creating ECC gap assessment:", error);
+      res.status(500).json({ message: "Failed to create ECC gap assessment" });
+    }
+  });
+
+  app.put("/api/ecc-gap-assessments/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updated = await storage.updateEccGapAssessment(id, req.body);
+      
+      if (!updated) {
+        return res.status(404).json({ message: "ECC gap assessment not found" });
+      }
+      
+      res.json(updated);
+    } catch (error) {
+      console.error("Error updating ECC gap assessment:", error);
+      res.status(500).json({ message: "Failed to update ECC gap assessment" });
+    }
+  });
+
+  // ECC Risk Assessment API endpoints
+  app.get("/api/ecc-risk-assessments/:projectId", async (req, res) => {
+    try {
+      const projectId = parseInt(req.params.projectId);
+      const gapAssessmentId = req.query.gapAssessmentId ? parseInt(req.query.gapAssessmentId.toString()) : undefined;
+      const assessments = await storage.getEccRiskAssessments(projectId, gapAssessmentId);
+      res.json(assessments);
+    } catch (error) {
+      console.error("Error fetching ECC risk assessments:", error);
+      res.status(500).json({ message: "Failed to fetch ECC risk assessments" });
+    }
+  });
+
+  app.post("/api/ecc-risk-assessments", async (req, res) => {
+    try {
+      const assessment = insertEccRiskAssessmentSchema.parse(req.body);
+      const created = await storage.createEccRiskAssessment(assessment);
+      res.json(created);
+    } catch (error) {
+      console.error("Error creating ECC risk assessment:", error);
+      res.status(500).json({ message: "Failed to create ECC risk assessment" });
+    }
+  });
+
+  app.put("/api/ecc-risk-assessments/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updated = await storage.updateEccRiskAssessment(id, req.body);
+      
+      if (!updated) {
+        return res.status(404).json({ message: "ECC risk assessment not found" });
+      }
+      
+      res.json(updated);
+    } catch (error) {
+      console.error("Error updating ECC risk assessment:", error);
+      res.status(500).json({ message: "Failed to update ECC risk assessment" });
+    }
+  });
+
+  // ECC Roadmap Tasks API endpoints
+  app.get("/api/ecc-roadmap-tasks/:projectId", async (req, res) => {
+    try {
+      const projectId = parseInt(req.params.projectId);
+      const status = req.query.status?.toString();
+      const tasks = await storage.getEccRoadmapTasks(projectId, status);
+      res.json(tasks);
+    } catch (error) {
+      console.error("Error fetching ECC roadmap tasks:", error);
+      res.status(500).json({ message: "Failed to fetch ECC roadmap tasks" });
+    }
+  });
+
+  app.post("/api/ecc-roadmap-tasks", async (req, res) => {
+    try {
+      const task = insertEccRoadmapTaskSchema.parse(req.body);
+      const created = await storage.createEccRoadmapTask(task);
+      res.json(created);
+    } catch (error) {
+      console.error("Error creating ECC roadmap task:", error);
+      res.status(500).json({ message: "Failed to create ECC roadmap task" });
+    }
+  });
+
+  app.put("/api/ecc-roadmap-tasks/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updated = await storage.updateEccRoadmapTask(id, req.body);
+      
+      if (!updated) {
+        return res.status(404).json({ message: "ECC roadmap task not found" });
+      }
+      
+      res.json(updated);
+    } catch (error) {
+      console.error("Error updating ECC roadmap task:", error);
+      res.status(500).json({ message: "Failed to update ECC roadmap task" });
+    }
+  });
+
+  app.delete("/api/ecc-roadmap-tasks/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const result = await storage.deleteEccRoadmapTask(id);
+      
+      if (!result) {
+        return res.status(404).json({ message: "ECC roadmap task not found" });
+      }
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting ECC roadmap task:", error);
+      res.status(500).json({ message: "Failed to delete ECC roadmap task" });
+    }
+  });
+
+  // ECC Training API endpoints
+  app.get("/api/ecc-training-modules", async (req, res) => {
+    try {
+      const isActive = req.query.isActive !== undefined ? req.query.isActive === 'true' : undefined;
+      const modules = await storage.getEccTrainingModules(isActive);
+      res.json(modules);
+    } catch (error) {
+      console.error("Error fetching ECC training modules:", error);
+      res.status(500).json({ message: "Failed to fetch ECC training modules" });
+    }
+  });
+
+  app.post("/api/ecc-training-modules", async (req, res) => {
+    try {
+      const module = insertEccTrainingModuleSchema.parse(req.body);
+      const created = await storage.createEccTrainingModule(module);
+      res.json(created);
+    } catch (error) {
+      console.error("Error creating ECC training module:", error);
+      res.status(500).json({ message: "Failed to create ECC training module" });
+    }
+  });
+
+  app.get("/api/ecc-user-training/:projectId/:userId", async (req, res) => {
+    try {
+      const projectId = parseInt(req.params.projectId);
+      const userId = parseInt(req.params.userId);
+      const training = await storage.getEccUserTraining(projectId, userId);
+      res.json(training);
+    } catch (error) {
+      console.error("Error fetching ECC user training:", error);
+      res.status(500).json({ message: "Failed to fetch ECC user training" });
+    }
+  });
+
+  app.post("/api/ecc-user-training", async (req, res) => {
+    try {
+      const training = insertEccUserTrainingSchema.parse(req.body);
+      const created = await storage.createEccUserTraining(training);
+      res.json(created);
+    } catch (error) {
+      console.error("Error creating ECC user training:", error);
+      res.status(500).json({ message: "Failed to create ECC user training" });
+    }
+  });
+
+  app.put("/api/ecc-user-training/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updated = await storage.updateEccUserTraining(id, req.body);
+      
+      if (!updated) {
+        return res.status(404).json({ message: "ECC user training not found" });
+      }
+      
+      res.json(updated);
+    } catch (error) {
+      console.error("Error updating ECC user training:", error);
+      res.status(500).json({ message: "Failed to update ECC user training" });
     }
   });
 
