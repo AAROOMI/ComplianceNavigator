@@ -204,7 +204,7 @@ STATUS: Successfully uploaded and ready for deployment
                             description: `Policy document uploaded from ${policy.name}`,
                             author: 'Policy Upload System',
                             createdDate: new Date(policy.uploadedAt).toLocaleDateString(),
-                            status: 'uploaded' as const,
+                            status: 'approved' as const,
                             priority: 'medium' as const,
                             category: 'Policy Document'
                           }}

@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import DocumentViewer from "@/components/common/document-viewer";
 import { 
   Rocket, 
   TrendingUp, 
@@ -17,323 +18,383 @@ import {
   FileText,
   Wand2,
   MessageSquare,
-  Archive
+  Archive,
+  Download,
+  Search,
+  Filter,
+  Zap,
+  Brain,
+  Shield
 } from "lucide-react";
-import CTOOnboarding from "@/components/ciso/cto-onboarding";
-import CTODocumentGenerator from "@/components/cto/policy-generator";
-import CTOExpertConsultant from "@/components/cto/expert-consultant";
-import CTODocumentLibrary from "@/components/cto/document-library";
 
 export default function CTODashboard() {
-  const [showOnboarding, setShowOnboarding] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const metrics = {
-    activeProjects: 8,
-    teamMembers: 24,
-    deploymentsThisMonth: 12,
-    systemUptime: 99.8
+  const stats = {
+    totalDocuments: 31,
+    criticalPriority: 8,
+    highPriority: 15,
+    categories: 22
   };
 
-  const strategicInitiatives = [
-    { id: 1, title: "Cloud Migration Strategy", progress: 75, status: "On Track" },
-    { id: 2, title: "AI/ML Integration", progress: 40, status: "In Progress" },
-    { id: 3, title: "Security Architecture Redesign", progress: 90, status: "Nearly Complete" },
-    { id: 4, title: "DevOps Transformation", progress: 60, status: "On Track" }
+  const categories = [
+    "All", "Technology Strategy", "Architecture", "Innovation", 
+    "Team Management", "Product Development", "Security Architecture", 
+    "Digital Transformation", "AI/ML Strategy", "Cloud Strategy", "DevOps"
   ];
 
-  const technologyStack = [
-    { name: "Frontend", technologies: ["React", "TypeScript", "Tailwind CSS"] },
-    { name: "Backend", technologies: ["Node.js", "Express", "PostgreSQL"] },
-    { name: "Infrastructure", technologies: ["AWS", "Docker", "Kubernetes"] },
-    { name: "Security", technologies: ["OAuth", "JWT", "SSL/TLS"] }
+  const policies = [
+    {
+      id: 1,
+      title: "Technology Roadmap Strategy",
+      description: "Define long-term technology vision and strategic initiatives",
+      category: "Technology Strategy",
+      priority: "Critical",
+      estimatedTime: "6-8 hours",
+      status: "Generate"
+    },
+    {
+      id: 2,
+      title: "Software Architecture Guidelines",
+      description: "Establish architectural standards and design principles",
+      category: "Architecture", 
+      priority: "High",
+      estimatedTime: "5-7 hours",
+      status: "Generate"
+    },
+    {
+      id: 3,
+      title: "Innovation Management Framework",
+      description: "Create processes for evaluating and implementing new technologies",
+      category: "Innovation",
+      priority: "High",
+      estimatedTime: "4-6 hours", 
+      status: "Generate"
+    },
+    {
+      id: 4,
+      title: "Engineering Team Standards",
+      description: "Define coding standards, review processes, and team practices",
+      category: "Team Management",
+      priority: "Critical",
+      estimatedTime: "3-5 hours",
+      status: "Generate"
+    },
+    {
+      id: 5,
+      title: "Cloud Migration Strategy",
+      description: "Plan and execute cloud transformation initiatives",
+      category: "Cloud Strategy",
+      priority: "Critical",
+      estimatedTime: "7-9 hours",
+      status: "Generate"
+    },
+    {
+      id: 6,
+      title: "AI/ML Implementation Plan",
+      description: "Strategy for artificial intelligence and machine learning adoption",
+      category: "AI/ML Strategy",
+      priority: "High",
+      estimatedTime: "5-7 hours",
+      status: "Generate"
+    }
   ];
 
-  const getProgressColor = (progress: number) => {
-    if (progress >= 80) return "bg-green-500";
-    if (progress >= 60) return "bg-blue-500";
-    if (progress >= 40) return "bg-yellow-500";
-    return "bg-red-500";
-  };
+  const filteredPolicies = selectedCategory === "All" 
+    ? policies 
+    : policies.filter(policy => policy.category === selectedCategory);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "On Track": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-      case "In Progress": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
-      case "Nearly Complete": return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
-      default: return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "Critical": return "bg-red-500 text-white";
+      case "High": return "bg-orange-500 text-white";
+      case "Medium": return "bg-yellow-500 text-white";
+      case "Low": return "bg-green-500 text-white";
+      default: return "bg-gray-500 text-white";
     }
   };
 
-  const handleOnboardingComplete = () => {
-    setShowOnboarding(false);
-    localStorage.setItem('cto-onboarding-completed', 'true');
-  };
+  const generatePolicy = (policyId: number) => {
+    const policy = policies.find(p => p.id === policyId);
+    if (!policy) return;
 
-  const handleOnboardingSkip = () => {
-    setShowOnboarding(false);
-    localStorage.setItem('cto-onboarding-completed', 'true');
+    const content = `
+CTO STRATEGIC DOCUMENT: ${policy.title}
+
+EXECUTIVE SUMMARY:
+${policy.description}
+
+STRATEGIC VISION:
+This document outlines the technology leadership approach for driving innovation, 
+managing technical teams, and ensuring alignment with business objectives.
+
+TECHNOLOGY LEADERSHIP RESPONSIBILITIES:
+- Strategic technology planning and roadmap development
+- Architecture oversight and technical decision-making
+- Innovation management and emerging technology evaluation
+- Engineering team leadership and development
+- Cross-functional collaboration with business stakeholders
+
+TECHNICAL FRAMEWORK:
+- Modern software architecture patterns and practices
+- Cloud-native development and deployment strategies
+- AI/ML integration and data-driven decision making
+- Cybersecurity and compliance considerations
+- Performance optimization and scalability planning
+
+STRATEGIC INITIATIVES:
+1. Technology Modernization: Upgrade legacy systems and infrastructure
+2. Digital Innovation: Implement cutting-edge solutions for competitive advantage
+3. Team Excellence: Build high-performing engineering teams
+4. Security First: Integrate security throughout the development lifecycle
+5. Data Strategy: Leverage data analytics for business insights
+
+IMPLEMENTATION ROADMAP:
+Quarter 1: Assessment and planning phase
+Quarter 2: Infrastructure and architecture setup
+Quarter 3: Development and testing implementation
+Quarter 4: Deployment and optimization
+
+GOVERNANCE & METRICS:
+- Monthly technology review meetings
+- Quarterly innovation assessments
+- Annual strategic planning sessions
+- KPI tracking and performance monitoring
+
+SUCCESS CRITERIA:
+- Improved system performance and reliability
+- Faster time-to-market for new features
+- Enhanced team productivity and satisfaction
+- Increased innovation and competitive advantage
+
+STATUS: Ready for executive review
+PRIORITY: ${policy.priority}
+ESTIMATED COMPLETION: ${policy.estimatedTime}
+    `;
+
+    return content;
   };
 
   return (
-    <div className="space-y-6" data-testid="cto-dashboard">
+    <div className="space-y-6 p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-            <Rocket className="h-8 w-8 text-primary" />
+          <h1 className="text-3xl font-bold flex items-center gap-2">
+            <Rocket className="w-8 h-8 text-primary" />
             CTO Dashboard
           </h1>
-          <p className="text-muted-foreground mt-2">
-            Strategic technology overview and innovation management
+          <p className="text-muted-foreground mt-1">
+            Technology Strategy & Leadership Policy Generation
           </p>
         </div>
-        
-        <div className="flex gap-3">
-          <Button
-            onClick={() => setShowOnboarding(true)}
-            variant="outline"
-            className="flex items-center gap-2"
-            data-testid="button-start-onboarding"
-          >
-            <Lightbulb className="h-4 w-4" />
-            Strategic Tour
+        <div className="flex items-center gap-2">
+          <Button variant="outline">
+            <Download className="w-4 h-4 mr-2" />
+            Export All
           </Button>
-          <Button 
-            className="flex items-center gap-2"
-            onClick={() => setActiveTab("generator")}
-          >
-            <Wand2 className="w-4 h-4" />
-            Generate Strategy Document
+          <Button>
+            <Brain className="w-4 h-4 mr-2" />
+            Generate Strategy
           </Button>
         </div>
       </div>
 
-      {/* Overview Statistics */}
+      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Active Projects</p>
-                <p className="text-2xl font-bold">{metrics.activeProjects}</p>
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
-              <Target className="h-8 w-8 text-blue-600" />
+              <div>
+                <div className="text-2xl font-bold">{stats.totalDocuments}</div>
+                <div className="text-sm text-muted-foreground">Total Documents</div>
+              </div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Team Members</p>
-                <p className="text-2xl font-bold">{metrics.teamMembers}</p>
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-red-100 dark:bg-red-900 rounded-lg">
+                <Target className="w-6 h-6 text-red-600 dark:text-red-400" />
               </div>
-              <Users className="h-8 w-8 text-green-600" />
+              <div>
+                <div className="text-2xl font-bold">{stats.criticalPriority}</div>
+                <div className="text-sm text-muted-foreground">Critical Priority</div>
+              </div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Deployments</p>
-                <p className="text-2xl font-bold">{metrics.deploymentsThisMonth}</p>
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-orange-100 dark:bg-orange-900 rounded-lg">
+                <TrendingUp className="w-6 h-6 text-orange-600 dark:text-orange-400" />
               </div>
-              <GitBranch className="h-8 w-8 text-purple-600" />
+              <div>
+                <div className="text-2xl font-bold">{stats.highPriority}</div>
+                <div className="text-sm text-muted-foreground">High Priority</div>
+              </div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">System Uptime</p>
-                <p className="text-2xl font-bold">{metrics.systemUptime}%</p>
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
+                <BarChart className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
-              <TrendingUp className="h-8 w-8 text-emerald-600" />
+              <div>
+                <div className="text-2xl font-bold">{stats.categories}</div>
+                <div className="text-sm text-muted-foreground">Categories</div>
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Main Content Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">Strategic Overview</TabsTrigger>
-          <TabsTrigger value="generator">Document Generator</TabsTrigger>
-          <TabsTrigger value="consultant">Expert Consultant</TabsTrigger>
-          <TabsTrigger value="library">Document Library</TabsTrigger>
-        </TabsList>
+      {/* Main Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Navigation Cards */}
+        <div className="lg:col-span-1 space-y-4">
+          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 border-blue-200 dark:border-blue-700">
+            <CardContent className="p-4 text-center">
+              <Archive className="w-8 h-8 mx-auto mb-2 text-blue-600 dark:text-blue-400" />
+              <h3 className="font-semibold">Document Library</h3>
+              <Button size="sm" className="mt-2" variant="outline">
+                Browse
+              </Button>
+            </CardContent>
+          </Card>
 
-        {/* Strategic Overview Tab */}
-        <TabsContent value="overview" className="space-y-6">
-          {/* Strategic Initiatives */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Target className="h-5 w-5" />
-            Strategic Initiatives
-          </CardTitle>
-          <CardDescription>
-            Key technology initiatives and their progress
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {strategicInitiatives.map((initiative) => (
-              <div key={initiative.id} className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div>
-                      <p className="font-medium">{initiative.title}</p>
-                      <p className="text-sm text-muted-foreground">{initiative.progress}% Complete</p>
-                    </div>
+          <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 border-green-200 dark:border-green-700">
+            <CardContent className="p-4 text-center">
+              <Lightbulb className="w-8 h-8 mx-auto mb-2 text-green-600 dark:text-green-400" />
+              <h3 className="font-semibold">Strategy Generator</h3>
+              <Button size="sm" className="mt-2" variant="outline">
+                Create
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 border-purple-200 dark:border-purple-700">
+            <CardContent className="p-4 text-center">
+              <MessageSquare className="w-8 h-8 mx-auto mb-2 text-purple-600 dark:text-purple-400" />
+              <h3 className="font-semibold">Tech Consultant</h3>
+              <Button size="sm" className="mt-2" variant="outline">
+                Ask
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800 border-orange-200 dark:border-orange-700">
+            <CardContent className="p-4 text-center">
+              <TrendingUp className="w-8 h-8 mx-auto mb-2 text-orange-600 dark:text-orange-400" />
+              <h3 className="font-semibold">Manage Portfolio</h3>
+              <Button size="sm" className="mt-2" variant="outline">
+                Organize
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Policy Generation Area */}
+        <div className="lg:col-span-3">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Technology Strategy Documents</CardTitle>
+                  <CardDescription>
+                    Generate strategic technology plans and leadership frameworks
+                  </CardDescription>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="relative">
+                    <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                    <input
+                      type="text"
+                      placeholder="Search strategies..."
+                      className="pl-10 pr-4 py-2 border rounded-md"
+                    />
                   </div>
-                  <Badge className={getStatusColor(initiative.status)}>
-                    {initiative.status}
-                  </Badge>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
-                  <div 
-                    className={`h-2 rounded-full ${getProgressColor(initiative.progress)}`}
-                    style={{ width: `${initiative.progress}%` }}
-                  ></div>
+                  <Button variant="outline" size="sm">
+                    <Filter className="w-4 h-4" />
+                  </Button>
                 </div>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+            </CardHeader>
+            <CardContent>
+              {/* Category Filter */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                {categories.map((category) => (
+                  <Button
+                    key={category}
+                    variant={selectedCategory === category ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedCategory(category)}
+                  >
+                    {category}
+                  </Button>
+                ))}
+              </div>
 
-      {/* Technology Stack */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Code className="h-5 w-5" />
-            Technology Stack
-          </CardTitle>
-          <CardDescription>
-            Current technology stack and infrastructure
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-2 gap-6">
-            {technologyStack.map((category) => (
-              <div key={category.name} className="space-y-3">
-                <h4 className="font-semibold text-lg">{category.name}</h4>
-                <div className="flex flex-wrap gap-2">
-                  {category.technologies.map((tech) => (
-                    <Badge key={tech} variant="outline" className="text-sm">
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
+              {/* Policy Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {filteredPolicies.map((policy) => (
+                  <Card key={policy.id} className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <Rocket className="w-5 h-5 text-purple-500" />
+                          <h3 className="font-semibold">{policy.title}</h3>
+                        </div>
+                        <Badge className={getPriorityColor(policy.priority)}>
+                          {policy.priority}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        {policy.description}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <div className="text-xs text-muted-foreground">
+                          Category: {policy.category}<br />
+                          Est. Time: {policy.estimatedTime}
+                        </div>
+                        <DocumentViewer
+                          content={generatePolicy(policy.id)}
+                          metadata={{
+                            title: policy.title,
+                            type: 'Technology Strategy Document',
+                            description: policy.description,
+                            author: 'CTO Dashboard',
+                            createdDate: new Date().toLocaleDateString(),
+                            status: 'draft',
+                            priority: policy.priority.toLowerCase() as 'high' | 'medium' | 'low',
+                            category: policy.category
+                          }}
+                          triggerButton={
+                            <Button size="sm" className="bg-teal-500 hover:bg-teal-600 text-white">
+                              Generate
+                            </Button>
+                          }
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Innovation Labs */}
-      <div className="grid md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Lightbulb className="h-5 w-5" />
-              Innovation Pipeline
-            </CardTitle>
-            <CardDescription>
-              Emerging technologies and R&D projects
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 p-3 border rounded-lg">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-                <div>
-                  <p className="font-medium">AI-Powered Compliance Assistant</p>
-                  <p className="text-sm text-muted-foreground">Research Phase</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 border rounded-lg">
-                <Clock className="w-5 h-5 text-yellow-500" />
-                <div>
-                  <p className="font-medium">Blockchain Integration</p>
-                  <p className="text-sm text-muted-foreground">Evaluation Phase</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 border rounded-lg">
-                <Target className="w-5 h-5 text-blue-500" />
-                <div>
-                  <p className="font-medium">Zero-Trust Architecture</p>
-                  <p className="text-sm text-muted-foreground">Planning Phase</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BarChart className="h-5 w-5" />
-              Performance Metrics
-            </CardTitle>
-            <CardDescription>
-              System performance and optimization
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">API Response Time</span>
-                <span className="text-sm text-green-600">85ms</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Database Query Performance</span>
-                <span className="text-sm text-green-600">12ms</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Page Load Speed</span>
-                <span className="text-sm text-green-600">1.2s</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Error Rate</span>
-                <span className="text-sm text-green-600">0.1%</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-
-        </TabsContent>
-
-        {/* Document Generator Tab */}
-        <TabsContent value="generator">
-          <CTODocumentGenerator />
-        </TabsContent>
-
-        {/* Expert Consultant Tab */}
-        <TabsContent value="consultant">
-          <CTOExpertConsultant />
-        </TabsContent>
-
-        {/* Document Library Tab */}
-        <TabsContent value="library">
-          <CTODocumentLibrary />
-        </TabsContent>
-      </Tabs>
-
-      {/* CTO Onboarding */}
-      <CTOOnboarding
-        isVisible={showOnboarding}
-        onComplete={handleOnboardingComplete}
-        onSkip={handleOnboardingSkip}
-      />
     </div>
   );
 }
