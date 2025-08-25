@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ShieldCheck, FileText, ClipboardCheck, Bot, LayoutDashboard, AlertTriangle, Shield, Database, Settings, Rocket, Monitor, Users, GraduationCap, Book, Award, Brain, Upload } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { LanguageToggle } from '@/components/ui/language-toggle';
+import ceoImage from '@assets/ceo-removebg-preview_1756122016972.png';
 
 export default function Sidebar() {
   const [location] = useLocation();
@@ -57,9 +58,20 @@ export default function Sidebar() {
     >
       <div className="flex flex-col h-full">
         <div className="p-4 border-b">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mb-4">
             <ShieldCheck className="w-6 h-6 text-primary" />
             <h1 className="text-xl font-bold">MetaWorks</h1>
+          </div>
+          {/* CEO Picture */}
+          <div className="flex justify-center">
+            <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20 shadow-lg">
+              <img 
+                src={ceoImage} 
+                alt="CEO" 
+                className="w-full h-full object-cover"
+                data-testid="ceo-picture"
+              />
+            </div>
           </div>
         </div>
 
