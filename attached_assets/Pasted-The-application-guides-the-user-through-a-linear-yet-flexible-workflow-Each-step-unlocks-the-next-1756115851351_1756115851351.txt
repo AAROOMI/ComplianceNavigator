@@ -1,0 +1,48 @@
+The application guides the user through a linear, yet flexible, workflow. Each step unlocks the next.
+
+1. Project Setup
+Create a new project. Define the organization's name, size, and scope (e.g., does it have ICS?).
+The CISO logs in and creates a new implementation project.
+2. Gap Assessment
+An interactive questionnaire based on the 114 controls. Users answer "Yes," "No," or "Not Applicable" for each control.
+The security team completes the assessment. The app instantly calculates a "Compliance Score."
+3. Risk Assessment
+Integrated risk matrix. For every "No" in the gap assessment, the app prompts the user to assess the risk (Likelihood x Impact).
+The team assigns risk levels (High, Medium, Low) to each gap.
+4. Roadmap Generation
+The app auto-generates a prioritized task list. High-risk gaps become top-priority tasks with suggested deadlines.
+The CISO reviews and approves the generated roadmap.
+5. Policy Development
+A "Policy Builder" with pre-built, editable templates for all required policies (e.g., Cybersecurity Policy, AUP, IRP).
+The security team selects a template, customizes it with their organization's details, and submits it for approval.
+6. Task Management
+A Kanban-style board (To Do, In Progress, For Review, Done) for all implementation tasks. Tasks are assigned to specific users.
+Department heads receive notifications and work on their assigned tasks (e.g., "Implement MFA for email").
+7. Document Repository
+A central, secure library for uploading and storing all evidence (e.g., signed policies, patch logs, training records).
+Users upload documents as proof of task completion.
+8. Training & Awareness
+Built-in micro-learning modules. Interactive sessions on phishing, secure browsing, and social media. Includes quizzes with scoring.
+All employees log in to complete their mandatory training. Their competency is tracked.
+9. Continuous Monitoring
+A live dashboard showing real-time progress, compliance score, open tasks, and training completion rates.
+The CISO uses the dashboard to monitor the entire organization's status.
+10. Audit & Reporting
+One-click generation of a formal compliance report for the NCA, including all evidence and assessment results.
+The CISO generates the final report for submission.
+
+3. Pre-Built, Well-Drafted Documentation Templates
+The application comes with a library of pre-built, professionally formatted templates that are fully compliant with the ECC. These are editable within the app.
+
+Gap Assessment Report Template
+Risk Assessment Matrix Template
+Cybersecurity Strategy Document
+Cybersecurity Policy
+Acceptable Use Policy (AUP)
+Incident Response Plan (IRP)
+Business Continuity & Disaster Recovery (BC/DR) Plan
+Data Classification Policy
+Third-Party Contract Security Addendum
+Cloud Computing Security Agreement
+ICS Security Plan
+Training Completion Certificate

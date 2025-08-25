@@ -33,6 +33,8 @@ import NCAECCImplementation from "@/pages/nca-ecc-implementation";
 import DocumentManagement from "@/pages/document-management";
 import NotFound from "@/pages/not-found";
 import PolicyUpload from "@/pages/policy-upload";
+import EccNavigator from "@/pages/ecc-navigator";
+import EccProjectDetail from "@/pages/ecc-project-detail";
 
 export default function App() {
   return (
@@ -150,6 +152,16 @@ export default function App() {
           <Route path="/policy-upload">
             <Layout>
               <PolicyUpload />
+            </Layout>
+          </Route>
+          <Route path="/ecc-navigator">
+            <Layout>
+              <EccNavigator />
+            </Layout>
+          </Route>
+          <Route path="/ecc-navigator/project/:id">
+            <Layout>
+              <EccProjectDetail />
             </Layout>
           </Route>
           <Route>

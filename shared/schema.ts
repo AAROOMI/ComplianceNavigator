@@ -586,6 +586,120 @@ export type InsertNotificationPreferences = z.infer<typeof insertNotificationPre
 export type RiskRegister = typeof riskRegister.$inferSelect;
 export type InsertRiskRegister = z.infer<typeof insertRiskRegisterSchema>;
 
+// ECC Navigator - Complete ECC Implementation Platform
+export const eccProjects = pgTable("ecc_projects", {
+  id: serial("id").primaryKey(),
+  organizationName: varchar("organization_name", { length: 200 }).notNull(),
+  organizationSize: varchar("organization_size", { length: 50 }).notNull(), // small, medium, large, enterprise
+  organizationScope: varchar("organization_scope", { length: 50 }).notNull(), // basic, advanced, ics-included
+  projectName: varchar("project_name", { length: 200 }).notNull(),
+  description: text("description"),
+  cisoUserId: integer("ciso_user_id").notNull(),
+  status: varchar("status", { length: 30 }).notNull().default("setup"), // setup, gap-assessment, risk-assessment, roadmap, implementation, monitoring, completed
+  currentStep: integer("current_step").notNull().default(1), // 1-10 workflow steps
+  overallComplianceScore: integer("overall_compliance_score").default(0), // 0-100
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const eccGapAssessments = pgTable("ecc_gap_assessments", {
+  id: serial("id").primaryKey(),
+  projectId: integer("project_id").notNull().references(() => eccProjects.id),
+  controlId: varchar("control_id", { length: 50 }).notNull(), // e.g., ECC-1-1-1
+  domain: varchar("domain", { length: 100 }).notNull(),
+  subdomain: varchar("subdomain", { length: 100 }).notNull(),
+  controlDescription: text("control_description").notNull(),
+  complianceStatus: varchar("compliance_status", { length: 20 }).notNull(), // compliant, partially-compliant, non-compliant, not-applicable
+  evidenceProvided: text("evidence_provided"),
+  assessorId: integer("assessor_id").notNull(),
+  assessedAt: timestamp("assessed_at").defaultNow(),
+  comments: text("comments"),
+});
+
+export const eccRiskAssessments = pgTable("ecc_risk_assessments", {
+  id: serial("id").primaryKey(),
+  projectId: integer("project_id").notNull().references(() => eccProjects.id),
+  gapAssessmentId: integer("gap_assessment_id").notNull().references(() => eccGapAssessments.id),
+  riskLevel: varchar("risk_level", { length: 20 }).notNull(), // critical, high, medium, low
+  likelihood: varchar("likelihood", { length: 20 }).notNull(), // very-high, high, medium, low, very-low
+  impact: varchar("impact", { length: 20 }).notNull(), // critical, high, medium, low
+  businessImpact: text("business_impact").notNull(),
+  riskDescription: text("risk_description").notNull(),
+  currentControls: text("current_controls"),
+  recommendedActions: text("recommended_actions"),
+  assessorId: integer("assessor_id").notNull(),
+  assessedAt: timestamp("assessed_at").defaultNow(),
+});
+
+export const eccRoadmapTasks = pgTable("ecc_roadmap_tasks", {
+  id: serial("id").primaryKey(),
+  projectId: integer("project_id").notNull().references(() => eccProjects.id),
+  controlId: varchar("control_id", { length: 50 }).notNull(),
+  taskTitle: varchar("task_title", { length: 200 }).notNull(),
+  taskDescription: text("task_description").notNull(),
+  priority: varchar("priority", { length: 20 }).notNull(), // critical, high, medium, low
+  assignedTo: integer("assigned_to"), // user ID
+  department: varchar("department", { length: 100 }),
+  estimatedEffort: varchar("estimated_effort", { length: 50 }), // e.g., "2-4 weeks"
+  targetDate: timestamp("target_date"),
+  status: varchar("status", { length: 20 }).notNull().default("todo"), // todo, in-progress, review, done, blocked
+  progress: integer("progress").default(0), // 0-100
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const eccPolicyTemplates = pgTable("ecc_policy_templates", {
+  id: serial("id").primaryKey(),
+  templateName: varchar("template_name", { length: 200 }).notNull(),
+  templateType: varchar("template_type", { length: 100 }).notNull(),
+  domain: varchar("domain", { length: 100 }).notNull(),
+  description: text("description"),
+  templateContent: text("template_content").notNull(),
+  requiredFields: text("required_fields").array(),
+  relatedControls: text("related_controls").array(), // ECC control IDs
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const eccTrainingModules = pgTable("ecc_training_modules", {
+  id: serial("id").primaryKey(),
+  moduleName: varchar("module_name", { length: 200 }).notNull(),
+  moduleType: varchar("module_type", { length: 50 }).notNull(), // phishing-simulator, secure-browsing-game, social-media-challenge, quiz
+  description: text("description"),
+  content: jsonb("content").notNull(), // Interactive content, scenarios, questions
+  difficulty: varchar("difficulty", { length: 20 }).default("beginner"), // beginner, intermediate, advanced
+  estimatedTime: integer("estimated_time_minutes"), // in minutes
+  passingScore: integer("passing_score").default(80), // percentage
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const eccUserTraining = pgTable("ecc_user_training", {
+  id: serial("id").primaryKey(),
+  projectId: integer("project_id").notNull().references(() => eccProjects.id),
+  userId: integer("user_id").notNull(),
+  moduleId: integer("module_id").notNull().references(() => eccTrainingModules.id),
+  status: varchar("status", { length: 20 }).notNull().default("not-started"), // not-started, in-progress, completed, failed
+  score: integer("score"), // percentage score
+  attempts: integer("attempts").default(0),
+  timeSpent: integer("time_spent_minutes").default(0),
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+  lastAccessedAt: timestamp("last_accessed_at"),
+});
+
+export const eccComplianceReports = pgTable("ecc_compliance_reports", {
+  id: serial("id").primaryKey(),
+  projectId: integer("project_id").notNull().references(() => eccProjects.id),
+  reportType: varchar("report_type", { length: 50 }).notNull(), // gap-assessment, risk-assessment, full-compliance, nca-submission
+  reportTitle: varchar("report_title", { length: 200 }).notNull(),
+  reportContent: text("report_content").notNull(), // PDF content or JSON data
+  generatedBy: integer("generated_by").notNull(),
+  generatedAt: timestamp("generated_at").defaultNow(),
+  metadata: jsonb("metadata"), // Additional report metadata
+});
+
 // User Management System
 export const usersManagement = pgTable("users_management", {
   id: serial("id").primaryKey(),
@@ -698,3 +812,97 @@ export type PolicyFeedback = typeof policyFeedback.$inferSelect;
 export type InsertPolicyFeedback = z.infer<typeof insertPolicyFeedbackSchema>;
 export type PolicyCollaboration = typeof policyCollaboration.$inferSelect;
 export type InsertPolicyCollaboration = z.infer<typeof insertPolicyCollaborationSchema>;
+
+// ECC Navigator Insert Schemas
+export const insertEccProjectSchema = createInsertSchema(eccProjects).pick({
+  organizationName: true,
+  organizationSize: true,
+  organizationScope: true,
+  projectName: true,
+  description: true,
+  cisoUserId: true,
+  status: true,
+  currentStep: true,
+  overallComplianceScore: true,
+});
+
+export const insertEccGapAssessmentSchema = createInsertSchema(eccGapAssessments).pick({
+  projectId: true,
+  controlId: true,
+  domain: true,
+  subdomain: true,
+  controlDescription: true,
+  complianceStatus: true,
+  evidenceProvided: true,
+  assessorId: true,
+  comments: true,
+});
+
+export const insertEccRiskAssessmentSchema = createInsertSchema(eccRiskAssessments).pick({
+  projectId: true,
+  gapAssessmentId: true,
+  riskLevel: true,
+  likelihood: true,
+  impact: true,
+  businessImpact: true,
+  riskDescription: true,
+  currentControls: true,
+  recommendedActions: true,
+  assessorId: true,
+});
+
+export const insertEccRoadmapTaskSchema = createInsertSchema(eccRoadmapTasks).pick({
+  projectId: true,
+  controlId: true,
+  taskTitle: true,
+  taskDescription: true,
+  priority: true,
+  assignedTo: true,
+  department: true,
+  estimatedEffort: true,
+  targetDate: true,
+  status: true,
+  progress: true,
+});
+
+export const insertEccTrainingModuleSchema = createInsertSchema(eccTrainingModules).pick({
+  moduleName: true,
+  moduleType: true,
+  description: true,
+  content: true,
+  difficulty: true,
+  estimatedTime: true,
+  passingScore: true,
+  isActive: true,
+});
+
+export const insertEccUserTrainingSchema = createInsertSchema(eccUserTraining).pick({
+  projectId: true,
+  userId: true,
+  moduleId: true,
+  status: true,
+  score: true,
+  attempts: true,
+  timeSpent: true,
+});
+
+// ECC Navigator Types
+export type EccProject = typeof eccProjects.$inferSelect;
+export type InsertEccProject = z.infer<typeof insertEccProjectSchema>;
+
+export type EccGapAssessment = typeof eccGapAssessments.$inferSelect;
+export type InsertEccGapAssessment = z.infer<typeof insertEccGapAssessmentSchema>;
+
+export type EccRiskAssessment = typeof eccRiskAssessments.$inferSelect;
+export type InsertEccRiskAssessment = z.infer<typeof insertEccRiskAssessmentSchema>;
+
+export type EccRoadmapTask = typeof eccRoadmapTasks.$inferSelect;
+export type InsertEccRoadmapTask = z.infer<typeof insertEccRoadmapTaskSchema>;
+
+export type EccTrainingModule = typeof eccTrainingModules.$inferSelect;
+export type InsertEccTrainingModule = z.infer<typeof insertEccTrainingModuleSchema>;
+
+export type EccUserTraining = typeof eccUserTraining.$inferSelect;
+export type InsertEccUserTraining = z.infer<typeof insertEccUserTrainingSchema>;
+
+export type EccComplianceReport = typeof eccComplianceReports.$inferSelect;
