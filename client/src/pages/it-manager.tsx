@@ -369,7 +369,7 @@ ESTIMATED COMPLETION: ${policy.estimatedTime}
                             author: 'IT Manager Portal',
                             createdDate: new Date().toLocaleDateString(),
                             status: 'draft',
-                            priority: policy.priority.toLowerCase() as 'high' | 'medium' | 'low',
+                            priority: (policy.priority?.toLowerCase() || 'medium') as 'high' | 'medium' | 'low',
                             category: policy.category
                           }}
                           triggerButton={

@@ -392,12 +392,15 @@ export default function DocumentViewer({
       <canvas ref={canvasRef} style={{ display: 'none' }} />
       
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
-          {triggerButton || (
+        <DialogTrigger asChild onClick={handleOpen}>
+          {triggerButton ? (
+            <div onClick={handleOpen}>
+              {triggerButton}
+            </div>
+          ) : (
             <Button 
               variant="outline" 
               size="sm" 
-              onClick={handleOpen}
               className={className}
               data-testid="button-view-document"
             >
