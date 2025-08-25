@@ -15,6 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useQuery } from "@tanstack/react-query";
 import ComprehensiveGapAssessment from "@/components/ecc/comprehensive-gap-assessment";
+import EccImplementationDashboard from "@/components/ecc/ecc-implementation-dashboard";
 import { 
   Shield, 
   ShieldCheck, 
@@ -243,7 +244,7 @@ const trainingModules = [
 export default function EccNavigator() {
   const [location, setLocation] = useLocation();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("dashboard");
   const [selectedProject, setSelectedProject] = useState<EccProject | null>(null);
   const [isCreatingProject, setIsCreatingProject] = useState(false);
   const [showNewProjectDialog, setShowNewProjectDialog] = useState(false);
@@ -262,7 +263,7 @@ export default function EccNavigator() {
   useEffect(() => {
     if (eccProjects.length > 0 && !selectedProject) {
       setSelectedProject(eccProjects[0]);
-      setActiveTab("workflow");
+      setActiveTab("dashboard");
     }
   }, [eccProjects, selectedProject]);
 
@@ -550,12 +551,97 @@ export default function EccNavigator() {
 
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-6">
+          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+          <TabsTrigger value="workflow">Workflow</TabsTrigger>
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="projects">My Projects</TabsTrigger>
-          <TabsTrigger value="training">Training Hub</TabsTrigger>
+          <TabsTrigger value="projects">Projects</TabsTrigger>
+          <TabsTrigger value="training">Training</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="dashboard" className="space-y-4">
+          {selectedProject ? (
+            <EccImplementationDashboard
+              projectId={selectedProject.id}
+              organizationName={selectedProject.organizationName}
+              onStepSelect={(stepId) => {
+                setCurrentWorkflowStep(`step-${stepId}`);
+                setActiveTab("workflow");
+              }}
+            />
+          ) : (
+            <Card>
+              <CardContent className="p-12 text-center">
+                <Shield className="w-16 h-16 mx-auto mb-4 text-muted-foreground/50" />
+                <h3 className="text-lg font-semibold mb-2">No Project Selected</h3>
+                <p className="text-muted-foreground mb-4">
+                  Create or select an ECC project to view the implementation dashboard
+                </p>
+                <Button onClick={() => setShowNewProjectDialog(true)}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create New Project
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="workflow" className="space-y-4">
+          {selectedProject ? (
+            <div className="space-y-6">
+              {currentWorkflowStep === "gap-assessment" ? (
+                <ComprehensiveGapAssessment
+                  projectId={selectedProject.id}
+                  userId={userId}
+                  onComplete={(result) => {
+                    updateProjectStep(selectedProject.id, 3, "risk-assessment");
+                    setCurrentWorkflowStep("");
+                    setActiveTab("dashboard");
+                    toast({
+                      title: "Gap Assessment Complete",
+                      description: `Overall compliance score: ${result.overallScore}%`,
+                    });
+                  }}
+                />
+              ) : (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Active Workflow Component</CardTitle>
+                    <CardDescription>
+                      Select a workflow step from the dashboard to begin working
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="text-center py-12">
+                    <Target className="w-16 h-16 mx-auto mb-4 text-muted-foreground/50" />
+                    <h3 className="text-lg font-semibold mb-2">No Active Workflow Step</h3>
+                    <p className="text-muted-foreground mb-4">
+                      Go to the Implementation Dashboard to select and start a workflow step
+                    </p>
+                    <Button onClick={() => setActiveTab("dashboard")}>
+                      <BarChart3 className="w-4 h-4 mr-2" />
+                      View Dashboard
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="p-12 text-center">
+                <Shield className="w-16 h-16 mx-auto mb-4 text-muted-foreground/50" />
+                <h3 className="text-lg font-semibold mb-2">No Project Selected</h3>
+                <p className="text-muted-foreground mb-4">
+                  Create or select an ECC project to access workflow components
+                </p>
+                <Button onClick={() => setShowNewProjectDialog(true)}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create New Project
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
 
         <TabsContent value="overview" className="space-y-6">
           {/* Workflow Steps */}
