@@ -67,46 +67,48 @@ export default function Sidebar() {
             <div 
               className="w-24 h-24 rounded-full overflow-hidden border-2 border-primary/20 shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300 hover:border-primary/40"
               onClick={() => {
-                console.log('SARAH JOHNSON clicked - activating D-ID agent');
+                console.log('SARAH JOHNSON clicked - opening D-ID agent');
                 
                 try {
-                  // Wait a moment for D-ID agent to be fully loaded
+                  // Wait for D-ID agent to be ready
                   setTimeout(() => {
-                    // Method 1: Try window.DIDAgent (most common)
+                    // Primary method: Look for D-ID agent button and click it
+                    const didButton = document.querySelector('button[data-testid="did-agent-fab"]') || 
+                                     document.querySelector('.did-fab-button') ||
+                                     document.querySelector('[data-name="did-agent"] button') ||
+                                     document.querySelector('#did-agent-button');
+                    
+                    if (didButton) {
+                      (didButton as HTMLElement).click();
+                      console.log('✓ D-ID Agent opened via button click');
+                      return;
+                    }
+                    
+                    // Alternative: Try window.DIDAgent methods
                     if ((window as any).DIDAgent) {
-                      (window as any).DIDAgent.show();
-                      console.log('✓ D-ID Agent activated via window.DIDAgent.show()');
+                      if (typeof (window as any).DIDAgent.open === 'function') {
+                        (window as any).DIDAgent.open();
+                        console.log('✓ D-ID Agent opened via window.DIDAgent.open()');
+                      } else if (typeof (window as any).DIDAgent.show === 'function') {
+                        (window as any).DIDAgent.show();
+                        console.log('✓ D-ID Agent opened via window.DIDAgent.show()');
+                      }
                       return;
                     }
                     
-                    // Method 2: Try window.didAgent
-                    if ((window as any).didAgent) {
-                      (window as any).didAgent.show();
-                      console.log('✓ D-ID Agent activated via window.didAgent.show()');
+                    // Try alternative window properties
+                    if ((window as any).didAgent && typeof (window as any).didAgent.open === 'function') {
+                      (window as any).didAgent.open();
+                      console.log('✓ D-ID Agent opened via window.didAgent.open()');
                       return;
                     }
                     
-                    // Method 3: Try to find D-ID elements and trigger them
-                    const didElements = document.querySelectorAll('[data-name="did-agent"], [data-agent-id="agt_56bnv71C"], .did-agent, #did-agent');
-                    if (didElements.length > 0) {
-                      didElements.forEach((element) => {
-                        if (element && typeof (element as any).click === 'function') {
-                          (element as HTMLElement).click();
-                        }
-                      });
-                      console.log('✓ D-ID Agent elements found and triggered');
-                      return;
-                    }
+                    console.log('D-ID Agent methods not found - agent should auto-appear');
                     
-                    // Method 4: Dispatch window events that D-ID might listen for
-                    window.dispatchEvent(new CustomEvent('did-agent-show'));
-                    window.dispatchEvent(new CustomEvent('DIDAgent:show'));
-                    console.log('✓ D-ID Agent events dispatched');
-                    
-                  }, 100);
+                  }, 200);
                   
                 } catch (error) {
-                  console.error('❌ Error activating D-ID agent:', error);
+                  console.error('❌ Error opening D-ID agent:', error);
                 }
               }}
               data-testid="ceo-picture"
