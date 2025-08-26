@@ -5,182 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>Metaworks Cybersecurity Compliance Platform</title>
     <meta name="description" content="NCA ECC V1 & V2 Compliance Management with AI-powered assistance" />
-    <script
-      type="module"
-      src="https://agent.d-id.com/v2/index.js"
-      data-name="did-agent"
-      data-mode="fabio"
-      data-client-key="YXV0aDB8NjdlZWI3NmYwOTYxZDU0Yjg2N2Y4ZWE3OkMwcExqeHpDYkl0VWt0N1dBQ056WQ=="
-      data-agent-id="v2_agt_D0t5wjZD"
-      data-monitor="true"
-      data-orientation="horizontal"
-      data-position="right"
-      onload="console.log('✅ D-ID Agent script loaded successfully'); window.didAgentLoaded = true; window.didAgentFailed = false;"
-      onerror="console.log('❌ D-ID Agent script failed to load - will use fallback'); window.didAgentFailed = true; window.didAgentLoaded = false;">
-    </script>
+    <!-- D-ID removed due to service connectivity issues - using reliable Sarah Johnson chat -->
     <script>
-      // Global error handlers for all D-ID related failures
-      let didServiceFailed = false;
+      // Sarah Johnson AI Assistant Integration
       
-      window.addEventListener('unhandledrejection', function(event) {
-        if (event.reason && (event.reason.message || '').toLowerCase().includes('d-id')) {
-          console.warn('⚠️ D-ID promise rejection:', event.reason.message || event.reason);
-          event.preventDefault();
-          didServiceFailed = true;
-        }
-      });
-      
-      // Monitor D-ID service status (for logging only)
-      const originalFetch = window.fetch;
-      window.fetch = function(...args) {
-        const promise = originalFetch.apply(this, args);
-        
-        return promise.catch(error => {
-          const url = args[0] || '';
-          if (url.toString().toLowerCase().includes('d-id.com')) {
-            console.warn('🚨 D-ID service network error:', error.message);
-          }
-          throw error;
-        }).then(response => {
-          const url = args[0] || '';
-          if (url.toString().toLowerCase().includes('d-id.com') && response && (response.status === 429 || response.status >= 400)) {
-            console.warn(`🚨 D-ID service error: ${response.status} ${response.statusText}`);
-          }
-          return response;
-        });
-      };
-      
-      // Enhanced D-ID agent initialization and debugging
+      // Initialize Sarah Johnson AI Assistant
       document.addEventListener('DOMContentLoaded', function() {
-        console.log('🚀 DOM loaded, initializing D-ID integration...');
+        console.log('🚀 Sarah Johnson AI Assistant ready');
         
-        // Initialize D-ID status tracking
-        window.didAgentStatus = 'loading';
-        
-        // Wait for D-ID agent to fully initialize
-        setTimeout(() => {
-          console.log('🔍 Checking D-ID agent status after initialization period...');
-          
-          // Check if D-ID script failed to load
-          if (window.didAgentFailed) {
-            console.log('❌ D-ID script failed to load');
-            window.didAgentStatus = 'failed';
-            return;
-          }
-          
-          // Check if D-ID agent is available
-          const didProperties = Object.keys(window).filter(k => k.toLowerCase().includes('did'));
-          console.log('🔎 D-ID related window properties:', didProperties);
-          
-          // Check for D-ID API availability
-          if (typeof window.DID_AGENTS_API !== 'undefined') {
-            console.log('✅ D-ID API detected');
-            window.didAgentStatus = 'ready';
-          } else {
-            console.log('⚠️ D-ID API not detected - connection may have failed');
-            window.didAgentStatus = 'failed';
-            window.didAgentFailed = true;
-          }
-          
-          // Check for D-ID elements in DOM
-          const didElements = document.querySelectorAll('*[class*="did"], *[id*="did"], *[data-testid*="did"]');
-          console.log('🔎 D-ID DOM elements found:', didElements.length);
-          
-          // Check for iframes (D-ID agent might load in iframe)
-          const iframes = document.querySelectorAll('iframe');
-          console.log('🔎 Iframes found:', iframes.length);
-        }, 3000);
-        
-        // Global function to launch D-ID agent for voice conversation
+        // Global function to launch Sarah Johnson chat interface
         window.openDIDAgent = function() {
-          console.log('🎤 Sarah Johnson clicked - launching D-ID voice agent...');
-          
-          let didOpened = false;
-          
-          // Try to launch D-ID agent using available API methods
-          if (typeof window.DID_AGENTS_API !== 'undefined') {
-            try {
-              console.log('🎬 D-ID API Object:', window.DID_AGENTS_API);
-              console.log('🔧 Available D-ID methods:', Object.keys(window.DID_AGENTS_API));
-              
-              // Primary method: show D-ID agent interface
-              if (typeof window.DID_AGENTS_API.show === 'function') {
-                console.log('📞 Calling DID_AGENTS_API.show()...');
-                const result = window.DID_AGENTS_API.show();
-                console.log('📊 show() result:', result);
-                
-                // Wait a moment to see if the agent opens
-                setTimeout(() => {
-                  const didElements = document.querySelectorAll('[class*="did"], [id*="did"]');
-                  console.log('🔍 After show(), found D-ID elements:', didElements.length);
-                }, 1000);
-                
-                return true;
-              }
-              
-              // Alternative methods
-              if (typeof window.DID_AGENTS_API.open === 'function') {
-                console.log('📞 Calling DID_AGENTS_API.open()...');
-                const result = window.DID_AGENTS_API.open();
-                console.log('📊 open() result:', result);
-                return true;
-              }
-              
-              if (typeof window.DID_AGENTS_API.start === 'function') {
-                console.log('📞 Calling DID_AGENTS_API.start()...');
-                const result = window.DID_AGENTS_API.start();
-                console.log('📊 start() result:', result);
-                return true;
-              }
-              
-              if (typeof window.DID_AGENTS_API.toggle === 'function') {
-                console.log('📞 Calling DID_AGENTS_API.toggle()...');
-                const result = window.DID_AGENTS_API.toggle();
-                console.log('📊 toggle() result:', result);
-                return true;
-              }
-              
-              console.warn('⚠️ No valid D-ID API methods found');
-              console.log('🔍 D-ID API contents:', Object.getOwnPropertyNames(window.DID_AGENTS_API));
-              
-            } catch (error) {
-              console.error('❌ Error launching D-ID agent:', error);
-              console.error('❌ Error details:', error.stack);
-              alert('Error launching D-ID voice agent: ' + error.message);
-              return false;
-            }
-          } else {
-            console.error('❌ DID_AGENTS_API not found on window object');
-          }
-          
-          // Method 2: Look for D-ID elements and try to activate them
-          const didElements = document.querySelectorAll('[data-testid*="did"], [class*="did"], [id*="did"]');
-          
-          if (didElements.length > 0 && !didOpened) {
-            console.log('🔍 Found D-ID elements, attempting to activate...');
-            
-            for (let element of didElements) {
-              try {
-                if (element.click) {
-                  element.click();
-                  console.log('✅ D-ID element activated!');
-                  didOpened = true;
-                  return true;
-                }
-              } catch (error) {
-                console.warn('⚠️ Element activation failed:', error.message);
-              }
-            }
-          }
-          
-          // If no D-ID API available, show message
-          if (!didOpened) {
-            console.warn('❌ D-ID Voice Agent not available');
-            alert('D-ID Voice Agent is not available at the moment. Please try again later.');
-            return false;
-          }
-          
-          return didOpened;
+          console.log('🎤 Sarah Johnson clicked - launching chat interface...');
+          showFallbackChat();
+          return true;
         };
         
         // Make fallback chat available globally for auto-triggering
@@ -199,8 +36,7 @@
             existingChat.remove();
           }
           
-          // Mark that we've opened the fallback
-          didServiceFailed = true;
+          // Sarah Johnson chat is now active
           
           // Create chat widget
           const chatWidget = document.createElement('div');
