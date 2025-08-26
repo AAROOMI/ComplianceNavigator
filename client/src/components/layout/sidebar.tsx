@@ -71,61 +71,74 @@ export default function Sidebar() {
                 e.stopPropagation();
                 
                 console.log('🔥 SARAH JOHNSON clicked - opening D-ID agent');
-                alert('Sarah Johnson clicked! Opening D-ID Agent...');
                 
-                try {
-                  // Immediate attempt
-                  console.log('Checking for D-ID agent on window:', Object.keys(window).filter(key => key.toLowerCase().includes('did')));
-                  
-                  // Try direct global access
-                  if ((window as any).DID_AGENT) {
-                    (window as any).DID_AGENT.show();
-                    console.log('✓ D-ID Agent opened via window.DID_AGENT');
-                    return;
-                  }
-                  
-                  if ((window as any).DIDAgent) {
-                    (window as any).DIDAgent.show();
-                    console.log('✓ D-ID Agent opened via window.DIDAgent');
-                    return;
-                  }
-                  
-                  if ((window as any).didAgent) {
-                    (window as any).didAgent.show();
-                    console.log('✓ D-ID Agent opened via window.didAgent');
-                    return;
-                  }
-                  
-                  // Try to find D-ID elements
-                  const allElements = document.querySelectorAll('*');
-                  const didElements = Array.from(allElements).filter(el => 
-                    el.getAttribute('data-name') === 'did-agent' || 
-                    el.getAttribute('data-agent-id') === 'agt_56bnv71C' ||
-                    el.classList.contains('did-agent') ||
-                    el.id.includes('did-agent')
-                  );
-                  
-                  console.log('Found D-ID elements:', didElements);
-                  
-                  if (didElements.length > 0) {
-                    didElements.forEach(el => {
-                      if (el.tagName === 'SCRIPT') return;
-                      (el as HTMLElement).click();
+                // Give D-ID agent time to fully initialize
+                setTimeout(() => {
+                  try {
+                    // Method 1: Try to find and activate the D-ID agent widget/button
+                    const didWidget = document.querySelector('iframe[src*="d-id.com"]') ||
+                                     document.querySelector('[data-testid="did-widget"]') ||
+                                     document.querySelector('.did-widget') ||
+                                     document.querySelector('#did-widget');
+                    
+                    if (didWidget) {
+                      // Try to click the widget or send it a message
+                      if ((didWidget as HTMLElement).click) {
+                        (didWidget as HTMLElement).click();
+                        console.log('✓ D-ID Widget clicked');
+                      }
+                      return;
+                    }
+                    
+                    // Method 2: Try window-based D-ID agent methods
+                    const windowDidMethods = [
+                      'DIDAgent', 'didAgent', 'DID_AGENT', 'DIdAgent', 
+                      'did', 'DID', 'DiDAgent', 'dIdAgent'
+                    ];
+                    
+                    for (const method of windowDidMethods) {
+                      if ((window as any)[method]) {
+                        const agent = (window as any)[method];
+                        if (typeof agent.show === 'function') {
+                          agent.show();
+                          console.log(`✓ D-ID Agent opened via window.${method}.show()`);
+                          return;
+                        }
+                        if (typeof agent.open === 'function') {
+                          agent.open();
+                          console.log(`✓ D-ID Agent opened via window.${method}.open()`);
+                          return;
+                        }
+                        if (typeof agent.start === 'function') {
+                          agent.start();
+                          console.log(`✓ D-ID Agent opened via window.${method}.start()`);
+                          return;
+                        }
+                      }
+                    }
+                    
+                    // Method 3: Create and dispatch multiple D-ID events
+                    const events = [
+                      'DIDAgent:show', 'DIDAgent:open', 'DIDAgent:start',
+                      'did-agent-show', 'did-agent-open', 'did-agent-start',
+                      'didagent:show', 'didagent:open', 'didagent:start'
+                    ];
+                    
+                    events.forEach(eventName => {
+                      window.dispatchEvent(new CustomEvent(eventName, { 
+                        detail: { agentId: 'agt_56bnv71C', mode: 'fabio' } 
+                      }));
+                      document.dispatchEvent(new CustomEvent(eventName, { 
+                        detail: { agentId: 'agt_56bnv71C', mode: 'fabio' } 
+                      }));
                     });
-                    console.log('✓ D-ID Elements clicked');
-                    return;
+                    
+                    console.log('✅ D-ID Agent events dispatched - should open soon');
+                    
+                  } catch (error) {
+                    console.error('❌ Error opening D-ID agent:', error);
                   }
-                  
-                  // Force load D-ID agent by dispatching events
-                  window.dispatchEvent(new CustomEvent('DIDAgentShow'));
-                  document.dispatchEvent(new CustomEvent('did-agent-show'));
-                  
-                  console.log('⚠️ No D-ID agent found - dispatched events');
-                  
-                } catch (error) {
-                  console.error('❌ Error opening D-ID agent:', error);
-                  alert('Error: ' + error.message);
-                }
+                }, 300);
               }}
               data-testid="ceo-picture"
             >
