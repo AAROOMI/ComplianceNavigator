@@ -64,22 +64,25 @@ export default function Sidebar() {
           </div>
           {/* CEO Picture */}
           <div className="flex flex-col items-center">
-            <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-primary/20 shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300">
+            <div 
+              className="w-24 h-24 rounded-full overflow-hidden border-2 border-primary/20 shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300 hover:border-primary/40"
+              onClick={() => {
+                // Trigger D-ID agent
+                if (window.didAgent) {
+                  window.didAgent.start();
+                } else if (document.querySelector('[data-name="did-agent"]')) {
+                  // Alternative method to trigger the agent
+                  const event = new CustomEvent('did-agent-start');
+                  document.dispatchEvent(event);
+                }
+                console.log('CEO image clicked - triggering D-ID agent');
+              }}
+              data-testid="ceo-picture"
+            >
               <img 
                 src={ceoImage} 
                 alt="CEO" 
-                className="w-full h-full object-cover"
-                data-testid="ceo-picture"
-                onClick={() => {
-                  // Trigger D-ID agent
-                  if (window.didAgent) {
-                    window.didAgent.start();
-                  } else if (document.querySelector('[data-name="did-agent"]')) {
-                    // Alternative method to trigger the agent
-                    const event = new CustomEvent('did-agent-start');
-                    document.dispatchEvent(event);
-                  }
-                }}
+                className="w-full h-full object-cover pointer-events-none"
               />
             </div>
             <div className="mt-2 text-center">
