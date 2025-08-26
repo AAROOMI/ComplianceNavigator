@@ -28,7 +28,7 @@
         }
       });
       
-      // Monitor for D-ID service failures (429, network errors)
+      // Monitor D-ID service status (for logging only)
       const originalFetch = window.fetch;
       window.fetch = function(...args) {
         const promise = originalFetch.apply(this, args);
@@ -36,31 +36,13 @@
         return promise.catch(error => {
           const url = args[0] || '';
           if (url.toString().toLowerCase().includes('d-id.com')) {
-            console.warn('🚨 D-ID service network error detected:', error.message);
-            didServiceFailed = true;
-            
-            // Auto-trigger fallback chat after network failure
-            setTimeout(() => {
-              if (didServiceFailed && typeof window.showFallbackChatDirect === 'function') {
-                console.log('🔄 Auto-opening fallback chat due to D-ID service failure');
-                window.showFallbackChatDirect();
-              }
-            }, 1000);
+            console.warn('🚨 D-ID service network error:', error.message);
           }
           throw error;
         }).then(response => {
           const url = args[0] || '';
           if (url.toString().toLowerCase().includes('d-id.com') && response && (response.status === 429 || response.status >= 400)) {
-            console.warn(`🚨 D-ID service responded with error: ${response.status} ${response.statusText}`);
-            didServiceFailed = true;
-            
-            // Auto-trigger fallback chat for rate limits and errors
-            setTimeout(() => {
-              if (didServiceFailed && typeof window.showFallbackChatDirect === 'function') {
-                console.log('🔄 Auto-opening fallback chat due to D-ID service error');
-                window.showFallbackChatDirect();
-              }
-            }, 1000);
+            console.warn(`🚨 D-ID service error: ${response.status} ${response.statusText}`);
           }
           return response;
         });
@@ -107,96 +89,75 @@
           console.log('🔎 Iframes found:', iframes.length);
         }, 3000);
         
-        // Global function to trigger D-ID agent or fallback chat
+        // Global function to launch D-ID agent for voice conversation
         window.openDIDAgent = function() {
-          console.log('🚀 Sarah Johnson clicked - checking D-ID availability...');
-          
-          // Check if D-ID service has failed
-          if (didServiceFailed || window.didAgentStatus === 'failed' || window.didAgentFailed) {
-            console.log('💬 D-ID service unavailable - opening fallback chat');
-            showFallbackChat();
-            return true;
-          }
+          console.log('🎤 Sarah Johnson clicked - launching D-ID voice agent...');
           
           let didOpened = false;
-          let attemptTimeout;
           
-          // Set fallback timeout in case D-ID hangs
-          attemptTimeout = setTimeout(() => {
-            if (!didOpened && !didServiceFailed) {
-              console.log('⏰ D-ID taking too long - opening fallback chat');
-              showFallbackChat();
-              didOpened = true;
-            }
-          }, 2500);
-          
-          // Method 1: Try D-ID API if available
-          if (typeof window.DID_AGENTS_API !== 'undefined' && !didServiceFailed) {
+          // Try to launch D-ID agent using available API methods
+          if (typeof window.DID_AGENTS_API !== 'undefined') {
             try {
-              console.log('🔧 Trying D-ID API methods...');
+              console.log('🎬 Launching D-ID voice agent...');
               
-              // Try different methods on the API
+              // Primary method: show D-ID agent interface
               if (window.DID_AGENTS_API.show) {
                 window.DID_AGENTS_API.show();
-                console.log('✅ D-ID Agent show() called');
-                didOpened = true;
-                clearTimeout(attemptTimeout);
-                
-                // Verify D-ID actually opened after a short delay
-                setTimeout(() => {
-                  if (didServiceFailed) {
-                    console.log('🔄 D-ID service failed after opening - showing fallback');
-                    showFallbackChat();
-                  }
-                }, 1500);
-                
+                console.log('✅ D-ID Voice Agent launched successfully!');
                 return true;
               }
+              
+              // Alternative methods
               if (window.DID_AGENTS_API.open) {
                 window.DID_AGENTS_API.open();
-                console.log('✅ D-ID Agent open() called');
-                didOpened = true;
-                clearTimeout(attemptTimeout);
+                console.log('✅ D-ID Agent opened successfully!');
                 return true;
               }
+              
               if (window.DID_AGENTS_API.start) {
                 window.DID_AGENTS_API.start();
-                console.log('✅ D-ID Agent start() called');
-                didOpened = true;
-                clearTimeout(attemptTimeout);
+                console.log('✅ D-ID Agent started successfully!');
                 return true;
               }
+              
+              if (window.DID_AGENTS_API.toggle) {
+                window.DID_AGENTS_API.toggle();
+                console.log('✅ D-ID Agent toggled successfully!');
+                return true;
+              }
+              
             } catch (error) {
-              console.warn('⚠️ D-ID API error:', error.message);
-              didServiceFailed = true;
+              console.error('❌ Error launching D-ID agent:', error);
+              alert('Error launching D-ID voice agent: ' + error.message);
+              return false;
             }
           }
           
-          // Method 2: Look for D-ID floating button
-          const fabButton = document.querySelector('[data-testid*="did"]') ||
-                           document.querySelector('[class*="did-fab"]') ||
-                           document.querySelector('[class*="agent-fab"]') ||
-                           document.querySelector('button[class*="did"]') ||
-                           document.querySelector('[id*="did"]');
+          // Method 2: Look for D-ID elements and try to activate them
+          const didElements = document.querySelectorAll('[data-testid*="did"], [class*="did"], [id*="did"]');
           
-          if (fabButton && !didOpened) {
-            try {
-              fabButton.click();
-              console.log('✅ D-ID button clicked successfully!');
-              didOpened = true;
-              return true;
-            } catch (error) {
-              console.warn('⚠️ D-ID button click failed:', error.message);
+          if (didElements.length > 0 && !didOpened) {
+            console.log('🔍 Found D-ID elements, attempting to activate...');
+            
+            for (let element of didElements) {
+              try {
+                if (element.click) {
+                  element.click();
+                  console.log('✅ D-ID element activated!');
+                  didOpened = true;
+                  return true;
+                }
+              } catch (error) {
+                console.warn('⚠️ Element activation failed:', error.message);
+              }
             }
           }
           
-          // Clear timeout and show fallback if needed
-          if (attemptTimeout) clearTimeout(attemptTimeout);
-          
-          if (!didOpened || didServiceFailed) {
-            console.log('💬 Opening Sarah Johnson chat (D-ID unavailable)');
-            showFallbackChat();
-            return true;
+          // If no D-ID API available, show message
+          if (!didOpened) {
+            console.warn('❌ D-ID Voice Agent not available');
+            alert('D-ID Voice Agent is not available at the moment. Please try again later.');
+            return false;
           }
           
           return didOpened;
