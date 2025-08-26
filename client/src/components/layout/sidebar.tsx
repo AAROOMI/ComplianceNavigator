@@ -63,7 +63,7 @@ export default function Sidebar() {
             <h1 className="text-xl font-bold">MetaWorks</h1>
           </div>
           {/* CEO Picture */}
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center">
             <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20 shadow-lg">
               <img 
                 src={ceoImage} 
@@ -71,6 +71,9 @@ export default function Sidebar() {
                 className="w-full h-full object-cover"
                 data-testid="ceo-picture"
               />
+            </div>
+            <div className="mt-2 text-center">
+              <h2 className="text-sm font-semibold text-foreground">SARAH JOHNSON</h2>
             </div>
           </div>
         </div>
