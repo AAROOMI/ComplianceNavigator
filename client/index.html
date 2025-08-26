@@ -98,39 +98,57 @@
           // Try to launch D-ID agent using available API methods
           if (typeof window.DID_AGENTS_API !== 'undefined') {
             try {
-              console.log('🎬 Launching D-ID voice agent...');
+              console.log('🎬 D-ID API Object:', window.DID_AGENTS_API);
+              console.log('🔧 Available D-ID methods:', Object.keys(window.DID_AGENTS_API));
               
               // Primary method: show D-ID agent interface
-              if (window.DID_AGENTS_API.show) {
-                window.DID_AGENTS_API.show();
-                console.log('✅ D-ID Voice Agent launched successfully!');
+              if (typeof window.DID_AGENTS_API.show === 'function') {
+                console.log('📞 Calling DID_AGENTS_API.show()...');
+                const result = window.DID_AGENTS_API.show();
+                console.log('📊 show() result:', result);
+                
+                // Wait a moment to see if the agent opens
+                setTimeout(() => {
+                  const didElements = document.querySelectorAll('[class*="did"], [id*="did"]');
+                  console.log('🔍 After show(), found D-ID elements:', didElements.length);
+                }, 1000);
+                
                 return true;
               }
               
               // Alternative methods
-              if (window.DID_AGENTS_API.open) {
-                window.DID_AGENTS_API.open();
-                console.log('✅ D-ID Agent opened successfully!');
+              if (typeof window.DID_AGENTS_API.open === 'function') {
+                console.log('📞 Calling DID_AGENTS_API.open()...');
+                const result = window.DID_AGENTS_API.open();
+                console.log('📊 open() result:', result);
                 return true;
               }
               
-              if (window.DID_AGENTS_API.start) {
-                window.DID_AGENTS_API.start();
-                console.log('✅ D-ID Agent started successfully!');
+              if (typeof window.DID_AGENTS_API.start === 'function') {
+                console.log('📞 Calling DID_AGENTS_API.start()...');
+                const result = window.DID_AGENTS_API.start();
+                console.log('📊 start() result:', result);
                 return true;
               }
               
-              if (window.DID_AGENTS_API.toggle) {
-                window.DID_AGENTS_API.toggle();
-                console.log('✅ D-ID Agent toggled successfully!');
+              if (typeof window.DID_AGENTS_API.toggle === 'function') {
+                console.log('📞 Calling DID_AGENTS_API.toggle()...');
+                const result = window.DID_AGENTS_API.toggle();
+                console.log('📊 toggle() result:', result);
                 return true;
               }
+              
+              console.warn('⚠️ No valid D-ID API methods found');
+              console.log('🔍 D-ID API contents:', Object.getOwnPropertyNames(window.DID_AGENTS_API));
               
             } catch (error) {
               console.error('❌ Error launching D-ID agent:', error);
+              console.error('❌ Error details:', error.stack);
               alert('Error launching D-ID voice agent: ' + error.message);
               return false;
             }
+          } else {
+            console.error('❌ DID_AGENTS_API not found on window object');
           }
           
           // Method 2: Look for D-ID elements and try to activate them
