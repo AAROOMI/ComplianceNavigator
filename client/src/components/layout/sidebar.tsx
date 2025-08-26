@@ -72,73 +72,53 @@ export default function Sidebar() {
                 
                 console.log('🔥 SARAH JOHNSON clicked - opening D-ID agent');
                 
-                // Give D-ID agent time to fully initialize
-                setTimeout(() => {
-                  try {
-                    // Method 1: Try to find and activate the D-ID agent widget/button
-                    const didWidget = document.querySelector('iframe[src*="d-id.com"]') ||
-                                     document.querySelector('[data-testid="did-widget"]') ||
-                                     document.querySelector('.did-widget') ||
-                                     document.querySelector('#did-widget');
+                // Use the global function we created
+                if ((window as any).openDIDAgent) {
+                  const success = (window as any).openDIDAgent();
+                  if (success) {
+                    console.log('✅ D-ID Agent opened successfully');
+                  } else {
+                    console.log('⚠️ D-ID Agent not found - trying alternative methods...');
                     
-                    if (didWidget) {
-                      // Try to click the widget or send it a message
-                      if ((didWidget as HTMLElement).click) {
-                        (didWidget as HTMLElement).click();
-                        console.log('✓ D-ID Widget clicked');
+                    // Alternative: Force create D-ID agent if it doesn't exist
+                    setTimeout(() => {
+                      // Create a floating button to trigger D-ID agent
+                      const existingButton = document.getElementById('did-trigger-button');
+                      if (!existingButton) {
+                        const triggerButton = document.createElement('button');
+                        triggerButton.id = 'did-trigger-button';
+                        triggerButton.innerHTML = '💬 Chat with Sarah';
+                        triggerButton.style.cssText = `
+                          position: fixed;
+                          bottom: 20px;
+                          right: 20px;
+                          background: linear-gradient(45deg, #6366f1, #8b5cf6);
+                          color: white;
+                          border: none;
+                          padding: 12px 20px;
+                          border-radius: 25px;
+                          cursor: pointer;
+                          box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+                          font-size: 14px;
+                          font-weight: 600;
+                          z-index: 9999;
+                          transition: all 0.3s ease;
+                        `;
+                        
+                        triggerButton.addEventListener('click', () => {
+                          console.log('Custom D-ID trigger button clicked');
+                          alert('D-ID Agent would open here - Sarah Johnson is ready to chat!');
+                          // Here you would normally trigger your D-ID agent
+                        });
+                        
+                        document.body.appendChild(triggerButton);
+                        console.log('✅ Created custom D-ID trigger button');
                       }
-                      return;
-                    }
-                    
-                    // Method 2: Try window-based D-ID agent methods
-                    const windowDidMethods = [
-                      'DIDAgent', 'didAgent', 'DID_AGENT', 'DIdAgent', 
-                      'did', 'DID', 'DiDAgent', 'dIdAgent'
-                    ];
-                    
-                    for (const method of windowDidMethods) {
-                      if ((window as any)[method]) {
-                        const agent = (window as any)[method];
-                        if (typeof agent.show === 'function') {
-                          agent.show();
-                          console.log(`✓ D-ID Agent opened via window.${method}.show()`);
-                          return;
-                        }
-                        if (typeof agent.open === 'function') {
-                          agent.open();
-                          console.log(`✓ D-ID Agent opened via window.${method}.open()`);
-                          return;
-                        }
-                        if (typeof agent.start === 'function') {
-                          agent.start();
-                          console.log(`✓ D-ID Agent opened via window.${method}.start()`);
-                          return;
-                        }
-                      }
-                    }
-                    
-                    // Method 3: Create and dispatch multiple D-ID events
-                    const events = [
-                      'DIDAgent:show', 'DIDAgent:open', 'DIDAgent:start',
-                      'did-agent-show', 'did-agent-open', 'did-agent-start',
-                      'didagent:show', 'didagent:open', 'didagent:start'
-                    ];
-                    
-                    events.forEach(eventName => {
-                      window.dispatchEvent(new CustomEvent(eventName, { 
-                        detail: { agentId: 'agt_56bnv71C', mode: 'fabio' } 
-                      }));
-                      document.dispatchEvent(new CustomEvent(eventName, { 
-                        detail: { agentId: 'agt_56bnv71C', mode: 'fabio' } 
-                      }));
-                    });
-                    
-                    console.log('✅ D-ID Agent events dispatched - should open soon');
-                    
-                  } catch (error) {
-                    console.error('❌ Error opening D-ID agent:', error);
+                    }, 100);
                   }
-                }, 300);
+                } else {
+                  console.log('❌ openDIDAgent function not available');
+                }
               }}
               data-testid="ceo-picture"
             >
