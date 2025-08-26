@@ -17,6 +17,7 @@ import NcaEcc from "@/pages/nca-ecc";
 import Assistant from "@/pages/assistant";
 import MetaworksCompliance from "@/pages/metaworks-compliance";
 import NFRMRiskManagement from "@/pages/nfrm-risk-management";
+import CybersecurityRiskDashboard from "@/pages/cybersecurity-risk-dashboard";
 import CisoPolicies from "@/pages/ciso-policies";
 import RiskRegisterPage from "@/pages/risk-register";
 import UserManagement from "@/pages/user-management";
@@ -78,6 +79,9 @@ export default function App() {
             <Layout>
               <NFRMRiskManagement />
             </Layout>
+          </Route>
+          <Route path="/cybersecurity-risk-dashboard">
+            <CybersecurityRiskDashboard />
           </Route>
           <Route path="/ciso-policies">
             <Layout>

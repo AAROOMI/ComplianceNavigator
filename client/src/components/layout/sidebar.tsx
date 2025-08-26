@@ -29,6 +29,7 @@ export default function Sidebar() {
     { href: "/assessment", label: "Assessment Questionnaire", icon: ClipboardCheck, testId: "sidebar-assessment" },
     { href: "/risk-register", label: "Risk Register", icon: Database, testId: "sidebar-risk-register" },
     { href: "/risk-assessment", label: "Interactive Risk Assessment", icon: AlertTriangle, testId: "sidebar-risk-assessment" },
+    { href: "/cybersecurity-risk-dashboard", label: "Cybersecurity Risk Dashboard", icon: Shield, testId: "sidebar-cybersecurity-risk-dashboard" },
     { href: "/dashboard", label: "Risk Dashboard", icon: LayoutDashboard, testId: "sidebar-risk-dashboard" },
   ];
 
