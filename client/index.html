@@ -12,7 +12,26 @@
       data-mode="fabio"
       data-client-key="YXV0aDB8NjdlZWI3NmYwOTYxZDU0Yjg2N2Y4ZWE3OkMwcExqeHpDYkl0VWt0N1dBQ056WQ=="
       data-agent-id="agt_56bnv71C"
-      data-monitor="true">
+      data-monitor="true"
+      onload="console.log('D-ID Agent script loaded')">
+    </script>
+    <script>
+      // Additional D-ID agent initialization
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, checking for D-ID agent...');
+        
+        // Listen for custom events to trigger agent
+        document.addEventListener('did-agent-activate', function(event) {
+          console.log('D-ID agent activation event received');
+          
+          // Try multiple methods to show the agent
+          if (window.DIDAgent) {
+            window.DIDAgent.show();
+          } else if (window.didAgent) {
+            window.didAgent.show();
+          }
+        });
+      });
     </script>
   </head>
   <body>

@@ -67,15 +67,40 @@ export default function Sidebar() {
             <div 
               className="w-24 h-24 rounded-full overflow-hidden border-2 border-primary/20 shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300 hover:border-primary/40"
               onClick={() => {
-                // Trigger D-ID agent
-                if (window.didAgent) {
-                  window.didAgent.start();
-                } else if (document.querySelector('[data-name="did-agent"]')) {
-                  // Alternative method to trigger the agent
-                  const event = new CustomEvent('did-agent-start');
-                  document.dispatchEvent(event);
-                }
                 console.log('CEO image clicked - triggering D-ID agent');
+                
+                // Multiple methods to trigger D-ID agent
+                try {
+                  // Method 1: Direct window access
+                  if (typeof window !== 'undefined' && (window as any).DIDAgent) {
+                    (window as any).DIDAgent.start();
+                    console.log('D-ID Agent started via window.DIDAgent');
+                  }
+                  // Method 2: Check for did-agent element
+                  else if ((window as any).didAgent) {
+                    (window as any).didAgent.show();
+                    console.log('D-ID Agent started via window.didAgent');
+                  }
+                  // Method 3: Dispatch custom event
+                  else {
+                    const event = new CustomEvent('did-agent-activate', {
+                      detail: { action: 'start' }
+                    });
+                    document.dispatchEvent(event);
+                    console.log('D-ID Agent event dispatched');
+                    
+                    // Method 4: Try to find and click D-ID button if it exists
+                    const didButton = document.querySelector('[data-name="did-agent"]') || 
+                                     document.querySelector('.did-agent-button') ||
+                                     document.querySelector('#did-agent-button');
+                    if (didButton) {
+                      (didButton as HTMLElement).click();
+                      console.log('D-ID Agent button clicked');
+                    }
+                  }
+                } catch (error) {
+                  console.error('Error triggering D-ID agent:', error);
+                }
               }}
               data-testid="ceo-picture"
             >
