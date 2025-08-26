@@ -65,50 +65,66 @@ export default function Sidebar() {
           {/* CEO Picture */}
           <div className="flex flex-col items-center">
             <div 
-              className="w-24 h-24 rounded-full overflow-hidden border-2 border-primary/20 shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300 hover:border-primary/40"
-              onClick={() => {
-                console.log('SARAH JOHNSON clicked - opening D-ID agent');
+              className="w-24 h-24 rounded-full overflow-hidden border-2 border-primary/20 shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300 hover:border-primary/40 relative z-10"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log('🔥 SARAH JOHNSON clicked - opening D-ID agent');
+                alert('Sarah Johnson clicked! Opening D-ID Agent...');
                 
                 try {
-                  // Wait for D-ID agent to be ready
-                  setTimeout(() => {
-                    // Primary method: Look for D-ID agent button and click it
-                    const didButton = document.querySelector('button[data-testid="did-agent-fab"]') || 
-                                     document.querySelector('.did-fab-button') ||
-                                     document.querySelector('[data-name="did-agent"] button') ||
-                                     document.querySelector('#did-agent-button');
-                    
-                    if (didButton) {
-                      (didButton as HTMLElement).click();
-                      console.log('✓ D-ID Agent opened via button click');
-                      return;
-                    }
-                    
-                    // Alternative: Try window.DIDAgent methods
-                    if ((window as any).DIDAgent) {
-                      if (typeof (window as any).DIDAgent.open === 'function') {
-                        (window as any).DIDAgent.open();
-                        console.log('✓ D-ID Agent opened via window.DIDAgent.open()');
-                      } else if (typeof (window as any).DIDAgent.show === 'function') {
-                        (window as any).DIDAgent.show();
-                        console.log('✓ D-ID Agent opened via window.DIDAgent.show()');
-                      }
-                      return;
-                    }
-                    
-                    // Try alternative window properties
-                    if ((window as any).didAgent && typeof (window as any).didAgent.open === 'function') {
-                      (window as any).didAgent.open();
-                      console.log('✓ D-ID Agent opened via window.didAgent.open()');
-                      return;
-                    }
-                    
-                    console.log('D-ID Agent methods not found - agent should auto-appear');
-                    
-                  }, 200);
+                  // Immediate attempt
+                  console.log('Checking for D-ID agent on window:', Object.keys(window).filter(key => key.toLowerCase().includes('did')));
+                  
+                  // Try direct global access
+                  if ((window as any).DID_AGENT) {
+                    (window as any).DID_AGENT.show();
+                    console.log('✓ D-ID Agent opened via window.DID_AGENT');
+                    return;
+                  }
+                  
+                  if ((window as any).DIDAgent) {
+                    (window as any).DIDAgent.show();
+                    console.log('✓ D-ID Agent opened via window.DIDAgent');
+                    return;
+                  }
+                  
+                  if ((window as any).didAgent) {
+                    (window as any).didAgent.show();
+                    console.log('✓ D-ID Agent opened via window.didAgent');
+                    return;
+                  }
+                  
+                  // Try to find D-ID elements
+                  const allElements = document.querySelectorAll('*');
+                  const didElements = Array.from(allElements).filter(el => 
+                    el.getAttribute('data-name') === 'did-agent' || 
+                    el.getAttribute('data-agent-id') === 'agt_56bnv71C' ||
+                    el.classList.contains('did-agent') ||
+                    el.id.includes('did-agent')
+                  );
+                  
+                  console.log('Found D-ID elements:', didElements);
+                  
+                  if (didElements.length > 0) {
+                    didElements.forEach(el => {
+                      if (el.tagName === 'SCRIPT') return;
+                      (el as HTMLElement).click();
+                    });
+                    console.log('✓ D-ID Elements clicked');
+                    return;
+                  }
+                  
+                  // Force load D-ID agent by dispatching events
+                  window.dispatchEvent(new CustomEvent('DIDAgentShow'));
+                  document.dispatchEvent(new CustomEvent('did-agent-show'));
+                  
+                  console.log('⚠️ No D-ID agent found - dispatched events');
                   
                 } catch (error) {
                   console.error('❌ Error opening D-ID agent:', error);
+                  alert('Error: ' + error.message);
                 }
               }}
               data-testid="ceo-picture"
