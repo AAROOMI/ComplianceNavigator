@@ -13,76 +13,106 @@
       data-client-key="YXV0aDB8NjdlZWI3NmYwOTYxZDU0Yjg2N2Y4ZWE3OkMwcExqeHpDYkl0VWt0N1dBQ056WQ=="
       data-agent-id="agt_56bnv71C"
       data-monitor="true"
-      onload="console.log('D-ID Agent script loaded'); window.didAgentLoaded = true;"
-      onerror="console.log('D-ID Agent failed to load - using fallback'); window.didAgentFailed = true;">
+      onload="console.log('✅ D-ID Agent script loaded successfully'); window.didAgentLoaded = true; window.didAgentFailed = false;"
+      onerror="console.log('❌ D-ID Agent script failed to load - will use fallback'); window.didAgentFailed = true; window.didAgentLoaded = false;">
     </script>
     <script>
+      // Global error handlers for unhandled promise rejections
+      window.addEventListener('unhandledrejection', function(event) {
+        if (event.reason && (event.reason.message || '').toLowerCase().includes('d-id')) {
+          console.warn('⚠️ D-ID related promise rejection caught:', event.reason);
+          event.preventDefault(); // Prevent the error from appearing in console
+          
+          // Mark D-ID as failed if not already marked
+          if (!window.didAgentFailed) {
+            window.didAgentFailed = true;
+            console.log('📱 D-ID connection failed - fallback chat ready');
+          }
+        }
+      });
+      
       // Enhanced D-ID agent initialization and debugging
       document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM loaded, checking for D-ID agent...');
+        console.log('🚀 DOM loaded, initializing D-ID integration...');
+        
+        // Initialize D-ID status tracking
+        window.didAgentStatus = 'loading';
         
         // Wait for D-ID agent to fully initialize
         setTimeout(() => {
-          console.log('Checking D-ID agent status after page load...');
-          console.log('Window properties with "did":', Object.keys(window).filter(k => k.toLowerCase().includes('did')));
+          console.log('🔍 Checking D-ID agent status after initialization period...');
+          
+          // Check if D-ID script failed to load
+          if (window.didAgentFailed) {
+            console.log('❌ D-ID script failed to load');
+            window.didAgentStatus = 'failed';
+            return;
+          }
+          
+          // Check if D-ID agent is available
+          const didProperties = Object.keys(window).filter(k => k.toLowerCase().includes('did'));
+          console.log('🔎 D-ID related window properties:', didProperties);
+          
+          // Check for D-ID API availability
+          if (typeof window.DID_AGENTS_API !== 'undefined') {
+            console.log('✅ D-ID API detected');
+            window.didAgentStatus = 'ready';
+          } else {
+            console.log('⚠️ D-ID API not detected - connection may have failed');
+            window.didAgentStatus = 'failed';
+            window.didAgentFailed = true;
+          }
           
           // Check for D-ID elements in DOM
           const didElements = document.querySelectorAll('*[class*="did"], *[id*="did"], *[data-testid*="did"]');
-          console.log('Found D-ID elements:', didElements.length, didElements);
+          console.log('🔎 D-ID DOM elements found:', didElements.length);
           
-          // Check for iframes that might contain D-ID agent
+          // Check for iframes (D-ID agent might load in iframe)
           const iframes = document.querySelectorAll('iframe');
-          console.log('Found iframes:', iframes.length, Array.from(iframes).map(iframe => iframe.src));
-        }, 2000);
+          console.log('🔎 Iframes found:', iframes.length);
+        }, 3000);
         
         // Global function to trigger D-ID agent or fallback chat
         window.openDIDAgent = function() {
-          console.log('🚀 Attempting to open D-ID agent...');
+          console.log('🚀 Sarah Johnson clicked - attempting to open D-ID agent...');
           
-          // Check if D-ID failed to load, show fallback immediately
-          if (window.didAgentFailed) {
-            console.log('D-ID Agent failed to load, showing fallback chat...');
+          // Check D-ID status first
+          if (window.didAgentStatus === 'failed' || window.didAgentFailed) {
+            console.log('💬 D-ID not available - opening fallback chat immediately');
             showFallbackChat();
             return true;
           }
           
-          // Method 1: Use the detected DID_AGENTS_API
+          // Give D-ID a moment to respond, then fallback
+          let didOpened = false;
+          
+          // Method 1: Try D-ID API if available
           if (typeof window.DID_AGENTS_API !== 'undefined') {
             try {
-              console.log('Available D-ID API:', window.DID_AGENTS_API);
-              console.log('DID_AGENTS_API methods:', Object.keys(window.DID_AGENTS_API));
+              console.log('🔧 Attempting to use D-ID API...');
               
               // Try different methods on the API
               if (window.DID_AGENTS_API.show) {
                 window.DID_AGENTS_API.show();
-                console.log('✅ D-ID Agent opened via DID_AGENTS_API.show()');
+                console.log('✅ D-ID Agent opened successfully!');
+                didOpened = true;
                 return true;
               }
               if (window.DID_AGENTS_API.open) {
                 window.DID_AGENTS_API.open();
-                console.log('✅ D-ID Agent opened via DID_AGENTS_API.open()');
+                console.log('✅ D-ID Agent opened successfully!');
+                didOpened = true;
                 return true;
               }
               if (window.DID_AGENTS_API.start) {
                 window.DID_AGENTS_API.start();
-                console.log('✅ D-ID Agent opened via DID_AGENTS_API.start()');
-                return true;
-              }
-              if (window.DID_AGENTS_API.toggle) {
-                window.DID_AGENTS_API.toggle();
-                console.log('✅ D-ID Agent toggled via DID_AGENTS_API.toggle()');
-                return true;
-              }
-              // Try calling it as a function
-              if (typeof window.DID_AGENTS_API === 'function') {
-                window.DID_AGENTS_API();
-                console.log('✅ D-ID Agent called as function');
+                console.log('✅ D-ID Agent started successfully!');
+                didOpened = true;
                 return true;
               }
             } catch (error) {
-              console.error('Error with DID_AGENTS_API:', error);
-              showFallbackChat();
-              return true;
+              console.warn('⚠️ D-ID API error:', error.message);
+              // Don't return here, try other methods
             }
           }
           
@@ -93,26 +123,35 @@
                            document.querySelector('button[class*="did"]') ||
                            document.querySelector('[id*="did"]');
           
-          if (fabButton) {
-            fabButton.click();
-            console.log('✅ Clicked D-ID FAB button');
+          if (fabButton && !didOpened) {
+            try {
+              fabButton.click();
+              console.log('✅ D-ID button clicked successfully!');
+              didOpened = true;
+              return true;
+            } catch (error) {
+              console.warn('⚠️ D-ID button click failed:', error.message);
+            }
+          }
+          
+          // If D-ID didn't open, show fallback chat immediately
+          if (!didOpened) {
+            console.log('💬 D-ID not available - opening Sarah Johnson chat');
+            showFallbackChat();
             return true;
           }
           
-          // If all else fails, show fallback chat after short delay
-          setTimeout(() => {
-            console.log('⚠️ D-ID agent not responding, showing fallback chat...');
-            showFallbackChat();
-          }, 2000);
-          
-          return false;
+          return didOpened;
         };
         
         // Fallback chat interface for Sarah Johnson
         function showFallbackChat() {
+          console.log('🎯 Opening Sarah Johnson fallback chat...');
+          
           // Remove existing chat if present
           const existingChat = document.getElementById('sarah-chat-widget');
           if (existingChat) {
+            console.log('🗑️ Removing existing chat widget');
             existingChat.remove();
           }
           
@@ -262,7 +301,16 @@
             if (input) input.focus();
           }, 100);
           
-          console.log('✅ Sarah Johnson fallback chat opened');
+          console.log('✅ Sarah Johnson chat is now ready!');
+          
+          // Add a subtle animation
+          setTimeout(() => {
+            chatWidget.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+              chatWidget.style.transform = 'scale(1)';
+              chatWidget.style.transition = 'transform 0.2s ease';
+            }, 150);
+          }, 100);
         }
         
         // Handle chat messages
