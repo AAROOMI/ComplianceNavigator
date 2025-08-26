@@ -67,39 +67,46 @@ export default function Sidebar() {
             <div 
               className="w-24 h-24 rounded-full overflow-hidden border-2 border-primary/20 shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300 hover:border-primary/40"
               onClick={() => {
-                console.log('CEO image clicked - triggering D-ID agent');
+                console.log('SARAH JOHNSON clicked - activating D-ID agent');
                 
-                // Multiple methods to trigger D-ID agent
                 try {
-                  // Method 1: Direct window access
-                  if (typeof window !== 'undefined' && (window as any).DIDAgent) {
-                    (window as any).DIDAgent.start();
-                    console.log('D-ID Agent started via window.DIDAgent');
-                  }
-                  // Method 2: Check for did-agent element
-                  else if ((window as any).didAgent) {
-                    (window as any).didAgent.show();
-                    console.log('D-ID Agent started via window.didAgent');
-                  }
-                  // Method 3: Dispatch custom event
-                  else {
-                    const event = new CustomEvent('did-agent-activate', {
-                      detail: { action: 'start' }
-                    });
-                    document.dispatchEvent(event);
-                    console.log('D-ID Agent event dispatched');
-                    
-                    // Method 4: Try to find and click D-ID button if it exists
-                    const didButton = document.querySelector('[data-name="did-agent"]') || 
-                                     document.querySelector('.did-agent-button') ||
-                                     document.querySelector('#did-agent-button');
-                    if (didButton) {
-                      (didButton as HTMLElement).click();
-                      console.log('D-ID Agent button clicked');
+                  // Wait a moment for D-ID agent to be fully loaded
+                  setTimeout(() => {
+                    // Method 1: Try window.DIDAgent (most common)
+                    if ((window as any).DIDAgent) {
+                      (window as any).DIDAgent.show();
+                      console.log('✓ D-ID Agent activated via window.DIDAgent.show()');
+                      return;
                     }
-                  }
+                    
+                    // Method 2: Try window.didAgent
+                    if ((window as any).didAgent) {
+                      (window as any).didAgent.show();
+                      console.log('✓ D-ID Agent activated via window.didAgent.show()');
+                      return;
+                    }
+                    
+                    // Method 3: Try to find D-ID elements and trigger them
+                    const didElements = document.querySelectorAll('[data-name="did-agent"], [data-agent-id="agt_56bnv71C"], .did-agent, #did-agent');
+                    if (didElements.length > 0) {
+                      didElements.forEach((element) => {
+                        if (element && typeof (element as any).click === 'function') {
+                          (element as HTMLElement).click();
+                        }
+                      });
+                      console.log('✓ D-ID Agent elements found and triggered');
+                      return;
+                    }
+                    
+                    // Method 4: Dispatch window events that D-ID might listen for
+                    window.dispatchEvent(new CustomEvent('did-agent-show'));
+                    window.dispatchEvent(new CustomEvent('DIDAgent:show'));
+                    console.log('✓ D-ID Agent events dispatched');
+                    
+                  }, 100);
+                  
                 } catch (error) {
-                  console.error('Error triggering D-ID agent:', error);
+                  console.error('❌ Error activating D-ID agent:', error);
                 }
               }}
               data-testid="ceo-picture"
