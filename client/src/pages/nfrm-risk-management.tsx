@@ -254,6 +254,162 @@ export default function NFRMRiskManagement() {
     URL.revokeObjectURL(url);
   };
 
+  const generateComprehensiveReport = () => {
+    const totalRisks = risks.length;
+    const risksByLevel = risks.reduce((acc, risk) => {
+      acc[risk.level] = (acc[risk.level] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    const highestRisks = risks.filter(r => r.level === 'High' || r.level === 'Severe');
+    const avgScore = risks.length > 0 ? risks.reduce((sum, r) => sum + r.score, 0) / risks.length : 0;
+    
+    const reportContent = `
+# COMPREHENSIVE CYBERSECURITY RISK ASSESSMENT REPORT
+*Generated from NFRM Risk Management System*
+**Date:** ${new Date().toLocaleDateString()}
+
+## EXECUTIVE SUMMARY
+
+### Risk Overview
+- **Total Risks Identified:** ${totalRisks}
+- **Average Risk Score:** ${avgScore.toFixed(2)}
+- **Risk Assessment Framework:** National Framework for Cybersecurity Risk Management (NFCRM – 1:2024)
+
+### Risk Distribution
+- **Severe Risk:** ${risksByLevel['Severe'] || 0} risks (${((risksByLevel['Severe'] || 0) / totalRisks * 100).toFixed(1)}%)
+- **High Risk:** ${risksByLevel['High'] || 0} risks (${((risksByLevel['High'] || 0) / totalRisks * 100).toFixed(1)}%)
+- **Medium Risk:** ${risksByLevel['Medium'] || 0} risks (${((risksByLevel['Medium'] || 0) / totalRisks * 100).toFixed(1)}%)
+- **Low Risk:** ${risksByLevel['Low'] || 0} risks (${((risksByLevel['Low'] || 0) / totalRisks * 100).toFixed(1)}%)
+- **Very Low Risk:** ${risksByLevel['Very Low'] || 0} risks (${((risksByLevel['Very Low'] || 0) / totalRisks * 100).toFixed(1)}%)
+
+### Critical Findings
+${highestRisks.length > 0 ? `
+**⚠️ ${highestRisks.length} High/Severe Risk(s) Require Immediate Attention:**
+${highestRisks.map((risk, i) => `${i + 1}. ${risk.asset} - ${risk.threat} (Score: ${risk.score})`).join('\n')}
+` : `
+**✅ No Critical Risks Identified:** All identified risks are within acceptable levels.
+`}
+
+## DETAILED RISK ANALYSIS
+
+### Risk Matrix Summary
+The risk assessment follows a 5×5 matrix approach:
+- **Impact Scale:** 1-5 (based on Confidentiality, Integrity, Availability)
+- **Likelihood Scale:** 1-5 (probability of occurrence)
+- **Risk Score:** Impact × Likelihood (1-25)
+
+### Individual Risk Assessment
+
+${risks.length > 0 ? risks.map((risk, index) => `
+#### Risk ${index + 1}: ${risk.asset}
+- **Threat:** ${risk.threat}
+- **Vulnerability:** ${risk.vulnerability}
+- **Impact Assessment:**
+  - Confidentiality: ${risk.impactC}/5
+  - Integrity: ${risk.impactI}/5  
+  - Availability: ${risk.impactA}/5
+- **Likelihood:** ${risk.likelihood}/5
+- **Risk Score:** ${risk.score}/25
+- **Risk Level:** ${risk.level}
+- **Existing Controls:** ${risk.controls || 'None specified'}
+- **Treatment Strategy:** ${risk.treatment || 'Pending assessment'}
+- **Date Identified:** ${new Date(risk.createdAt).toLocaleDateString()}
+
+`).join('\n') : 'No risks have been identified in the system.'}
+
+## RISK TREATMENT RECOMMENDATIONS
+
+### Immediate Actions Required (Next 30 Days)
+${risks.filter(r => r.level === 'Severe').length > 0 ? 
+  risks.filter(r => r.level === 'Severe').map(risk => 
+    `- **${risk.asset}:** Implement emergency controls for ${risk.threat.toLowerCase()}`
+  ).join('\n') : 
+  '- No severe risks requiring immediate action'
+}
+
+### Short-term Actions (1-3 Months)  
+${risks.filter(r => r.level === 'High').length > 0 ? 
+  risks.filter(r => r.level === 'High').map(risk => 
+    `- **${risk.asset}:** Develop mitigation strategy for ${risk.vulnerability.toLowerCase()}`
+  ).join('\n') : 
+  '- No high risks requiring short-term action'
+}
+
+### Medium-term Planning (3-12 Months)
+${risks.filter(r => r.level === 'Medium').length > 0 ? 
+  risks.filter(r => r.level === 'Medium').map(risk => 
+    `- **${risk.asset}:** Review and enhance controls for ${risk.threat.toLowerCase()}`
+  ).join('\n') : 
+  '- No medium risks requiring medium-term planning'
+}
+
+## COMPLIANCE ALIGNMENT
+
+This risk assessment aligns with:
+- **National Framework for Cybersecurity Risk Management (NFCRM – 1:2024)**
+- **NCA Essential Cybersecurity Controls (ECC-1:2018)**
+- **ISO 27001:2022 Risk Management**
+- **NIST Cybersecurity Framework**
+
+## MONITORING AND REVIEW
+
+### Recommended Review Schedule
+- **Severe/High Risks:** Monthly review
+- **Medium Risks:** Quarterly review  
+- **Low/Very Low Risks:** Semi-annual review
+- **Full Risk Assessment:** Annual comprehensive review
+
+### Key Performance Indicators
+- Risk reduction progress
+- New risk identification rate
+- Control effectiveness measurements
+- Incident correlation with identified risks
+
+## NEXT STEPS
+
+1. **Prioritize High/Severe Risks:** Focus immediate resources on critical findings
+2. **Implement Treatment Plans:** Execute risk treatment strategies systematically  
+3. **Monitor Effectiveness:** Track control implementation and effectiveness
+4. **Regular Updates:** Schedule periodic risk assessment updates
+5. **Stakeholder Communication:** Share findings with relevant leadership
+
+## APPENDIX
+
+### Risk Scoring Methodology
+- **Impact Calculation:** Maximum of Confidentiality, Integrity, Availability impacts
+- **Final Score:** Impact × Likelihood
+- **Risk Bands:**
+  - 1-3: Very Low Risk (Green)
+  - 4-8: Low Risk (Light Green)  
+  - 9-14: Medium Risk (Yellow)
+  - 15-19: High Risk (Orange)
+  - 20-25: Severe Risk (Red)
+
+---
+**Report Generated By:** ComplianceNavigator NFRM Risk Management System  
+**Framework Compliance:** NFCRM-1:2024, NCA ECC-1:2018  
+**Report Type:** Comprehensive Risk Assessment Report  
+**Generated On:** ${new Date().toLocaleString()}
+    `;
+
+    // Create and download the report
+    const blob = new Blob([reportContent], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `NFRM_Risk_Assessment_Report_${new Date().toISOString().split('T')[0]}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: "Comprehensive Report Generated",
+      description: "Risk assessment report with detailed analysis has been downloaded.",
+    });
+  };
+
   const filteredRisks = risks.filter(risk => {
     const searchLower = searchFilter.toLowerCase();
     return (
@@ -470,6 +626,10 @@ export default function NFRMRiskManagement() {
             <Button onClick={exportJSON} variant="outline" className="w-full justify-start">
               <Database className="w-4 h-4 mr-2" />
               Export JSON
+            </Button>
+            <Button onClick={generateComprehensiveReport} className="w-full justify-start bg-indigo-500 hover:bg-indigo-600 text-white">
+              <FileText className="w-4 h-4 mr-2" />
+              📊 Risk Assessment Report
             </Button>
             <Button onClick={handleResetAll} variant="destructive" className="w-full justify-start">
               <RotateCcw className="w-4 h-4 mr-2" />
