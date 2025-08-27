@@ -126,15 +126,11 @@ export default function CybersecurityRiskDashboard() {
           </div>
           
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
-              className="px-3 py-1 text-sm border border-slate-600 rounded hover:bg-slate-800"
-            >
-              {language === 'en' ? 'أين اللغة العربية' : 'English'}
-            </button>
-            <button className="flex items-center gap-2 px-3 py-1 text-sm">
+            <span className="text-sm text-slate-400">أين الشبكة ثابتة</span>
+            <button className="flex items-center gap-1 px-3 py-1 text-sm border border-slate-600 rounded hover:bg-slate-800">
               <Globe className="w-4 h-4" />
-              {language === 'en' ? 'English' : 'العربية'}
+              English
+              <span className="ml-1">▼</span>
             </button>
             <button className="flex items-center gap-2 px-3 py-1 text-sm">
               <User className="w-4 h-4" />
@@ -158,7 +154,11 @@ export default function CybersecurityRiskDashboard() {
             </button>
             <button className="flex items-center gap-3 w-full px-3 py-2 text-left rounded hover:bg-slate-700">
               <Info className="w-4 h-4" />
-              {language === 'ar' ? 'معلومات' : 'inf ge'}
+              @{}
+            </button>
+            <button className="flex items-center gap-3 w-full px-3 py-2 text-left rounded hover:bg-slate-700">
+              <Globe className="w-4 h-4" />
+              inf ge
             </button>
             <button className="flex items-center gap-3 w-full px-3 py-2 text-left rounded hover:bg-slate-700">
               <FileText className="w-4 h-4" />
@@ -269,24 +269,39 @@ export default function CybersecurityRiskDashboard() {
                         stroke="#374151"
                         strokeWidth="8"
                       />
-                      {/* Progress circle - multi-colored */}
+                      {/* Multi-colored progress circle */}
                       <circle
                         cx="50"
                         cy="50"
                         r="40"
                         fill="none"
-                        stroke="url(#gradient)"
+                        stroke="#10B981"
                         strokeWidth="8"
                         strokeLinecap="round"
-                        strokeDasharray="157 94"
+                        strokeDasharray="62.8 188.4"
                       />
-                      <defs>
-                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                          <stop offset="0%" stopColor="#10B981" />
-                          <stop offset="50%" stopColor="#F59E0B" />
-                          <stop offset="100%" stopColor="#EF4444" />
-                        </linearGradient>
-                      </defs>
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="40"
+                        fill="none"
+                        stroke="#F59E0B"
+                        strokeWidth="8"
+                        strokeLinecap="round"
+                        strokeDasharray="62.8 188.4"
+                        strokeDashoffset="-62.8"
+                      />
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="40"
+                        fill="none"
+                        stroke="#EF4444"
+                        strokeWidth="8"
+                        strokeLinecap="round"
+                        strokeDasharray="62.8 188.4"
+                        strokeDashoffset="-125.6"
+                      />
                     </svg>
                     <div className="absolute inset-0 flex items-center justify-center">
                       <span className="text-sm font-semibold">Medium</span>
@@ -326,10 +341,10 @@ export default function CybersecurityRiskDashboard() {
                 {/* Rear Test Section */}
                 <div className="mt-6">
                   <h4 className="text-sm font-medium mb-3">Rear test</h4>
-                  <div className="flex gap-4 text-xs text-slate-400">
-                    <span>{language === 'ar' ? 'المستمرة' : 'continuous'}</span>
-                    <span>{language === 'ar' ? 'جودة البيانات' : 'data quality'}</span>
-                    <span>{language === 'ar' ? 'مراجع' : 'references'}</span>
+                  <div className="flex gap-4 text-xs">
+                    <button className="px-3 py-1 bg-slate-700 rounded text-slate-300 hover:bg-slate-600">المستمرة</button>
+                    <button className="px-3 py-1 bg-slate-700 rounded text-slate-300 hover:bg-slate-600">جودة البيانات</button>
+                    <button className="px-3 py-1 bg-slate-700 rounded text-slate-300 hover:bg-slate-600">مراجع</button>
                   </div>
                 </div>
               </CardContent>
@@ -339,7 +354,7 @@ export default function CybersecurityRiskDashboard() {
             <Card className="bg-slate-800 border-slate-700">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-lg">Risks</CardTitle>
-                <span className="text-sm text-slate-400">{language === 'ar' ? 'وثيقة' : 'document'}</span>
+                <span className="text-sm text-slate-400">وثيقة</span>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
