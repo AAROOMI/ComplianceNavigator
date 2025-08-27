@@ -765,6 +765,146 @@ export async function registerRoutes(app: Express) {
     }
   });
 
+  // Users Management API endpoints
+  app.get("/api/users-management", async (req, res) => {
+    try {
+      const users = await storage.getUsersManagement();
+      res.json(users);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      res.status(500).json({ message: "Failed to fetch users" });
+    }
+  });
+
+  app.get("/api/users-management/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const user = await storage.getUserManagement(id);
+      
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  app.post("/api/users-management", async (req, res) => {
+    try {
+      const userData = insertUsersManagementSchema.parse(req.body);
+      const created = await storage.createUserManagement(userData);
+      res.json(created);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      res.status(500).json({ message: "Failed to create user" });
+    }
+  });
+
+  app.put("/api/users-management/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userData = req.body;
+      const updated = await storage.updateUserManagement(id, userData);
+      
+      if (!updated) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      res.json(updated);
+    } catch (error) {
+      console.error("Error updating user:", error);
+      res.status(500).json({ message: "Failed to update user" });
+    }
+  });
+
+  app.delete("/api/users-management/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const result = await storage.deleteUserManagement(id);
+      
+      if (!result) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      res.status(500).json({ message: "Failed to delete user" });
+    }
+  });
+
+  // User Roles API endpoints
+  app.get("/api/roles", async (req, res) => {
+    try {
+      const roles = await storage.getRoles();
+      res.json(roles);
+    } catch (error) {
+      console.error("Error fetching roles:", error);
+      res.status(500).json({ message: "Failed to fetch roles" });
+    }
+  });
+
+  app.post("/api/roles", async (req, res) => {
+    try {
+      const roleData = req.body;
+      const created = await storage.createRole(roleData);
+      res.json(created);
+    } catch (error) {
+      console.error("Error creating role:", error);
+      res.status(500).json({ message: "Failed to create role" });
+    }
+  });
+
+  // User Activities API endpoints
+  app.get("/api/user-activities", async (req, res) => {
+    try {
+      const userId = req.query.userId ? parseInt(req.query.userId.toString()) : undefined;
+      const limit = req.query.limit ? parseInt(req.query.limit.toString()) : undefined;
+      const activities = await storage.getUserActivities(userId, limit);
+      res.json(activities);
+    } catch (error) {
+      console.error("Error fetching user activities:", error);
+      res.status(500).json({ message: "Failed to fetch user activities" });
+    }
+  });
+
+  app.post("/api/user-activities", async (req, res) => {
+    try {
+      const activityData = req.body;
+      const created = await storage.createUserActivity(activityData);
+      res.json(created);
+    } catch (error) {
+      console.error("Error creating user activity:", error);
+      res.status(500).json({ message: "Failed to create user activity" });
+    }
+  });
+
+  // User Workspaces API endpoints
+  app.get("/api/user-workspaces/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const workspaces = await storage.getUserWorkspaces(userId);
+      res.json(workspaces);
+    } catch (error) {
+      console.error("Error fetching user workspaces:", error);
+      res.status(500).json({ message: "Failed to fetch user workspaces" });
+    }
+  });
+
+  app.post("/api/user-workspaces", async (req, res) => {
+    try {
+      const workspaceData = req.body;
+      const created = await storage.createUserWorkspace(workspaceData);
+      res.json(created);
+    } catch (error) {
+      console.error("Error creating user workspace:", error);
+      res.status(500).json({ message: "Failed to create user workspace" });
+    }
+  });
+
   // Object Storage routes for file uploads
   app.post("/api/upload/policy", async (req, res) => {
     try {

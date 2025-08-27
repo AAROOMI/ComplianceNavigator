@@ -1,98 +1,93 @@
 import { 
   users, assessments, policies, vulnerabilities, riskManagementPlans, riskRegister,
-  usersManagement, achievementBadges, userAchievements, policyFeedback, policyCollaboration,
-  eccProjects, eccGapAssessments, eccRiskAssessments, eccRoadmapTasks, eccTrainingModules, eccUserTraining,
-  type User, type InsertUser, 
+  roles, userSessions, userActivities, userWorkspaces, permissions, usersManagement,
+  type User, type InsertUser,
+  type Role, type InsertRole,
+  type UserSession, type InsertUserSession,
+  type UserActivity, type InsertUserActivity,
+  type UserWorkspace, type InsertUserWorkspace,
+  type Permission, type InsertPermission,
   type Assessment, type InsertAssessment, 
   type Policy, type InsertPolicy, 
   type Vulnerability, type InsertVulnerability,
   type RiskManagementPlan, type InsertRiskManagementPlan,
   type RiskRegister, type InsertRiskRegister,
-  type UsersManagement, type InsertUsersManagement,
-  type AchievementBadge, type InsertAchievementBadge,
-  type UserAchievement, type InsertUserAchievement,
-  type PolicyFeedback, type InsertPolicyFeedback,
-  type PolicyCollaboration, type InsertPolicyCollaboration,
-  type EccProject, type InsertEccProject,
-  type EccGapAssessment, type InsertEccGapAssessment,
-  type EccRiskAssessment, type InsertEccRiskAssessment,
-  type EccRoadmapTask, type InsertEccRoadmapTask,
-  type EccTrainingModule, type InsertEccTrainingModule,
-  type EccUserTraining, type InsertEccUserTraining
+  type UsersManagement, type InsertUsersManagement
 } from "@shared/schema";
 import { eq, and } from "drizzle-orm";
 
 export interface IStorage {
+  // User authentication
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  
+  // User management with RBAC
+  getAllUsers(): Promise<User[]>;
+  updateUser(id: number, user: Partial<InsertUser>): Promise<User | undefined>;
+  deleteUser(id: number): Promise<boolean>;
+  
+  // Role management
+  getRoles(): Promise<Role[]>;
+  getRole(id: number): Promise<Role | undefined>;
+  createRole(role: InsertRole): Promise<Role>;
+  updateRole(id: number, role: Partial<InsertRole>): Promise<Role | undefined>;
+  deleteRole(id: number): Promise<boolean>;
+  
+  // Permission management
+  getPermissions(): Promise<Permission[]>;
+  getPermissionsByCategory(category: string): Promise<Permission[]>;
+  createPermission(permission: InsertPermission): Promise<Permission>;
+  
+  // User sessions
+  createUserSession(session: InsertUserSession): Promise<UserSession>;
+  getUserSessions(userId: number): Promise<UserSession[]>;
+  updateUserSession(id: number, session: Partial<InsertUserSession>): Promise<UserSession | undefined>;
+  
+  // User activities
+  getUserActivities(userId?: number, limit?: number): Promise<UserActivity[]>;
+  createUserActivity(activity: InsertUserActivity): Promise<UserActivity>;
+  
+  // User workspaces
+  getUserWorkspaces(userId: number): Promise<UserWorkspace[]>;
+  getDefaultWorkspace(userId: number): Promise<UserWorkspace | undefined>;
+  createUserWorkspace(workspace: InsertUserWorkspace): Promise<UserWorkspace>;
+  updateUserWorkspace(id: number, workspace: Partial<InsertUserWorkspace>): Promise<UserWorkspace | undefined>;
+  deleteUserWorkspace(id: number): Promise<boolean>;
+
+  // Users Management (for the existing UI)
+  getUsersManagement(): Promise<UsersManagement[]>;
+  getUserManagement(id: number): Promise<UsersManagement | undefined>;
+  createUserManagement(userData: InsertUsersManagement): Promise<UsersManagement>;
+  updateUserManagement(id: number, userData: Partial<InsertUsersManagement>): Promise<UsersManagement | undefined>;
+  deleteUserManagement(id: number): Promise<boolean>;
+  
+  // Existing assessment methods
   getAssessments(userId: number): Promise<Assessment[]>;
   createAssessment(assessment: InsertAssessment): Promise<Assessment>;
+  
+  // Existing policy methods
   getPolicies(userId: number): Promise<Policy[]>;
   createPolicy(policy: InsertPolicy): Promise<Policy>;
+  
+  // Existing vulnerability methods
   getVulnerabilities(userId: number, assessmentId?: number): Promise<Vulnerability[]>;
   getVulnerabilityByDomain(userId: number, domain: string): Promise<Vulnerability[]>;
   createVulnerability(vulnerability: InsertVulnerability): Promise<Vulnerability>;
+  
+  // Existing risk management methods
   getRiskManagementPlans(userId: number, vulnerabilityId?: number): Promise<RiskManagementPlan[]>;
   getRiskManagementPlanById(id: number): Promise<RiskManagementPlan | undefined>;
   createRiskManagementPlan(plan: InsertRiskManagementPlan): Promise<RiskManagementPlan>;
   updateRiskManagementPlan(id: number, plan: Partial<InsertRiskManagementPlan>): Promise<RiskManagementPlan | undefined>;
   deleteRiskManagementPlan(id: number): Promise<boolean>;
+  
   // Risk Register methods
   getRiskRegister(category?: string, riskLevel?: string): Promise<RiskRegister[]>;
   getRiskRegisterById(id: number): Promise<RiskRegister | undefined>;
   createRiskRegisterEntry(entry: InsertRiskRegister): Promise<RiskRegister>;
   updateRiskRegisterEntry(id: number, entry: Partial<InsertRiskRegister>): Promise<RiskRegister | undefined>;
   deleteRiskRegisterEntry(id: number): Promise<boolean>;
-  
-  // User Management
-  getUsersManagement(): Promise<UsersManagement[]>;
-  getUserManagement(id: number): Promise<UsersManagement | undefined>;
-  createUserManagement(insertUser: InsertUsersManagement): Promise<UsersManagement>;
-  updateUserManagement(id: number, updateData: Partial<InsertUsersManagement>): Promise<UsersManagement>;
-  deleteUserManagement(id: number): Promise<void>;
-  
-  // Achievement Badges
-  getAchievementBadges(): Promise<AchievementBadge[]>;
-  createAchievementBadge(badge: InsertAchievementBadge): Promise<AchievementBadge>;
-  getUserAchievements(userId: number): Promise<UserAchievement[]>;
-  awardBadge(userId: number, badgeId: number): Promise<UserAchievement>;
-  
-  // Policy Feedback & Collaboration
-  getPolicyFeedback(policyId: number): Promise<PolicyFeedback[]>;
-  createPolicyFeedback(feedback: InsertPolicyFeedback): Promise<PolicyFeedback>;
-  getPolicyCollaboration(policyId: number): Promise<PolicyCollaboration[]>;
-  createPolicyCollaboration(collaboration: InsertPolicyCollaboration): Promise<PolicyCollaboration>;
-
-  // ECC Project Management
-  getEccProjects(cisoUserId: number): Promise<EccProject[]>;
-  getEccProject(id: number): Promise<EccProject | undefined>;
-  createEccProject(project: InsertEccProject): Promise<EccProject>;
-  updateEccProject(id: number, project: Partial<InsertEccProject>): Promise<EccProject | undefined>;
-  deleteEccProject(id: number): Promise<boolean>;
-
-  // ECC Gap Assessment
-  getEccGapAssessments(projectId: number): Promise<EccGapAssessment[]>;
-  createEccGapAssessment(assessment: InsertEccGapAssessment): Promise<EccGapAssessment>;
-  updateEccGapAssessment(id: number, assessment: Partial<InsertEccGapAssessment>): Promise<EccGapAssessment | undefined>;
-
-  // ECC Risk Assessment
-  getEccRiskAssessments(projectId: number, gapAssessmentId?: number): Promise<EccRiskAssessment[]>;
-  createEccRiskAssessment(assessment: InsertEccRiskAssessment): Promise<EccRiskAssessment>;
-  updateEccRiskAssessment(id: number, assessment: Partial<InsertEccRiskAssessment>): Promise<EccRiskAssessment | undefined>;
-
-  // ECC Roadmap Tasks
-  getEccRoadmapTasks(projectId: number, status?: string): Promise<EccRoadmapTask[]>;
-  createEccRoadmapTask(task: InsertEccRoadmapTask): Promise<EccRoadmapTask>;
-  updateEccRoadmapTask(id: number, task: Partial<InsertEccRoadmapTask>): Promise<EccRoadmapTask | undefined>;
-  deleteEccRoadmapTask(id: number): Promise<boolean>;
-
-  // ECC Training
-  getEccTrainingModules(isActive?: boolean): Promise<EccTrainingModule[]>;
-  createEccTrainingModule(module: InsertEccTrainingModule): Promise<EccTrainingModule>;
-  getEccUserTraining(projectId: number, userId: number): Promise<EccUserTraining[]>;
-  createEccUserTraining(training: InsertEccUserTraining): Promise<EccUserTraining>;
-  updateEccUserTraining(id: number, training: Partial<InsertEccUserTraining>): Promise<EccUserTraining | undefined>;
 }
 
 class DatabaseStorage implements IStorage {
@@ -278,6 +273,153 @@ class DatabaseStorage implements IStorage {
   }
 
   // User Management - Database implementation
+  async getAllUsers(): Promise<User[]> {
+    const db = await this.getDb();
+    return await db.select().from(users);
+  }
+
+  async updateUser(id: number, user: Partial<InsertUser>): Promise<User | undefined> {
+    const db = await this.getDb();
+    const [updated] = await db.update(users)
+      .set({ ...user, updatedAt: new Date() })
+      .where(eq(users.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteUser(id: number): Promise<boolean> {
+    const db = await this.getDb();
+    await db.delete(users).where(eq(users.id, id));
+    return true;
+  }
+
+  // Role Management
+  async getRoles(): Promise<Role[]> {
+    const db = await this.getDb();
+    return await db.select().from(roles).where(eq(roles.isActive, true));
+  }
+
+  async getRole(id: number): Promise<Role | undefined> {
+    const db = await this.getDb();
+    const [role] = await db.select().from(roles).where(eq(roles.id, id));
+    return role;
+  }
+
+  async createRole(role: InsertRole): Promise<Role> {
+    const db = await this.getDb();
+    const [created] = await db.insert(roles).values(role).returning();
+    return created;
+  }
+
+  async updateRole(id: number, role: Partial<InsertRole>): Promise<Role | undefined> {
+    const db = await this.getDb();
+    const [updated] = await db.update(roles)
+      .set({ ...role, updatedAt: new Date() })
+      .where(eq(roles.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteRole(id: number): Promise<boolean> {
+    const db = await this.getDb();
+    await db.update(roles)
+      .set({ isActive: false, updatedAt: new Date() })
+      .where(eq(roles.id, id));
+    return true;
+  }
+
+  // Permission Management
+  async getPermissions(): Promise<Permission[]> {
+    const db = await this.getDb();
+    return await db.select().from(permissions);
+  }
+
+  async getPermissionsByCategory(category: string): Promise<Permission[]> {
+    const db = await this.getDb();
+    return await db.select().from(permissions).where(eq(permissions.category, category));
+  }
+
+  async createPermission(permission: InsertPermission): Promise<Permission> {
+    const db = await this.getDb();
+    const [created] = await db.insert(permissions).values(permission).returning();
+    return created;
+  }
+
+  // User Sessions
+  async createUserSession(session: InsertUserSession): Promise<UserSession> {
+    const db = await this.getDb();
+    const [created] = await db.insert(userSessions).values(session).returning();
+    return created;
+  }
+
+  async getUserSessions(userId: number): Promise<UserSession[]> {
+    const db = await this.getDb();
+    return await db.select().from(userSessions).where(eq(userSessions.userId, userId));
+  }
+
+  async updateUserSession(id: number, session: Partial<InsertUserSession>): Promise<UserSession | undefined> {
+    const db = await this.getDb();
+    const [updated] = await db.update(userSessions)
+      .set(session)
+      .where(eq(userSessions.id, id))
+      .returning();
+    return updated;
+  }
+
+  // User Activities
+  async getUserActivities(userId?: number, limit?: number): Promise<UserActivity[]> {
+    const db = await this.getDb();
+    let query = db.select().from(userActivities);
+    
+    if (userId) {
+      query = query.where(eq(userActivities.userId, userId));
+    }
+    
+    return await query.limit(limit || 100);
+  }
+
+  async createUserActivity(activity: InsertUserActivity): Promise<UserActivity> {
+    const db = await this.getDb();
+    const [created] = await db.insert(userActivities).values(activity).returning();
+    return created;
+  }
+
+  // User Workspaces
+  async getUserWorkspaces(userId: number): Promise<UserWorkspace[]> {
+    const db = await this.getDb();
+    return await db.select().from(userWorkspaces).where(eq(userWorkspaces.userId, userId));
+  }
+
+  async getDefaultWorkspace(userId: number): Promise<UserWorkspace | undefined> {
+    const db = await this.getDb();
+    const [workspace] = await db.select()
+      .from(userWorkspaces)
+      .where(and(eq(userWorkspaces.userId, userId), eq(userWorkspaces.isDefault, true)));
+    return workspace;
+  }
+
+  async createUserWorkspace(workspace: InsertUserWorkspace): Promise<UserWorkspace> {
+    const db = await this.getDb();
+    const [created] = await db.insert(userWorkspaces).values(workspace).returning();
+    return created;
+  }
+
+  async updateUserWorkspace(id: number, workspace: Partial<InsertUserWorkspace>): Promise<UserWorkspace | undefined> {
+    const db = await this.getDb();
+    const [updated] = await db.update(userWorkspaces)
+      .set({ ...workspace, updatedAt: new Date() })
+      .where(eq(userWorkspaces.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteUserWorkspace(id: number): Promise<boolean> {
+    const db = await this.getDb();
+    await db.delete(userWorkspaces).where(eq(userWorkspaces.id, id));
+    return true;
+  }
+
+  // Users Management methods (for the existing UI) - Database implementation
   async getUsersManagement(): Promise<UsersManagement[]> {
     const db = await this.getDb();
     return await db.select().from(usersManagement);
@@ -289,254 +431,192 @@ class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async createUserManagement(insertUser: InsertUsersManagement): Promise<UsersManagement> {
+  async createUserManagement(userData: InsertUsersManagement): Promise<UsersManagement> {
     const db = await this.getDb();
-    const [user] = await db.insert(usersManagement).values(insertUser).returning();
-    return user;
+    const [created] = await db.insert(usersManagement).values(userData).returning();
+    return created;
   }
 
-  async updateUserManagement(id: number, updateData: Partial<InsertUsersManagement>): Promise<UsersManagement> {
+  async updateUserManagement(id: number, userData: Partial<InsertUsersManagement>): Promise<UsersManagement | undefined> {
     const db = await this.getDb();
-    const [user] = await db.update(usersManagement)
-      .set({ ...updateData, updatedAt: new Date() })
+    const [updated] = await db.update(usersManagement)
+      .set({ ...userData, updatedAt: new Date() })
       .where(eq(usersManagement.id, id))
       .returning();
-    return user;
+    return updated;
   }
 
-  async deleteUserManagement(id: number): Promise<void> {
+  async deleteUserManagement(id: number): Promise<boolean> {
     const db = await this.getDb();
     await db.delete(usersManagement).where(eq(usersManagement.id, id));
-  }
-
-  // Achievement Badges - Database implementation
-  async getAchievementBadges(): Promise<AchievementBadge[]> {
-    const db = await this.getDb();
-    return await db.select().from(achievementBadges).where(eq(achievementBadges.isActive, true));
-  }
-
-  async createAchievementBadge(badge: InsertAchievementBadge): Promise<AchievementBadge> {
-    const db = await this.getDb();
-    const [created] = await db.insert(achievementBadges).values(badge).returning();
-    return created;
-  }
-
-  async getUserAchievements(userId: number): Promise<UserAchievement[]> {
-    const db = await this.getDb();
-    return await db.select().from(userAchievements).where(eq(userAchievements.userId, userId));
-  }
-
-  async awardBadge(userId: number, badgeId: number): Promise<UserAchievement> {
-    const db = await this.getDb();
-    const [achievement] = await db.insert(userAchievements)
-      .values({ userId, badgeId, progress: 100 })
-      .returning();
-    return achievement;
-  }
-
-  // Policy Feedback & Collaboration - Database implementation
-  async getPolicyFeedback(policyId: number): Promise<PolicyFeedback[]> {
-    const db = await this.getDb();
-    return await db.select().from(policyFeedback).where(eq(policyFeedback.policyId, policyId));
-  }
-
-  async createPolicyFeedback(feedback: InsertPolicyFeedback): Promise<PolicyFeedback> {
-    const db = await this.getDb();
-    const [created] = await db.insert(policyFeedback).values(feedback).returning();
-    return created;
-  }
-
-  async getPolicyCollaboration(policyId: number): Promise<PolicyCollaboration[]> {
-    const db = await this.getDb();
-    return await db.select().from(policyCollaboration).where(eq(policyCollaboration.policyId, policyId));
-  }
-
-  async createPolicyCollaboration(collaboration: InsertPolicyCollaboration): Promise<PolicyCollaboration> {
-    const db = await this.getDb();
-    const [created] = await db.insert(policyCollaboration).values(collaboration).returning();
-    return created;
-  }
-
-  // ECC Project Management - Database implementation
-  async getEccProjects(cisoUserId: number): Promise<EccProject[]> {
-    const db = await this.getDb();
-    return await db.select().from(eccProjects).where(eq(eccProjects.cisoUserId, cisoUserId));
-  }
-
-  async getEccProject(id: number): Promise<EccProject | undefined> {
-    const db = await this.getDb();
-    const [project] = await db.select().from(eccProjects).where(eq(eccProjects.id, id));
-    return project;
-  }
-
-  async createEccProject(project: InsertEccProject): Promise<EccProject> {
-    const db = await this.getDb();
-    const [created] = await db.insert(eccProjects).values(project).returning();
-    return created;
-  }
-
-  async updateEccProject(id: number, project: Partial<InsertEccProject>): Promise<EccProject | undefined> {
-    const db = await this.getDb();
-    const [updated] = await db.update(eccProjects)
-      .set({ ...project, updatedAt: new Date() })
-      .where(eq(eccProjects.id, id))
-      .returning();
-    return updated;
-  }
-
-  async deleteEccProject(id: number): Promise<boolean> {
-    const db = await this.getDb();
-    await db.delete(eccProjects).where(eq(eccProjects.id, id));
     return true;
   }
 
-  // ECC Gap Assessment - Database implementation
-  async getEccGapAssessments(projectId: number): Promise<EccGapAssessment[]> {
-    const db = await this.getDb();
-    return await db.select().from(eccGapAssessments).where(eq(eccGapAssessments.projectId, projectId));
-  }
-
-  async createEccGapAssessment(assessment: InsertEccGapAssessment): Promise<EccGapAssessment> {
-    const db = await this.getDb();
-    const [created] = await db.insert(eccGapAssessments).values(assessment).returning();
-    return created;
-  }
-
-  async updateEccGapAssessment(id: number, assessment: Partial<InsertEccGapAssessment>): Promise<EccGapAssessment | undefined> {
-    const db = await this.getDb();
-    const [updated] = await db.update(eccGapAssessments)
-      .set(assessment)
-      .where(eq(eccGapAssessments.id, id))
-      .returning();
-    return updated;
-  }
-
-  // ECC Risk Assessment - Database implementation
-  async getEccRiskAssessments(projectId: number, gapAssessmentId?: number): Promise<EccRiskAssessment[]> {
-    const db = await this.getDb();
-    if (gapAssessmentId) {
-      return await db.select()
-        .from(eccRiskAssessments)
-        .where(
-          and(
-            eq(eccRiskAssessments.projectId, projectId),
-            eq(eccRiskAssessments.gapAssessmentId, gapAssessmentId)
-          )
-        );
-    }
-    return await db.select().from(eccRiskAssessments).where(eq(eccRiskAssessments.projectId, projectId));
-  }
-
-  async createEccRiskAssessment(assessment: InsertEccRiskAssessment): Promise<EccRiskAssessment> {
-    const db = await this.getDb();
-    const [created] = await db.insert(eccRiskAssessments).values(assessment).returning();
-    return created;
-  }
-
-  async updateEccRiskAssessment(id: number, assessment: Partial<InsertEccRiskAssessment>): Promise<EccRiskAssessment | undefined> {
-    const db = await this.getDb();
-    const [updated] = await db.update(eccRiskAssessments)
-      .set(assessment)
-      .where(eq(eccRiskAssessments.id, id))
-      .returning();
-    return updated;
-  }
-
-  // ECC Roadmap Tasks - Database implementation
-  async getEccRoadmapTasks(projectId: number, status?: string): Promise<EccRoadmapTask[]> {
-    const db = await this.getDb();
-    if (status) {
-      return await db.select()
-        .from(eccRoadmapTasks)
-        .where(
-          and(
-            eq(eccRoadmapTasks.projectId, projectId),
-            eq(eccRoadmapTasks.status, status)
-          )
-        );
-    }
-    return await db.select().from(eccRoadmapTasks).where(eq(eccRoadmapTasks.projectId, projectId));
-  }
-
-  async createEccRoadmapTask(task: InsertEccRoadmapTask): Promise<EccRoadmapTask> {
-    const db = await this.getDb();
-    const [created] = await db.insert(eccRoadmapTasks).values(task).returning();
-    return created;
-  }
-
-  async updateEccRoadmapTask(id: number, task: Partial<InsertEccRoadmapTask>): Promise<EccRoadmapTask | undefined> {
-    const db = await this.getDb();
-    const [updated] = await db.update(eccRoadmapTasks)
-      .set({ ...task, updatedAt: new Date() })
-      .where(eq(eccRoadmapTasks.id, id))
-      .returning();
-    return updated;
-  }
-
-  async deleteEccRoadmapTask(id: number): Promise<boolean> {
-    const db = await this.getDb();
-    await db.delete(eccRoadmapTasks).where(eq(eccRoadmapTasks.id, id));
-    return true;
-  }
-
-  // ECC Training - Database implementation
-  async getEccTrainingModules(isActive?: boolean): Promise<EccTrainingModule[]> {
-    const db = await this.getDb();
-    if (isActive !== undefined) {
-      return await db.select().from(eccTrainingModules).where(eq(eccTrainingModules.isActive, isActive));
-    }
-    return await db.select().from(eccTrainingModules);
-  }
-
-  async createEccTrainingModule(module: InsertEccTrainingModule): Promise<EccTrainingModule> {
-    const db = await this.getDb();
-    const [created] = await db.insert(eccTrainingModules).values(module).returning();
-    return created;
-  }
-
-  async getEccUserTraining(projectId: number, userId: number): Promise<EccUserTraining[]> {
-    const db = await this.getDb();
-    return await db.select()
-      .from(eccUserTraining)
-      .where(
-        and(
-          eq(eccUserTraining.projectId, projectId),
-          eq(eccUserTraining.userId, userId)
-        )
-      );
-  }
-
-  async createEccUserTraining(training: InsertEccUserTraining): Promise<EccUserTraining> {
-    const db = await this.getDb();
-    const [created] = await db.insert(eccUserTraining).values(training).returning();
-    return created;
-  }
-
-  async updateEccUserTraining(id: number, training: Partial<InsertEccUserTraining>): Promise<EccUserTraining | undefined> {
-    const db = await this.getDb();
-    const [updated] = await db.update(eccUserTraining)
-      .set(training)
-      .where(eq(eccUserTraining.id, id))
-      .returning();
-    return updated;
-  }
 }
 
 class InMemoryStorage implements IStorage {
   private users: User[] = [];
+  private roles: Role[] = [];
+  private permissions: Permission[] = [];
+  private userSessions: UserSession[] = [];
+  private userActivities: UserActivity[] = [];
+  private userWorkspaces: UserWorkspace[] = [];
   private assessments: Assessment[] = [];
   private policies: Policy[] = [];
   private vulnerabilities: Vulnerability[] = [];
   private riskManagementPlans: RiskManagementPlan[] = [];
+  private riskRegister: RiskRegister[] = [];
 
   private userIdSeq = 1;
+  private roleIdSeq = 1;
+  private permissionIdSeq = 1;
+  private sessionIdSeq = 1;
+  private activityIdSeq = 1;
+  private workspaceIdSeq = 1;
   private assessmentIdSeq = 1;
   private policyIdSeq = 1;
   private vulnerabilityIdSeq = 1;
   private riskPlanIdSeq = 1;
+  private riskRegisterIdSeq = 1;
 
+  // User authentication
   async getUser(id: number): Promise<User | undefined> {
     return this.users.find(u => u.id === id);
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    return this.users.find(u => u.username === username);
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const user: User = { id: this.userIdSeq++, ...insertUser } as User;
+    this.users.push(user);
+    return user;
+  }
+
+  // User management with RBAC
+  async getAllUsers(): Promise<User[]> {
+    return this.users;
+  }
+
+  async updateUser(id: number, user: Partial<InsertUser>): Promise<User | undefined> {
+    const index = this.users.findIndex(u => u.id === id);
+    if (index === -1) return undefined;
+    this.users[index] = { ...this.users[index], ...user };
+    return this.users[index];
+  }
+
+  async deleteUser(id: number): Promise<boolean> {
+    const index = this.users.findIndex(u => u.id === id);
+    if (index === -1) return false;
+    this.users.splice(index, 1);
+    return true;
+  }
+
+  // Role management
+  async getRoles(): Promise<Role[]> {
+    return this.roles;
+  }
+
+  async getRole(id: number): Promise<Role | undefined> {
+    return this.roles.find(r => r.id === id);
+  }
+
+  async createRole(role: InsertRole): Promise<Role> {
+    const created: Role = { id: this.roleIdSeq++, ...role } as Role;
+    this.roles.push(created);
+    return created;
+  }
+
+  async updateRole(id: number, role: Partial<InsertRole>): Promise<Role | undefined> {
+    const index = this.roles.findIndex(r => r.id === id);
+    if (index === -1) return undefined;
+    this.roles[index] = { ...this.roles[index], ...role };
+    return this.roles[index];
+  }
+
+  async deleteRole(id: number): Promise<boolean> {
+    const index = this.roles.findIndex(r => r.id === id);
+    if (index === -1) return false;
+    this.roles.splice(index, 1);
+    return true;
+  }
+
+  // Permission management
+  async getPermissions(): Promise<Permission[]> {
+    return this.permissions;
+  }
+
+  async getPermissionsByCategory(category: string): Promise<Permission[]> {
+    return this.permissions.filter(p => p.category === category);
+  }
+
+  async createPermission(permission: InsertPermission): Promise<Permission> {
+    const created: Permission = { id: this.permissionIdSeq++, ...permission } as Permission;
+    this.permissions.push(created);
+    return created;
+  }
+
+  // User sessions
+  async createUserSession(session: InsertUserSession): Promise<UserSession> {
+    const created: UserSession = { id: this.sessionIdSeq++, ...session } as UserSession;
+    this.userSessions.push(created);
+    return created;
+  }
+
+  async getUserSessions(userId: number): Promise<UserSession[]> {
+    return this.userSessions.filter(s => s.userId === userId);
+  }
+
+  async updateUserSession(id: number, session: Partial<InsertUserSession>): Promise<UserSession | undefined> {
+    const index = this.userSessions.findIndex(s => s.id === id);
+    if (index === -1) return undefined;
+    this.userSessions[index] = { ...this.userSessions[index], ...session };
+    return this.userSessions[index];
+  }
+
+  // User activities
+  async getUserActivities(userId?: number, limit?: number): Promise<UserActivity[]> {
+    let activities = this.userActivities;
+    if (userId) {
+      activities = activities.filter(a => a.userId === userId);
+    }
+    return activities.slice(0, limit || 100);
+  }
+
+  async createUserActivity(activity: InsertUserActivity): Promise<UserActivity> {
+    const created: UserActivity = { id: this.activityIdSeq++, ...activity } as UserActivity;
+    this.userActivities.push(created);
+    return created;
+  }
+
+  // User workspaces
+  async getUserWorkspaces(userId: number): Promise<UserWorkspace[]> {
+    return this.userWorkspaces.filter(w => w.userId === userId);
+  }
+
+  async getDefaultWorkspace(userId: number): Promise<UserWorkspace | undefined> {
+    return this.userWorkspaces.find(w => w.userId === userId && w.isDefault);
+  }
+
+  async createUserWorkspace(workspace: InsertUserWorkspace): Promise<UserWorkspace> {
+    const created: UserWorkspace = { id: this.workspaceIdSeq++, ...workspace } as UserWorkspace;
+    this.userWorkspaces.push(created);
+    return created;
+  }
+
+  async updateUserWorkspace(id: number, workspace: Partial<InsertUserWorkspace>): Promise<UserWorkspace | undefined> {
+    const index = this.userWorkspaces.findIndex(w => w.id === id);
+    if (index === -1) return undefined;
+    this.userWorkspaces[index] = { ...this.userWorkspaces[index], ...workspace };
+    return this.userWorkspaces[index];
+  }
+
+  async deleteUserWorkspace(id: number): Promise<boolean> {
+    const index = this.userWorkspaces.findIndex(w => w.id === id);
+    if (index === -1) return false;
+    this.userWorkspaces.splice(index, 1);
+    return true;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
@@ -766,9 +846,9 @@ class InMemoryStorage implements IStorage {
     return created;
   }
 
-  async updateUserManagement(id: number, updateData: Partial<InsertUsersManagement>): Promise<UsersManagement> {
+  async updateUserManagement(id: number, updateData: Partial<InsertUsersManagement>): Promise<UsersManagement | undefined> {
     const index = this.usersManagementList.findIndex(u => u.id === id);
-    if (index === -1) throw new Error("User not found");
+    if (index === -1) return undefined;
     
     const updated = {
       ...this.usersManagementList[index],
@@ -779,8 +859,10 @@ class InMemoryStorage implements IStorage {
     return updated;
   }
 
-  async deleteUserManagement(id: number): Promise<void> {
+  async deleteUserManagement(id: number): Promise<boolean> {
+    const initialLength = this.usersManagementList.length;
     this.usersManagementList = this.usersManagementList.filter(u => u.id !== id);
+    return this.usersManagementList.length < initialLength;
   }
 
   // Achievement Badges - InMemory implementation

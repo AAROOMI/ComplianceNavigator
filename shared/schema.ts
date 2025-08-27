@@ -227,12 +227,82 @@ export const ncaEccStructure = {
   }
 } as const;
 
-// Keep existing table definitions
+// Enhanced User Management with RBAC
+export const roles = pgTable("roles", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(), // "admin", "manager", "analyst", "viewer", etc.
+  displayName: text("display_name").notNull(),
+  description: text("description"),
+  permissions: text("permissions").array(), // Array of permission strings
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
+  email: text("email").notNull().unique(),
   password: text("password").notNull(),
-  role: text("role").notNull(),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  profileImage: text("profile_image"), // Object storage path
+  roleId: integer("role_id").notNull(),
+  department: text("department"),
+  position: text("position"),
+  phoneNumber: text("phone_number"),
+  isActive: boolean("is_active").notNull().default(true),
+  lastLoginAt: timestamp("last_login_at"),
+  passwordChangedAt: timestamp("password_changed_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  createdBy: integer("created_by"), // Admin who created this user
+});
+
+export const userSessions = pgTable("user_sessions", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  sessionToken: text("session_token").notNull().unique(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  loginAt: timestamp("login_at").defaultNow(),
+  logoutAt: timestamp("logout_at"),
+  isActive: boolean("is_active").notNull().default(true),
+});
+
+export const userActivities = pgTable("user_activities", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  action: text("action").notNull(), // "login", "logout", "create_policy", "view_assessment", etc.
+  resource: text("resource"), // What was accessed/modified
+  resourceId: integer("resource_id"), // ID of the resource
+  details: jsonb("details"), // Additional action details
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const userWorkspaces = pgTable("user_workspaces", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+  settings: jsonb("settings"), // User-specific workspace settings
+  dashboardConfig: jsonb("dashboard_config"), // Custom dashboard layout
+  favoritePages: text("favorite_pages").array(), // Array of favorite page URLs
+  recentActivities: jsonb("recent_activities"), // Recent activities in workspace
+  isDefault: boolean("is_default").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const permissions = pgTable("permissions", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(), // "view_assessments", "create_policies", etc.
+  displayName: text("display_name").notNull(),
+  description: text("description"),
+  category: text("category").notNull(), // "assessments", "policies", "users", "reports"
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const assessments = pgTable("assessments", {
@@ -453,11 +523,63 @@ export const cisoPolicyReviews = pgTable("ciso_policy_reviews", {
   reviewedAt: text("reviewed_at").notNull(),
 });
 
-// Keep existing schemas
+// New User Management Schema exports
+export const insertRoleSchema = createInsertSchema(roles).pick({
+  name: true,
+  displayName: true,
+  description: true,
+  permissions: true,
+  isActive: true,
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
+  email: true,
   password: true,
-  role: true,
+  firstName: true,
+  lastName: true,
+  profileImage: true,
+  roleId: true,
+  department: true,
+  position: true,
+  phoneNumber: true,
+  isActive: true,
+  createdBy: true,
+});
+
+export const insertUserSessionSchema = createInsertSchema(userSessions).pick({
+  userId: true,
+  sessionToken: true,
+  ipAddress: true,
+  userAgent: true,
+});
+
+export const insertUserActivitySchema = createInsertSchema(userActivities).pick({
+  userId: true,
+  action: true,
+  resource: true,
+  resourceId: true,
+  details: true,
+  ipAddress: true,
+  userAgent: true,
+});
+
+export const insertUserWorkspaceSchema = createInsertSchema(userWorkspaces).pick({
+  userId: true,
+  name: true,
+  description: true,
+  settings: true,
+  dashboardConfig: true,
+  favoritePages: true,
+  recentActivities: true,
+  isDefault: true,
+});
+
+export const insertPermissionSchema = createInsertSchema(permissions).pick({
+  name: true,
+  displayName: true,
+  description: true,
+  category: true,
 });
 
 export const insertAssessmentSchema = createInsertSchema(assessments).pick({
@@ -567,9 +689,26 @@ export const insertCisoPolicyReviewSchema = createInsertSchema(cisoPolicyReviews
   reviewedAt: true,
 });
 
+// User Management Types
+export type Role = typeof roles.$inferSelect;
+export type InsertRole = z.infer<typeof insertRoleSchema>;
+
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 
+export type UserSession = typeof userSessions.$inferSelect;
+export type InsertUserSession = z.infer<typeof insertUserSessionSchema>;
+
+export type UserActivity = typeof userActivities.$inferSelect;
+export type InsertUserActivity = z.infer<typeof insertUserActivitySchema>;
+
+export type UserWorkspace = typeof userWorkspaces.$inferSelect;
+export type InsertUserWorkspace = z.infer<typeof insertUserWorkspaceSchema>;
+
+export type Permission = typeof permissions.$inferSelect;
+export type InsertPermission = z.infer<typeof insertPermissionSchema>;
+
+// Existing Types
 export type Assessment = typeof assessments.$inferSelect;
 export type InsertAssessment = z.infer<typeof insertAssessmentSchema>;
 
