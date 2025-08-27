@@ -26,28 +26,55 @@
         window.openDIDAgent = function() {
           console.log('🎤 Sarah Johnson clicked - launching D-ID agent...');
           
-          // Show the D-ID agent container
+          // Debug: Check what D-ID APIs are available
+          console.log('🔍 Window D-ID properties:', Object.keys(window).filter(k => k.toLowerCase().includes('did')));
+          console.log('🔍 DID_AGENTS_API available:', typeof window.DID_AGENTS_API !== 'undefined');
+          
+          if (typeof window.DID_AGENTS_API !== 'undefined') {
+            console.log('🔍 DID_AGENTS_API methods:', Object.keys(window.DID_AGENTS_API));
+            
+            try {
+              // Try different D-ID API methods
+              if (window.DID_AGENTS_API.show) {
+                console.log('📞 Calling DID_AGENTS_API.show()...');
+                const result = window.DID_AGENTS_API.show();
+                console.log('📊 show() result:', result);
+                return true;
+              }
+              
+              if (window.DID_AGENTS_API.open) {
+                console.log('📞 Calling DID_AGENTS_API.open()...');
+                const result = window.DID_AGENTS_API.open();
+                console.log('📊 open() result:', result);
+                return true;
+              }
+              
+              if (window.DID_AGENTS_API.start) {
+                console.log('📞 Calling DID_AGENTS_API.start()...');
+                const result = window.DID_AGENTS_API.start();
+                console.log('📊 start() result:', result);
+                return true;
+              }
+              
+              console.warn('⚠️ No usable D-ID API methods found');
+              
+            } catch (error) {
+              console.error('❌ D-ID API call failed:', error);
+              console.error('❌ Error stack:', error.stack);
+            }
+          }
+          
+          // Show the D-ID agent container as fallback
           const agentContainer = document.getElementById('sarah-johnson-agent-container');
           if (agentContainer) {
+            console.log('📱 Showing D-ID container as fallback...');
             agentContainer.style.display = 'block';
-            console.log('✅ D-ID agent container shown');
-            
-            // Try to trigger the D-ID agent
-            if (typeof window.DID_AGENTS_API !== 'undefined') {
-              try {
-                if (window.DID_AGENTS_API.show) {
-                  window.DID_AGENTS_API.show();
-                }
-              } catch (error) {
-                console.warn('D-ID API call failed:', error);
-              }
-            }
-            return true;
-          } else {
-            console.warn('D-ID agent container not found');
-            showFallbackChat();
-            return false;
           }
+          
+          // If D-ID still fails, show chat
+          console.warn('❌ D-ID agent failed to launch, showing fallback chat');
+          showFallbackChat();
+          return false;
         };
         
         // Make fallback chat available globally for auto-triggering
