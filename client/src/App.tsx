@@ -10,6 +10,7 @@ import "@/lib/i18n";
 
 // Import pages
 import Landing from "@/pages/landing";
+import Login from "@/pages/login";
 import Dashboard from "@/pages/dashboard";
 import Assessment from "@/pages/assessment";
 import Policies from "@/pages/policies";
@@ -46,6 +47,9 @@ export default function App() {
             <Switch>
           <Route path="/">
             <Landing />
+          </Route>
+          <Route path="/login">
+            <Login />
           </Route>
           <Route path="/dashboard">
             <Layout>

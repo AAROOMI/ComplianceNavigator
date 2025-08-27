@@ -8,23 +8,101 @@ import {
   insertVulnerabilitySchema, 
   insertRiskManagementPlanSchema,
   insertRiskRegisterSchema,
-  insertUsersManagementSchema,
-  insertAchievementBadgeSchema,
-  insertPolicyFeedbackSchema,
-  insertPolicyCollaborationSchema,
-  insertEccProjectSchema,
-  insertEccGapAssessmentSchema,
-  insertEccRiskAssessmentSchema,
-  insertEccRoadmapTaskSchema,
-  insertEccTrainingModuleSchema,
-  insertEccUserTrainingSchema
+  insertUsersManagementSchema
 } from "@shared/schema";
 import { generateSecurityPolicy, generateComplianceResponse } from "./services/ai";
 import { seedRiskRegister } from "./risk-register-seed";
 import { ObjectStorageService } from "./objectStorage";
 import { multilingualService } from "./services/multilingual";
+import { AuthService } from "./auth";
+import session from "express-session";
+
+// Session middleware
+const sessionMiddleware = session({
+  secret: process.env.SESSION_SECRET || 'dev-secret-key-change-in-production',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // Set to true in production with HTTPS
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+});
+
+// Authentication middleware
+const requireAuth = (req: any, res: any, next: any) => {
+  if (req.session?.user) {
+    next();
+  } else {
+    res.status(401).json({ message: "Authentication required" });
+  }
+};
+
+// Admin/CISO role middleware
+const requireAdminRole = (req: any, res: any, next: any) => {
+  if (req.session?.user && ['admin', 'ciso', 'cto', 'system_admin'].includes(req.session.user.role)) {
+    next();
+  } else {
+    res.status(403).json({ message: "Admin access required" });
+  }
+};
 
 export async function registerRoutes(app: Express) {
+  // Apply session middleware
+  app.use(sessionMiddleware);
+  
+  const authService = new AuthService();
+
+  // Authentication routes
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ message: "Username and password are required" });
+      }
+
+      const user = await authService.login({ username, password });
+      
+      if (user) {
+        req.session.user = user;
+        res.json({ 
+          message: "Login successful", 
+          user: {
+            id: user.id,
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: user.role,
+            department: user.department
+          }
+        });
+      } else {
+        res.status(401).json({ message: "Invalid username or password" });
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/auth/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Failed to logout" });
+      }
+      res.clearCookie('connect.sid');
+      res.json({ message: "Logout successful" });
+    });
+  });
+
+  app.get("/api/auth/me", (req, res) => {
+    if (req.session?.user) {
+      res.json({ user: req.session.user });
+    } else {
+      res.status(401).json({ message: "Not authenticated" });
+    }
+  });
   app.get("/api/assessments/:userId", async (req, res) => {
     const userId = parseInt(req.params.userId);
     const assessments = await storage.getAssessments(userId);
@@ -392,8 +470,8 @@ export async function registerRoutes(app: Express) {
     }
   });
 
-  // User Management API endpoints
-  app.get("/api/users-management", async (req, res) => {
+  // User Management API endpoints (Protected)
+  app.get("/api/users-management", requireAuth, async (req, res) => {
     try {
       const users = await storage.getUsersManagement();
       res.json(users);

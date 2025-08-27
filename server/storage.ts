@@ -1,6 +1,8 @@
 import { 
   users, assessments, policies, vulnerabilities, riskManagementPlans, riskRegister,
   roles, userSessions, userActivities, userWorkspaces, permissions, usersManagement,
+  achievementBadges, userAchievements, policyFeedback, policyCollaboration,
+  eccProjects, eccGapAssessments, eccRiskAssessments, eccRoadmapTasks, eccTrainingModules, eccUserTraining,
   type User, type InsertUser,
   type Role, type InsertRole,
   type UserSession, type InsertUserSession,
@@ -12,7 +14,17 @@ import {
   type Vulnerability, type InsertVulnerability,
   type RiskManagementPlan, type InsertRiskManagementPlan,
   type RiskRegister, type InsertRiskRegister,
-  type UsersManagement, type InsertUsersManagement
+  type UsersManagement, type InsertUsersManagement,
+  type AchievementBadge, type InsertAchievementBadge,
+  type UserAchievement, type InsertUserAchievement,
+  type PolicyFeedback, type InsertPolicyFeedback,
+  type PolicyCollaboration, type InsertPolicyCollaboration,
+  type EccProject, type InsertEccProject,
+  type EccGapAssessment, type InsertEccGapAssessment,
+  type EccRiskAssessment, type InsertEccRiskAssessment,
+  type EccRoadmapTask, type InsertEccRoadmapTask,
+  type EccTrainingModule, type InsertEccTrainingModule,
+  type EccUserTraining, type InsertEccUserTraining
 } from "@shared/schema";
 import { eq, and } from "drizzle-orm";
 
@@ -61,6 +73,50 @@ export interface IStorage {
   createUserManagement(userData: InsertUsersManagement): Promise<UsersManagement>;
   updateUserManagement(id: number, userData: Partial<InsertUsersManagement>): Promise<UsersManagement | undefined>;
   deleteUserManagement(id: number): Promise<boolean>;
+
+  // Achievement Badges
+  getAchievementBadges(): Promise<AchievementBadge[]>;
+  createAchievementBadge(badge: InsertAchievementBadge): Promise<AchievementBadge>;
+  getUserAchievements(userId: number): Promise<UserAchievement[]>;
+  awardBadge(userId: number, badgeId: number): Promise<UserAchievement>;
+
+  // Policy Feedback & Collaboration
+  getPolicyFeedback(policyId: number): Promise<PolicyFeedback[]>;
+  createPolicyFeedback(feedback: InsertPolicyFeedback): Promise<PolicyFeedback>;
+  getPolicyCollaboration(policyId: number): Promise<PolicyCollaboration[]>;
+  createPolicyCollaboration(collaboration: InsertPolicyCollaboration): Promise<PolicyCollaboration>;
+
+  // ECC Projects
+  getEccProjects(): Promise<EccProject[]>;
+  getEccProject(id: number): Promise<EccProject | undefined>;
+  createEccProject(project: InsertEccProject): Promise<EccProject>;
+  updateEccProject(id: number, project: Partial<InsertEccProject>): Promise<EccProject | undefined>;
+  deleteEccProject(id: number): Promise<boolean>;
+
+  // ECC Gap Assessments
+  getEccGapAssessments(projectId?: number): Promise<EccGapAssessment[]>;
+  createEccGapAssessment(assessment: InsertEccGapAssessment): Promise<EccGapAssessment>;
+  updateEccGapAssessment(id: number, assessment: Partial<InsertEccGapAssessment>): Promise<EccGapAssessment | undefined>;
+
+  // ECC Risk Assessments
+  getEccRiskAssessments(projectId?: number): Promise<EccRiskAssessment[]>;
+  createEccRiskAssessment(assessment: InsertEccRiskAssessment): Promise<EccRiskAssessment>;
+  updateEccRiskAssessment(id: number, assessment: Partial<InsertEccRiskAssessment>): Promise<EccRiskAssessment | undefined>;
+
+  // ECC Roadmap Tasks
+  getEccRoadmapTasks(projectId?: number): Promise<EccRoadmapTask[]>;
+  createEccRoadmapTask(task: InsertEccRoadmapTask): Promise<EccRoadmapTask>;
+  updateEccRoadmapTask(id: number, task: Partial<InsertEccRoadmapTask>): Promise<EccRoadmapTask | undefined>;
+  deleteEccRoadmapTask(id: number): Promise<boolean>;
+
+  // ECC Training Modules
+  getEccTrainingModules(): Promise<EccTrainingModule[]>;
+  createEccTrainingModule(module: InsertEccTrainingModule): Promise<EccTrainingModule>;
+
+  // ECC User Training
+  getEccUserTraining(userId?: number): Promise<EccUserTraining[]>;
+  createEccUserTraining(training: InsertEccUserTraining): Promise<EccUserTraining>;
+  updateEccUserTraining(id: number, training: Partial<InsertEccUserTraining>): Promise<EccUserTraining | undefined>;
   
   // Existing assessment methods
   getAssessments(userId: number): Promise<Assessment[]>;
@@ -755,6 +811,7 @@ class InMemoryStorage implements IStorage {
       phoneNumber: "+1-555-0123",
       preferences: { theme: "dark", notifications: true },
       profileImageUrl: null,
+      password: "admin123", // Demo password - in production, this would be hashed
       createdAt: new Date('2024-01-15'),
       updatedAt: new Date('2024-01-15'),
       lastLogin: new Date('2025-01-24T10:30:00')
@@ -771,6 +828,7 @@ class InMemoryStorage implements IStorage {
       phoneNumber: "+1-555-0124",
       preferences: { theme: "light", notifications: false },
       profileImageUrl: null,
+      password: "password123",
       createdAt: new Date('2024-02-01'),
       updatedAt: new Date('2024-02-01'),
       lastLogin: new Date('2025-01-24T09:15:00')
@@ -787,6 +845,7 @@ class InMemoryStorage implements IStorage {
       phoneNumber: "+1-555-0125",
       preferences: { theme: "dark", notifications: true },
       profileImageUrl: null,
+      password: "cto2024",
       createdAt: new Date('2023-11-10'),
       updatedAt: new Date('2023-11-10'),
       lastLogin: new Date('2025-01-24T11:45:00')
@@ -803,6 +862,7 @@ class InMemoryStorage implements IStorage {
       phoneNumber: "+1-555-0126",
       preferences: { theme: "light", notifications: true },
       profileImageUrl: null,
+      password: "sysadmin123",
       createdAt: new Date('2024-03-05'),
       updatedAt: new Date('2024-03-05'),
       lastLogin: new Date('2025-01-24T08:20:00')
@@ -819,6 +879,7 @@ class InMemoryStorage implements IStorage {
       phoneNumber: "+1-555-0127",
       preferences: { theme: "dark", notifications: false },
       profileImageUrl: null,
+      password: "user123",
       createdAt: new Date('2024-04-12'),
       updatedAt: new Date('2024-04-12'),
       lastLogin: new Date('2025-01-20T16:30:00')

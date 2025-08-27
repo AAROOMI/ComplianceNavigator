@@ -925,6 +925,7 @@ export const usersManagement = pgTable("users_management", {
   id: serial("id").primaryKey(),
   username: varchar("username", { length: 50 }).notNull().unique(),
   email: varchar("email", { length: 100 }).notNull().unique(),
+  password: varchar("password", { length: 255 }).notNull(), // hashed password
   firstName: varchar("first_name", { length: 50 }),
   lastName: varchar("last_name", { length: 50 }),
   role: varchar("role", { length: 20 }).notNull().default("user"), // admin, ciso, it-manager, cto, sysadmin, user
@@ -938,52 +939,12 @@ export const usersManagement = pgTable("users_management", {
   preferences: jsonb("preferences").default({}),
 });
 
-// Achievement Badges System
-export const achievementBadges = pgTable("achievement_badges", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 100 }).notNull(),
-  description: text("description").notNull(),
-  icon: varchar("icon", { length: 50 }).notNull(),
-  category: varchar("category", { length: 50 }).notNull(), // compliance, policy, assessment, security
-  criteria: jsonb("criteria").notNull(), // JSON criteria for earning badge
-  isActive: boolean("is_active").notNull().default(true),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-// User Achievement Bridge Table
-export const userAchievements = pgTable("user_achievements", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull().references(() => usersManagement.id),
-  badgeId: integer("badge_id").notNull().references(() => achievementBadges.id),
-  earnedAt: timestamp("earned_at").defaultNow(),
-  progress: integer("progress").default(0), // Progress towards badge (0-100)
-});
-
-// Policy Feedback System
-export const policyFeedback = pgTable("policy_feedback", {
-  id: serial("id").primaryKey(),
-  policyId: integer("policy_id").notNull().references(() => policies.id),
-  userId: integer("user_id").notNull().references(() => usersManagement.id),
-  rating: integer("rating").notNull(), // 1-5 stars
-  feedback: text("feedback"),
-  isApproved: boolean("is_approved").default(false),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-// Policy Collaboration System
-export const policyCollaboration = pgTable("policy_collaboration", {
-  id: serial("id").primaryKey(),
-  policyId: integer("policy_id").notNull().references(() => policies.id),
-  userId: integer("user_id").notNull().references(() => usersManagement.id),
-  actionType: varchar("action_type", { length: 20 }).notNull(), // viewed, commented, approved, rejected, edited
-  comment: text("comment"),
-  timestamp: timestamp("timestamp").defaultNow(),
-});
 
 // Zod schemas for validation
 export const insertUsersManagementSchema = createInsertSchema(usersManagement).pick({
   username: true,
   email: true,
+  password: true,
   firstName: true,
   lastName: true,
   role: true,
@@ -993,45 +954,9 @@ export const insertUsersManagementSchema = createInsertSchema(usersManagement).p
   preferences: true
 });
 
-export const insertAchievementBadgeSchema = createInsertSchema(achievementBadges).pick({
-  name: true,
-  description: true,
-  icon: true,
-  category: true,
-  criteria: true,
-  isActive: true
-});
-
-export const insertUserAchievementSchema = createInsertSchema(userAchievements).pick({
-  userId: true,
-  badgeId: true,
-  progress: true
-});
-
-export const insertPolicyFeedbackSchema = createInsertSchema(policyFeedback).pick({
-  policyId: true,
-  userId: true,
-  rating: true,
-  feedback: true
-});
-
-export const insertPolicyCollaborationSchema = createInsertSchema(policyCollaboration).pick({
-  policyId: true,
-  userId: true,
-  actionType: true,
-  comment: true
-});
-
 export type UsersManagement = typeof usersManagement.$inferSelect;
 export type InsertUsersManagement = z.infer<typeof insertUsersManagementSchema>;
-export type AchievementBadge = typeof achievementBadges.$inferSelect;
-export type InsertAchievementBadge = z.infer<typeof insertAchievementBadgeSchema>;
-export type UserAchievement = typeof userAchievements.$inferSelect;
-export type InsertUserAchievement = z.infer<typeof insertUserAchievementSchema>;
-export type PolicyFeedback = typeof policyFeedback.$inferSelect;
-export type InsertPolicyFeedback = z.infer<typeof insertPolicyFeedbackSchema>;
-export type PolicyCollaboration = typeof policyCollaboration.$inferSelect;
-export type InsertPolicyCollaboration = z.infer<typeof insertPolicyCollaborationSchema>;
+
 
 // ECC Navigator Insert Schemas
 export const insertEccProjectSchema = createInsertSchema(eccProjects).pick({

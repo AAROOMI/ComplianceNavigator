@@ -24,11 +24,18 @@ export default function Landing() {
           <p className="text-xl mb-8">
             Innovative Cybersecurity Solutions for Comprehensive Compliance and Protection.
           </p>
-          <Link href="/dashboard">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white">
-              Go to Dashboard
-            </Button>
-          </Link>
+          <div className="flex gap-4">
+            <Link href="/login">
+              <Button size="lg" className="bg-primary hover:bg-primary/90 text-white">
+                Sign In
+              </Button>
+            </Link>
+            <Link href="/dashboard">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+                Demo Dashboard
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
