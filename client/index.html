@@ -289,15 +289,16 @@
               }
               
               .sarah-modal-minimized .sarah-container {
-                animation: slideToBottom 0.5s ease-out forwards;
                 pointer-events: all;
                 width: 300px !important;
                 height: 400px !important;
-                position: fixed;
-                bottom: 20px;
-                left: 50%;
-                transform: translateX(-50%) scale(0.4);
-                transition: transform 0.2s ease;
+                position: fixed !important;
+                bottom: 20px !important;
+                left: 50% !important;
+                top: auto !important;
+                transform: translateX(-50%) scale(0.4) !important;
+                transition: all 0.5s ease !important;
+                margin: 0 !important;
               }
               
               .sarah-modal-minimized .sarah-container:hover {
@@ -320,8 +321,10 @@
         
         // Minimize function to move Sarah to bottom of screen
         window.minimizeSarah = function() {
+          console.log('🔽 Minimize button clicked');
           const modal = document.getElementById('sarah-did-modal');
           if (modal) {
+            console.log('✅ Found modal, changing to minimized');
             modal.className = 'sarah-modal-minimized';
             
             // Add click to restore functionality in minimized mode
@@ -331,16 +334,21 @@
                 window.restoreSarah();
               };
               container.style.cursor = 'pointer';
+              console.log('✅ Added click handler to container');
             }
             
             console.log('📥 Sarah minimized to bottom of screen');
+          } else {
+            console.log('❌ Modal not found!');
           }
         };
         
         // Restore function to bring Sarah back to full size
         window.restoreSarah = function() {
+          console.log('🔼 Restore clicked');
           const modal = document.getElementById('sarah-did-modal');
           if (modal) {
+            console.log('✅ Found modal, restoring to full size');
             modal.className = 'sarah-modal-full';
             
             // Remove click handler in full mode
@@ -348,9 +356,12 @@
             if (container) {
               container.onclick = null;
               container.style.cursor = 'default';
+              console.log('✅ Removed click handler from container');
             }
             
             console.log('📤 Sarah restored to full size');
+          } else {
+            console.log('❌ Modal not found for restore!');
           }
         };
         
