@@ -18,7 +18,8 @@
           console.log('🎤 Sarah Johnson clicked - opening D-ID voice agent...');
           
           // D-ID Agent Share URL with clean interface
-          const didAgentURL = 'https://studio.d-id.com/agents/share?id=v2_agt_D0t5wjZD&utm_source=copy&key=WVhWMGFEQjhOamRsWldJM05tWXdPVFl4WkRVMFlqZzJOMlk0WldFM09rTXdjRXhxZUhwRFlrbDBWV3QwTjFkQlEwNTZXUT09&hide_branding=true&minimal=true';
+          const didAgentURL = 'https://studio.d-id.com/agents/share?id=v2_agt_D0t5wjZD&key=WVhWMGFEQjhOamRsWldJM05tWXdPVFl4WkRVMFlqZzJOMlk0WldFM09rTXdjRXhxZUhwRFlrbDBWV3QwTjFkQlEwNTZXUT09';
+          console.log('🔗 Loading D-ID agent URL:', didAgentURL);
           
           // Show D-ID agent in modal overlay
           const existingModal = document.getElementById('sarah-did-modal');
@@ -151,7 +152,9 @@
                     "
                     allow="microphone; camera"
                     title="Sarah Johnson - AI Voice Assistant"
+                    onerror="console.log('❌ D-ID iframe failed to load');"
                     onload="
+                      console.log('✅ D-ID iframe loaded successfully');
                       try {
                         const iframe = this;
                         setTimeout(() => {
@@ -280,25 +283,29 @@
                 margin: auto;
               }
               
-              .sarah-modal-minimized .sarah-overlay {
-                background: transparent !important;
-                backdrop-filter: none !important;
-                align-items: flex-end !important;
-                justify-content: center !important;
+              .sarah-modal-minimized {
                 pointer-events: none;
               }
               
+              .sarah-modal-minimized .sarah-overlay {
+                background: transparent !important;
+                backdrop-filter: none !important;
+                pointer-events: none !important;
+              }
+              
               .sarah-modal-minimized .sarah-container {
-                pointer-events: all;
-                width: 300px !important;
-                height: 400px !important;
+                pointer-events: all !important;
                 position: fixed !important;
                 bottom: 20px !important;
                 left: 50% !important;
                 top: auto !important;
+                right: auto !important;
+                width: 300px !important;
+                height: 400px !important;
                 transform: translateX(-50%) scale(0.4) !important;
                 transition: all 0.5s ease !important;
                 margin: 0 !important;
+                z-index: 10001 !important;
               }
               
               .sarah-modal-minimized .sarah-container:hover {
