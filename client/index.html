@@ -75,37 +75,14 @@
                   padding: 0 20px;
                   z-index: 10001;
                 ">
-                  <div style="display: flex; align-items: center; gap: 15px;">
-                    <div style="
-                      background: linear-gradient(to right, #00adb5, #00c896);
-                      -webkit-background-clip: text;
-                      -webkit-text-fill-color: transparent;
-                      background-clip: text;
-                      font-weight: 600;
-                      font-size: 18px;
-                    ">Sarah Johnson • AI Assistant</div>
-                    
-                    <!-- Language Selector -->
-                    <select id="sarah-language-selector" onchange="window.changeSarahLanguage(this.value)" style="
-                      background: rgba(0, 173, 181, 0.2);
-                      color: #00adb5;
-                      border: 1px solid rgba(0, 173, 181, 0.3);
-                      border-radius: 6px;
-                      padding: 4px 8px;
-                      font-size: 12px;
-                      backdrop-filter: blur(10px);
-                      cursor: pointer;
-                    ">
-                      <option value="en">English</option>
-                      <option value="ar">العربية</option>
-                      <option value="ur">اردو</option>
-                      <option value="hi">हिन्दी</option>
-                      <option value="es">Español</option>
-                      <option value="fr">Français</option>
-                      <option value="de">Deutsch</option>
-                      <option value="zh">中文</option>
-                    </select>
-                  </div>
+                  <div style="
+                    background: linear-gradient(to right, #00adb5, #00c896);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    font-weight: 600;
+                    font-size: 18px;
+                  ">Sarah Johnson • AI Assistant</div>
                   <div style="display: flex; gap: 10px;">
                     <button onclick="window.minimizeSarah()" style="
                       background: rgba(0, 173, 181, 0.2);
@@ -377,74 +354,10 @@
           }
         };
         
-        // Language change functionality for Sarah
-        window.changeSarahLanguage = function(languageCode) {
-          console.log(`🌍 Sarah language changed to: ${languageCode}`);
-          
-          // Store the selected language
-          localStorage.setItem('sarah-language', languageCode);
-          
-          // Send message to D-ID iframe if available
-          const modal = document.getElementById('sarah-did-modal');
-          if (modal) {
-            const iframe = modal.querySelector('iframe');
-            if (iframe && iframe.contentWindow) {
-              try {
-                iframe.contentWindow.postMessage({
-                  type: 'LANGUAGE_CHANGE',
-                  language: languageCode
-                }, '*');
-              } catch (e) {
-                console.log('Could not communicate with D-ID iframe');
-              }
-            }
-          }
-          
-          // Show language change notification
-          const notification = document.createElement('div');
-          notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 173, 181, 0.9);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            z-index: 20000;
-            font-size: 14px;
-            backdrop-filter: blur(10px);
-          `;
-          
-          const languageNames = {
-            'en': 'English',
-            'ar': 'Arabic (العربية)',
-            'ur': 'Urdu (اردو)',
-            'hi': 'Hindi (हिन्दी)',
-            'es': 'Spanish (Español)',
-            'fr': 'French (Français)',
-            'de': 'German (Deutsch)',
-            'zh': 'Chinese (中文)'
-          };
-          
-          notification.textContent = `Sarah now speaks ${languageNames[languageCode] || languageCode}`;
-          document.body.appendChild(notification);
-          
-          setTimeout(() => {
-            notification.remove();
-          }, 3000);
-        };
-        
-        // Load saved language preference
-        const savedLanguage = localStorage.getItem('sarah-language') || 'en';
-        const languageSelector = document.getElementById('sarah-language-selector');
-        if (languageSelector) {
-          languageSelector.value = savedLanguage;
-        }
 
         // Sarah Johnson voice agent ready
         console.log('🚀 Sarah Johnson AI Assistant ready');
         console.log('✅ Sarah Johnson voice agent ready - click her picture to start conversation');
-        console.log('🌍 Multilingual support active: English, Arabic, Urdu, Hindi, Spanish, French, German, Chinese');
         
         // Placeholder function (not used)
         function showFallbackChat() {
