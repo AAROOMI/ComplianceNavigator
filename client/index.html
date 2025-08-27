@@ -85,7 +85,7 @@
                     font-size: 18px;
                   ">Sarah Johnson • AI Assistant</div>
                   <div style="display: flex; gap: 10px;">
-                    <button onclick="window.minimizeSarah()" style="
+                    <button onclick="console.log('🟡 Minimize button clicked!'); window.minimizeSarah();" style="
                       background: rgba(0, 173, 181, 0.2);
                       color: #00adb5;
                       border: 1px solid rgba(0, 173, 181, 0.3);
@@ -328,27 +328,36 @@
         
         // Minimize function to move Sarah to bottom of screen
         window.minimizeSarah = function() {
-          console.log('🔽 Minimize button clicked');
+          console.log('🔽 Minimize function called');
           const modal = document.getElementById('sarah-did-modal');
+          console.log('🔍 Modal element:', modal);
+          console.log('🔍 Current modal className:', modal ? modal.className : 'NO MODAL');
+          
           if (modal) {
             console.log('✅ Found modal, changing to minimized');
             modal.className = 'sarah-modal-minimized';
+            console.log('✅ Updated className to:', modal.className);
             
             // Add click to restore functionality in minimized mode
             const container = modal.querySelector('.sarah-container');
+            console.log('🔍 Container element:', container);
             if (container) {
               container.onclick = function() {
+                console.log('🔼 Minimized container clicked, restoring...');
                 window.restoreSarah();
               };
               container.style.cursor = 'pointer';
               console.log('✅ Added click handler to container');
             }
             
-            console.log('📥 Sarah minimized to bottom of screen');
+            console.log('📥 Sarah minimize operation completed');
           } else {
             console.log('❌ Modal not found!');
           }
         };
+        
+        // Test if function is accessible
+        console.log('🧪 Testing minimizeSarah function:', typeof window.minimizeSarah);
         
         // Restore function to bring Sarah back to full size
         window.restoreSarah = function() {
