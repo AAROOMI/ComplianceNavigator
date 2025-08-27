@@ -22,6 +22,7 @@ import {
 import { generateSecurityPolicy, generateComplianceResponse } from "./services/ai";
 import { seedRiskRegister } from "./risk-register-seed";
 import { ObjectStorageService } from "./objectStorage";
+import { multilingualService } from "./services/multilingual";
 
 export async function registerRoutes(app: Express) {
   app.get("/api/assessments/:userId", async (req, res) => {
@@ -73,21 +74,107 @@ export async function registerRoutes(app: Express) {
   // AI Assistant API endpoint
   app.post("/api/assistant/chat", async (req, res) => {
     try {
-      const { message } = req.body;
+      const { message, language = 'en' } = req.body;
       if (!message) {
         return res.status(400).json({ message: "Message is required" });
       }
 
-      // Generate response using AI
+      // Generate response using AI with language support
       const response = await generateComplianceResponse(message);
       
       res.json({ 
         message: response,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        language: language
       });
     } catch (error) {
       console.error("Error in AI assistant:", error);
       res.status(500).json({ message: "Failed to process your request" });
+    }
+  });
+
+  // Multilingual API endpoints for Sarah's voice capabilities
+  app.post("/api/sarah/detect-language", async (req, res) => {
+    try {
+      const { text } = req.body;
+      if (!text) {
+        return res.status(400).json({ message: "Text is required" });
+      }
+
+      const language = await multilingualService.detectLanguage(text);
+      res.json({ language });
+    } catch (error) {
+      console.error("Error detecting language:", error);
+      res.status(500).json({ message: "Failed to detect language" });
+    }
+  });
+
+  app.post("/api/sarah/translate", async (req, res) => {
+    try {
+      const { text, targetLanguage } = req.body;
+      if (!text || !targetLanguage) {
+        return res.status(400).json({ message: "Text and target language are required" });
+      }
+
+      const translatedText = await multilingualService.translateText(text, targetLanguage);
+      res.json({ translatedText });
+    } catch (error) {
+      console.error("Error translating text:", error);
+      res.status(500).json({ message: "Failed to translate text" });
+    }
+  });
+
+  app.post("/api/sarah/speak", async (req, res) => {
+    try {
+      const { text, language = 'en', voiceId } = req.body;
+      if (!text) {
+        return res.status(400).json({ message: "Text is required" });
+      }
+
+      const audioBuffer = await multilingualService.generateSpeech(text, language, voiceId);
+      
+      if (!audioBuffer) {
+        return res.status(500).json({ message: "Failed to generate speech" });
+      }
+
+      res.set({
+        'Content-Type': 'audio/mpeg',
+        'Content-Length': audioBuffer.length.toString(),
+      });
+      
+      res.send(audioBuffer);
+    } catch (error) {
+      console.error("Error generating speech:", error);
+      res.status(500).json({ message: "Failed to generate speech" });
+    }
+  });
+
+  app.post("/api/sarah/respond", async (req, res) => {
+    try {
+      const { message, language = 'en', context = '' } = req.body;
+      if (!message) {
+        return res.status(400).json({ message: "Message is required" });
+      }
+
+      const response = await multilingualService.generateResponse(message, language, context);
+      res.json({ 
+        response,
+        language,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error("Error generating multilingual response:", error);
+      res.status(500).json({ message: "Failed to generate response" });
+    }
+  });
+
+  app.get("/api/sarah/languages", async (req, res) => {
+    try {
+      const languages = multilingualService.getAvailableLanguages();
+      res.json({ languages });
+    } catch (error) {
+      console.error("Error fetching languages:", error);
+      res.status(500).json({ message: "Failed to fetch languages" });
     }
   });
 
