@@ -68,25 +68,51 @@
             }
           }
           
-          // Show the D-ID agent container as fallback
+          // Force show the D-ID agent container
           const agentContainer = document.getElementById('sarah-johnson-agent-container');
           if (agentContainer) {
-            console.log('📱 Showing D-ID container as fallback...');
+            console.log('🚀 Force showing D-ID agent container...');
             agentContainer.style.display = 'block';
+            
+            // Try to manually trigger D-ID agent in the container
+            setTimeout(() => {
+              // Look for any D-ID elements and try to activate them
+              const didButton = agentContainer.querySelector('button, [role="button"], .start-conversation');
+              if (didButton) {
+                console.log('📞 Found D-ID button, clicking it...');
+                didButton.click();
+              }
+              
+              // Check if D-ID loaded properly
+              const didIframe = agentContainer.querySelector('iframe');
+              if (didIframe) {
+                console.log('✅ D-ID iframe detected in container!');
+              } else {
+                console.warn('⚠️ No D-ID iframe found in container');
+              }
+            }, 1000);
+            
+            return true;
+          } else {
+            console.error('❌ sarah-johnson-agent-container not found');
+            return false;
           }
-          
-          // If D-ID still fails, show chat
-          console.warn('❌ D-ID agent failed to launch, showing fallback chat');
-          showFallbackChat();
-          return false;
         };
         
-        // Make fallback chat available globally for auto-triggering
-        window.showFallbackChatDirect = function() {
-          showFallbackChat();
-        };
+        // D-ID agent status monitoring
+        setInterval(() => {
+          if (typeof window.DID_AGENTS_API !== 'undefined') {
+            const container = document.getElementById('sarah-johnson-agent-container');
+            if (container && container.style.display !== 'none') {
+              const didElements = container.querySelectorAll('iframe, [class*="did"], [id*="did"]');
+              if (didElements.length > 0) {
+                console.log('🟢 D-ID agent is active with', didElements.length, 'elements');
+              }
+            }
+          }
+        }, 5000);
         
-        // Fallback chat interface for Sarah Johnson
+        // Placeholder function (not used)
         function showFallbackChat() {
           console.log('🎯 Opening Sarah Johnson chat interface...');
           
