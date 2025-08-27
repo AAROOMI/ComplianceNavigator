@@ -68,155 +68,20 @@ export default function Sidebar() {
             <div 
               className="w-24 h-24 rounded-full overflow-hidden border-2 border-primary/20 shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300 hover:border-primary/40 relative z-10"
               onClick={(e) => {
-                console.log('🔥🔥🔥 SARAH JOHNSON PICTURE CLICKED!!!');
+                console.log('🔥 SARAH JOHNSON clicked - launching D-ID voice agent');
                 e.preventDefault();
                 e.stopPropagation();
                 
-                // ALWAYS create Sarah chat - don't depend on D-ID
-                try {
-                  console.log('🚀 Creating Sarah Johnson chat interface...');
-                  
-                  // Remove existing chat if present
-                  const existingChat = document.getElementById('sarah-chat-widget');
-                  if (existingChat) {
-                    existingChat.remove();
+                // Only try D-ID agent - no fallback chat
+                if ((window as any).openDIDAgent) {
+                  console.log('📞 Calling D-ID agent...');
+                  try {
+                    (window as any).openDIDAgent();
+                  } catch (error) {
+                    console.error('❌ D-ID agent failed:', error instanceof Error ? error.message : String(error));
                   }
-                  
-                  // Create chat widget immediately
-                  const chatWidget = document.createElement('div');
-                  chatWidget.id = 'sarah-chat-widget';
-                  chatWidget.innerHTML = `
-                    <div style="
-                      position: fixed;
-                      bottom: 20px;
-                      right: 20px;
-                      width: 350px;
-                      height: 500px;
-                      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                      border-radius: 15px;
-                      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                      z-index: 10000;
-                      display: flex;
-                      flex-direction: column;
-                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                    ">
-                      <!-- Header -->
-                      <div style="
-                        background: rgba(255,255,255,0.1);
-                        padding: 15px;
-                        border-radius: 15px 15px 0 0;
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        backdrop-filter: blur(10px);
-                      ">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                          <div style="
-                            width: 40px;
-                            height: 40px;
-                            background: white;
-                            border-radius: 50%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-size: 20px;
-                          ">👩‍💼</div>
-                          <div>
-                            <div style="color: white; font-weight: 600; font-size: 16px;">Sarah Johnson</div>
-                            <div style="color: rgba(255,255,255,0.8); font-size: 12px;">CEO • Cybersecurity Expert</div>
-                          </div>
-                        </div>
-                        <button onclick="document.getElementById('sarah-chat-widget').remove()" style="
-                          background: none;
-                          border: none;
-                          color: white;
-                          font-size: 20px;
-                          cursor: pointer;
-                          padding: 5px;
-                          border-radius: 5px;
-                          opacity: 0.7;
-                        " onmouseover="this.style.opacity='1'; this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.opacity='0.7'; this.style.background='none'">×</button>
-                      </div>
-                      
-                      <!-- Chat Messages -->
-                      <div style="
-                        flex: 1;
-                        padding: 20px;
-                        overflow-y: auto;
-                        background: rgba(255,255,255,0.05);
-                      ">
-                        <div style="
-                          background: rgba(255,255,255,0.9);
-                          padding: 12px 16px;
-                          border-radius: 15px 15px 15px 5px;
-                          margin-bottom: 15px;
-                          color: #333;
-                          font-size: 14px;
-                          line-height: 1.4;
-                        ">
-                          <div style="font-weight: 600; color: #667eea; margin-bottom: 5px;">Sarah Johnson</div>
-                          👋 Hello! I'm Sarah Johnson, CEO of ComplianceNavigator. I'm here to help you with cybersecurity compliance, risk assessments, and NCA ECC implementation. What can I help you with today?
-                        </div>
-                      </div>
-                      
-                      <!-- Input -->
-                      <div style="
-                        padding: 15px;
-                        background: rgba(255,255,255,0.1);
-                        border-radius: 0 0 15px 15px;
-                      ">
-                        <input type="text" placeholder="Ask Sarah about cybersecurity..." style="
-                          width: 100%;
-                          padding: 12px;
-                          border: none;
-                          border-radius: 20px;
-                          font-size: 14px;
-                          outline: none;
-                        " onkeypress="if(event.key==='Enter') { 
-                          const msg = this.value.trim();
-                          if(msg) {
-                            const responses = [
-                              'That\\'s a great question about cybersecurity compliance. Based on the NCA ECC framework, I recommend starting with a comprehensive risk assessment.',
-                              'For NCA ECC implementation, focus on the five core domains: Governance, Cybersecurity Defence, Cybersecurity Resilience, Third Party Cloud Computing, and Industrial Control Systems.',
-                              'Risk management is crucial for compliance. I suggest using our NFRM Risk Management tool to conduct thorough assessments.',
-                              'Security policies should align with your organizational structure. Our AI-powered policy generator can help you create customized policies based on NCA ECC requirements.',
-                              'Gap assessments are essential for identifying compliance gaps. Use our ECC Implementation Dashboard to track your progress across all 114 essential controls.'
-                            ];
-                            const response = responses[Math.floor(Math.random() * responses.length)];
-                            
-                            const messagesDiv = document.querySelector('#sarah-chat-widget [style*=\"overflow-y: auto\"]');
-                            messagesDiv.innerHTML += \`
-                              <div style=\"background: linear-gradient(45deg, #667eea, #764ba2); padding: 12px 16px; border-radius: 15px 15px 5px 15px; margin: 15px 0; margin-left: 50px; color: white; font-size: 14px;\">
-                                <div style=\"font-weight: 600; margin-bottom: 5px; opacity: 0.8;\">You</div>\${msg}
-                              </div>
-                              <div style=\"background: rgba(255,255,255,0.9); padding: 12px 16px; border-radius: 15px 15px 15px 5px; margin: 15px 0; color: #333; font-size: 14px;\">
-                                <div style=\"font-weight: 600; color: #667eea; margin-bottom: 5px;\">Sarah Johnson</div>\${response}
-                              </div>
-                            \`;
-                            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                            this.value = '';
-                          }
-                        }">
-                      </div>
-                    </div>
-                  `;
-                  
-                  document.body.appendChild(chatWidget);
-                  console.log('✅ Sarah Johnson chat created successfully!');
-                  
-                  // Also try D-ID if available
-                  if ((window as any).openDIDAgent) {
-                    console.log('📞 Also trying D-ID agent...');
-                    try {
-                      (window as any).openDIDAgent();
-                    } catch (error) {
-                      console.warn('D-ID agent failed:', error);
-                    }
-                  }
-                  
-                } catch (error) {
-                  console.error('❌ Error creating chat:', error);
-                  alert('Sarah Johnson chat system error: ' + error.message);
+                } else {
+                  console.warn('❌ D-ID agent not available');
                 }
               }}
               data-testid="ceo-picture"
