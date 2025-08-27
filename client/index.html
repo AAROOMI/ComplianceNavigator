@@ -17,8 +17,8 @@
         window.openDIDAgent = function() {
           console.log('🎤 Sarah Johnson clicked - opening D-ID voice agent...');
           
-          // D-ID Agent Share URL
-          const didAgentURL = 'https://studio.d-id.com/agents/share?id=v2_agt_D0t5wjZD&utm_source=copy&key=WVhWMGFEQjhOamRsWldJM05tWXdPVFl4WkRVMFlqZzJOMlk0WldFM09rTXdjRXhxZUhwRFlrbDBWV3QwTjFkQlEwNTZXUT09';
+          // D-ID Agent Share URL with clean interface
+          const didAgentURL = 'https://studio.d-id.com/agents/share?id=v2_agt_D0t5wjZD&utm_source=copy&key=WVhWMGFEQjhOamRsWldJM05tWXdPVFl4WkRVMFlqZzJOMlk0WldFM09rTXdjRXhxZUhwRFlrbDBWV3QwTjFkQlEwNTZXUT09&hide_branding=true&minimal=true';
           
           // Show D-ID agent in modal overlay
           const existingModal = document.getElementById('sarah-did-modal');
@@ -78,6 +78,42 @@
                   "
                   allow="microphone; camera"
                   title="Sarah Johnson - D-ID Voice Agent"
+                  onload="
+                    try {
+                      const iframe = this;
+                      setTimeout(() => {
+                        try {
+                          const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                          const style = iframeDoc.createElement('style');
+                          style.textContent = \`
+                            /* Hide D-ID branding and buttons */
+                            [class*='brand'], [class*='Brand'], [class*='logo'], [class*='Logo'] { display: none !important; }
+                            [class*='share'], [class*='Share'] { display: none !important; }
+                            [class*='create'], [class*='Create'] { display: none !important; }
+                            [class*='build'], [class*='Build'] { display: none !important; }
+                            [data-testid*='share'], [data-testid*='create'], [data-testid*='build'] { display: none !important; }
+                            button[title*='share'], button[title*='Share'] { display: none !important; }
+                            button[title*='create'], button[title*='Create'] { display: none !important; }
+                            button[title*='build'], button[title*='Build'] { display: none !important; }
+                            .footer, [class*='footer'], [class*='Footer'] { display: none !important; }
+                            .header-buttons, [class*='header-button'] { display: none !important; }
+                            a[href*='d-id.com'], a[href*='studio'] { display: none !important; }
+                            /* Hide specific D-ID elements */
+                            [class*='powered'], [class*='Powered'] { display: none !important; }
+                            [id*='watermark'], [class*='watermark'] { display: none !important; }
+                            /* Keep only the conversation interface */
+                            body { background: transparent !important; }
+                          \`;
+                          iframeDoc.head.appendChild(style);
+                          console.log('✅ D-ID branding hidden successfully');
+                        } catch (e) {
+                          console.warn('⚠️ Could not access iframe content (CORS):', e.message);
+                        }
+                      }, 2000);
+                    } catch (e) {
+                      console.warn('⚠️ Iframe onload error:', e.message);
+                    }
+                  "
                 ></iframe>
               </div>
             </div>
