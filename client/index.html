@@ -31,32 +31,36 @@
           console.log('🔍 DID_AGENTS_API available:', typeof window.DID_AGENTS_API !== 'undefined');
           
           if (typeof window.DID_AGENTS_API !== 'undefined') {
-            console.log('🔍 DID_AGENTS_API methods:', Object.keys(window.DID_AGENTS_API));
+            const methods = Object.keys(window.DID_AGENTS_API);
+            console.log('🔍 Available D-ID methods:', methods);
             
             try {
-              // Try different D-ID API methods
-              if (window.DID_AGENTS_API.show) {
-                console.log('📞 Calling DID_AGENTS_API.show()...');
-                const result = window.DID_AGENTS_API.show();
-                console.log('📊 show() result:', result);
-                return true;
+              // Try all available methods to find the right one
+              for (const methodName of methods) {
+                if (typeof window.DID_AGENTS_API[methodName] === 'function') {
+                  console.log(`📞 Trying method: ${methodName}()`);
+                  
+                  try {
+                    const result = window.DID_AGENTS_API[methodName]();
+                    console.log(`✅ ${methodName}() succeeded:`, result);
+                    
+                    // Check if the agent actually appeared
+                    setTimeout(() => {
+                      const didElements = document.querySelectorAll('[class*="did"], [id*="did"], iframe');
+                      console.log(`🔍 After ${methodName}(), found ${didElements.length} D-ID elements`);
+                      if (didElements.length > 0) {
+                        console.log('🎉 D-ID agent successfully launched!');
+                      }
+                    }, 2000);
+                    
+                    return true;
+                  } catch (methodError) {
+                    console.warn(`⚠️ ${methodName}() failed:`, methodError.message);
+                  }
+                }
               }
               
-              if (window.DID_AGENTS_API.open) {
-                console.log('📞 Calling DID_AGENTS_API.open()...');
-                const result = window.DID_AGENTS_API.open();
-                console.log('📊 open() result:', result);
-                return true;
-              }
-              
-              if (window.DID_AGENTS_API.start) {
-                console.log('📞 Calling DID_AGENTS_API.start()...');
-                const result = window.DID_AGENTS_API.start();
-                console.log('📊 start() result:', result);
-                return true;
-              }
-              
-              console.warn('⚠️ No usable D-ID API methods found');
+              console.warn('⚠️ All D-ID API methods failed');
               
             } catch (error) {
               console.error('❌ D-ID API call failed:', error);
